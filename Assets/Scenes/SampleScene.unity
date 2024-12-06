@@ -410,54 +410,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapConfiguration: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
---- !u!1 &2059495655
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2059495657}
-  - component: {fileID: 2059495656}
-  m_Layer: 0
-  m_Name: Debugger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2059495656
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2059495655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bb799b55af84ef49adaf06006c47bdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GridManager: {fileID: 1923748401}
-  CenterTilePosition: {x: 0, y: 0}
-  Range: 1
-  DebugCubePrefab: {fileID: 525406495714030031, guid: 25cead43a7cdff0479acd2f0dfc95c44, type: 3}
---- !u!4 &2059495657
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2059495655}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  TileTypes:
+  - {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
+  - {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}
+  - {fileID: 11400000, guid: cf34b43375d591c418a1f43d7133c2b0, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -466,4 +422,3 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 1013241394}
   - {fileID: 1923748400}
-  - {fileID: 2059495657}

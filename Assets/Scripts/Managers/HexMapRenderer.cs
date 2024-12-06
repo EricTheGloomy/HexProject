@@ -4,6 +4,7 @@ using UnityEngine;
 public class HexMapRenderer : MonoBehaviour
 {
     public MapConfig MapConfiguration;
+    public TileType[] TileTypes; // Array of possible TileTypes
 
     private float hexWidth;
     private float hexHeight;
@@ -31,9 +32,9 @@ public class HexMapRenderer : MonoBehaviour
 
     public void GenerateMap()
     {
-        if (MapConfiguration == null || MapConfiguration.HexTilePrefab == null)
+        if (MapConfiguration == null || TileTypes == null || TileTypes.Length == 0)
         {
-            Debug.LogError("MapConfiguration or HexTilePrefab is missing!");
+            Debug.LogError("MapConfiguration or TileTypes are missing!");
             return;
         }
 
@@ -45,19 +46,19 @@ public class HexMapRenderer : MonoBehaviour
             for (int col = 0; col < MapConfiguration.MapWidth; col++)
             {
                 Vector3 position = CalculateHexPosition(row, col);
-                GameObject hexTile = Instantiate(MapConfiguration.HexTilePrefab, position, Quaternion.identity, transform);
+                TileType assignedTileType = AssignTileType(row, col); // Assign a type based on position
 
-                Tile tile = hexTile.GetComponent<Tile>();
+                GameObject tilePrefab = Instantiate(assignedTileType.Prefab, position, Quaternion.identity, transform);
+
+                Tile tile = tilePrefab.GetComponent<Tile>();
                 if (tile != null)
                 {
-                    // Initialize the tile with its coordinates
-                    tile.Initialize(new Vector2Int(col, row), hexWidth, hexHeight);
-
+                    tile.Initialize(new Vector2Int(col, row), hexWidth, hexHeight, assignedTileType);
                     gridDataManager.AddTile(tile, new Vector2Int(col, row));
                 }
                 else
                 {
-                    Debug.LogWarning($"Hex tile at ({col}, {row}) is missing a Tile component.");
+                    Debug.LogWarning($"Tile prefab at ({col}, {row}) is missing a Tile component.");
                 }
             }
         }
@@ -68,17 +69,30 @@ public class HexMapRenderer : MonoBehaviour
         Debug.Log("Map rendered and neighbors assigned!");
     }
 
+    private TileType AssignTileType(int row, int col)
+    {
+        // Example logic for type assignment
+        return TileTypes[(row + col) % TileTypes.Length];
+    }
+
     private void CalculateHexSize()
     {
-        MeshRenderer renderer = MapConfiguration.HexTilePrefab.GetComponentInChildren<MeshRenderer>();
-        if (renderer != null)
+        if (TileTypes.Length > 0 && TileTypes[0].Prefab != null)
         {
-            hexWidth = renderer.bounds.size.x;
-            hexHeight = renderer.bounds.size.z;
+            MeshRenderer renderer = TileTypes[0].Prefab.GetComponentInChildren<MeshRenderer>();
+            if (renderer != null)
+            {
+                hexWidth = renderer.bounds.size.x;
+                hexHeight = renderer.bounds.size.z;
+            }
+            else
+            {
+                Debug.LogError("Tile prefab is missing a MeshRenderer!");
+            }
         }
         else
         {
-            Debug.LogError("HexTilePrefab is missing a MeshRenderer!");
+            Debug.LogError("TileTypes array is empty or invalid!");
         }
     }
 

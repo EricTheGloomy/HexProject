@@ -9,16 +9,19 @@ public class Tile : MonoBehaviour
     public string TerrainType;
     public GameObject FogOverlay;
 
+    public TileType TileType { get; private set; } // Reference to the scriptable object
+
     public Vector2 OffsetCoordinates { get; private set; }
     public Vector3 CubeCoordinates { get; private set; }
 
-    [SerializeField] 
+    [SerializeField]
     private List<Tile> neighbors = new List<Tile>();
     public List<Tile> Neighbors => neighbors;
 
-    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight)
+    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileType tileType)
     {
         GridPosition = gridPosition;
+        TileType = tileType;
 
         // Calculate Offset Coordinates
         OffsetCoordinates = new Vector2(gridPosition.x, gridPosition.y);
@@ -29,6 +32,18 @@ public class Tile : MonoBehaviour
 
         // Set World Position
         transform.position = HexCoordinateHelper.GetWorldPosition(OffsetCoordinates, false, hexWidth, hexHeight);
+
+        // Apply tile-specific visuals (if necessary)
+        ApplyTileVisuals();
+    }
+
+    private void ApplyTileVisuals()
+    {
+        Renderer renderer = GetComponentInChildren<Renderer>();
+        if (renderer != null)
+        {
+            // Apply visuals based on TileType prefab (if needed later)
+        }
     }
 
     public void AddNeighbor(Tile neighbor)
