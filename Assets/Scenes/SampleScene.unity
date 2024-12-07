@@ -423,9 +423,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f5640590e7d3747af1097de73402f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapWidth: 10
-  MapHeight: 10
-  NoiseScale: 5
+  MapConfig: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
+  MapGenerationConfig: {fileID: 11400000, guid: 4cabaf96612277c47be04a221f3ea9b3, type: 2}
   TileTypes:
   - {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
   - {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}

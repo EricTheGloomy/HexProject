@@ -21,7 +21,7 @@ public class HexMapRenderer : MonoBehaviour
 
     private void RenderMap(Dictionary<Vector2Int, TileType> mapData)
     {
-        if (MapConfiguration == null || MapConfiguration.HexTilePrefab == null)
+        if (MapConfiguration == null || MapConfiguration.HexTilePrefabDefault == null)
         {
             Debug.LogError("MapConfiguration or HexTilePrefab is missing!");
             return;
@@ -53,7 +53,7 @@ public class HexMapRenderer : MonoBehaviour
 
     private void CalculateHexSize()
     {
-        MeshRenderer renderer = MapConfiguration.HexTilePrefab.GetComponentInChildren<MeshRenderer>();
+        MeshRenderer renderer = MapConfiguration.HexTilePrefabDefault.GetComponentInChildren<MeshRenderer>();
         if (renderer != null)
         {
             hexWidth = renderer.bounds.size.x;
