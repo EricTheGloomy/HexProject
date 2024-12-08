@@ -6,19 +6,16 @@ public class HexGridDataManager : MonoBehaviour
     private Tile[,] mapGrid;
     private Dictionary<Vector2, Tile> hexCells = new Dictionary<Vector2, Tile>();
 
-    public Dictionary<Vector2, Tile> GetHexCells()
-    {
-        return hexCells;
-    }
+    public Dictionary<Vector2, Tile> GetHexCells() => hexCells;
 
     private void OnEnable()
     {
-        HexMapRenderer.OnRenderingComplete += AssignNeighbors;
+        HexMapRenderer.OnRenderingComplete += OnRenderingComplete;
     }
 
     private void OnDisable()
     {
-        HexMapRenderer.OnRenderingComplete -= AssignNeighbors;
+        HexMapRenderer.OnRenderingComplete -= OnRenderingComplete;
     }
 
     public void InitializeGrid(int width, int height)
@@ -63,5 +60,11 @@ public class HexGridDataManager : MonoBehaviour
     {
         return position.x >= 0 && position.x < mapGrid.GetLength(0) &&
                position.y >= 0 && position.y < mapGrid.GetLength(1);
+    }
+
+    private void OnRenderingComplete()
+    {
+        // Once rendering is complete, assign neighbors
+        AssignNeighbors();
     }
 }

@@ -11,6 +11,9 @@ public class HexMapRenderer : MonoBehaviour
 
     public static event Action OnRenderingComplete;
 
+    [SerializeField]
+    private HexGridDataManager gridDataManager; // Dependency injected via Unity Inspector
+
     private void OnEnable()
     {
         ProceduralMapGenerator.OnMapGenerated += RenderMap;
@@ -31,13 +34,13 @@ public class HexMapRenderer : MonoBehaviour
 
         CalculateHexSize();
 
-        HexGridDataManager gridDataManager = FindObjectOfType<HexGridDataManager>();
         if (gridDataManager == null)
         {
             Debug.LogError("HexGridDataManager is missing in the scene!");
             return;
         }
 
+        // Initialize the grid BEFORE adding tiles
         gridDataManager.InitializeGrid(MapConfiguration.MapWidth, MapConfiguration.MapHeight);
 
         foreach (var entry in mapData)
@@ -52,7 +55,7 @@ public class HexMapRenderer : MonoBehaviour
             if (tile != null)
             {
                 tile.Initialize(gridPosition, hexWidth, hexHeight, tileType);
-                gridDataManager.AddTile(tile, gridPosition);
+                gridDataManager.AddTile(tile, gridPosition); // Add tile to the grid manager
             }
             else
             {
