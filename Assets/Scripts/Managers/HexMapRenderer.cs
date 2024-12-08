@@ -1,6 +1,6 @@
-// File: Scripts/Managers/HexMapRenderer.cs
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class HexMapRenderer : MonoBehaviour
 {
@@ -8,6 +8,8 @@ public class HexMapRenderer : MonoBehaviour
 
     private float hexWidth;
     private float hexHeight;
+
+    public static event Action OnRenderingComplete;
 
     private void OnEnable()
     {
@@ -29,6 +31,15 @@ public class HexMapRenderer : MonoBehaviour
 
         CalculateHexSize();
 
+        HexGridDataManager gridDataManager = FindObjectOfType<HexGridDataManager>();
+        if (gridDataManager == null)
+        {
+            Debug.LogError("HexGridDataManager is missing in the scene!");
+            return;
+        }
+
+        gridDataManager.InitializeGrid(MapConfiguration.MapWidth, MapConfiguration.MapHeight);
+
         foreach (var entry in mapData)
         {
             Vector2Int gridPosition = entry.Key;
@@ -41,6 +52,7 @@ public class HexMapRenderer : MonoBehaviour
             if (tile != null)
             {
                 tile.Initialize(gridPosition, hexWidth, hexHeight, tileType);
+                gridDataManager.AddTile(tile, gridPosition);
             }
             else
             {
@@ -49,6 +61,7 @@ public class HexMapRenderer : MonoBehaviour
         }
 
         Debug.Log("Map rendering complete!");
+        OnRenderingComplete?.Invoke();
     }
 
     private void CalculateHexSize()

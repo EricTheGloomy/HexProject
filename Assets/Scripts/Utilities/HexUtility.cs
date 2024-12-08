@@ -2,13 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class HexUtility
-{
-    public static List<Tile> GetNeighbors(Tile center, Dictionary<Vector2, Tile> hexCells)
+{    public static List<Tile> GetNeighbors(Tile tile, Dictionary<Vector2, Tile> hexCells)
     {
         List<Tile> neighbors = new List<Tile>();
-        foreach (var offset in HexCoordinateHelper.GetCubeNeighborOffsets())
+
+        Vector3[] neighborOffsets = HexCoordinateHelper.GetCubeNeighborOffsets();
+
+        foreach (var offset in neighborOffsets)
         {
-            Vector3 neighborCubeCoords = center.CubeCoordinates + offset;
+            Vector3 neighborCubeCoords = tile.CubeCoordinates + offset;
+
+            // Convert cube coordinates back to offset for lookup
             Vector2 neighborOffsetCoords = HexCoordinateHelper.CubeToAxial(neighborCubeCoords);
             neighborOffsetCoords = HexCoordinateHelper.AxialToOffset(neighborOffsetCoords);
 
@@ -16,7 +20,12 @@ public static class HexUtility
             {
                 neighbors.Add(neighbor);
             }
+            else
+            {
+                Debug.Log($"No neighbor found for OffsetCoordinates: {neighborOffsetCoords}");
+            }
         }
+
         return neighbors;
     }
 
