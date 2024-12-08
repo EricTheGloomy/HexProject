@@ -6,6 +6,11 @@ public class HexGridDataManager : MonoBehaviour
     private Tile[,] mapGrid;
     private Dictionary<Vector2, Tile> hexCells = new Dictionary<Vector2, Tile>();
 
+    public Dictionary<Vector2, Tile> GetHexCells()
+    {
+        return hexCells;
+    }
+
     private void OnEnable()
     {
         HexMapRenderer.OnRenderingComplete += AssignNeighbors;
