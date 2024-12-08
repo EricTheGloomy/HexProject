@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 public class TileRangeDebugger : MonoBehaviour
 {
     public HexGridDataManager GridManager; // Reference to the grid manager
@@ -49,3 +49,4 @@ public class TileRangeDebugger : MonoBehaviour
         Debug.Log($"Debugged range: {tilesInRange.Count} tiles found.");
     }
 }
+*/
