@@ -16,7 +16,7 @@ MonoBehaviour:
   Octaves: 8
   Persistence: 0.5
   Lacunarity: 2
-  Seed: 42
+  seed: 42
   OffsetRangeMin: -100000
   OffsetRangeMax: 100000
   NoiseMin: -1

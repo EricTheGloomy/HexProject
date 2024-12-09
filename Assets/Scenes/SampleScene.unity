@@ -446,6 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf2897b053f707409c22bf0d225399a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapConfiguration: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
 --- !u!114 &1923748402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,6 +460,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapConfiguration: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
+  hexWidth: 0
+  hexHeight: 0
 --- !u!114 &1923748403
 MonoBehaviour:
   m_ObjectHideFlags: 0
