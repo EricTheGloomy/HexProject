@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GameFlowController : MonoBehaviour
 {
-    public GameState CurrentState { get; private set; }
+    public GameState CurrentState { get; private set; } = GameState.Initial;
 
     [Header("Dependencies")]
-    [SerializeField] private ProceduralMapGenerator mapGenerator; // Concrete class for IMapGenerator
-    [SerializeField] private HexGridDataManager gridManager;      // Concrete class for IGridManager
-    [SerializeField] private HexMapRenderer mapRenderer;         // Concrete class for IRenderer
+    [SerializeField] private ProceduralMapGenerator mapGenerator;
+    [SerializeField] private HexGridDataManager gridManager;
+    [SerializeField] private HexMapRenderer mapRenderer;
 
     private IMapGenerator MapGenerator;
     private IGridManager GridManager;
@@ -25,15 +25,13 @@ public class GameFlowController : MonoBehaviour
 
     private void Awake()
     {
-        // Safeguard against missing dependencies
         if (!mapGenerator || !gridManager || !mapRenderer)
         {
             Debug.LogError("GameFlowController: Missing dependencies in the Inspector!");
-            enabled = false; // Disable script if dependencies are missing
+            enabled = false;
             return;
         }
 
-        // Cast components to interfaces
         MapGenerator = mapGenerator;
         GridManager = gridManager;
         MapRenderer = mapRenderer;
@@ -44,21 +42,22 @@ public class GameFlowController : MonoBehaviour
         TransitionToState(GameState.GameStart);
     }
 
-    private void TransitionToState(GameState newState)
+    private void TransitionToState(GameState newState, bool forceReExecution = false)
     {
-        if (CurrentState == newState)
+        if (CurrentState == newState && !forceReExecution)
         {
-            Debug.LogWarning($"GameFlowController: Already in state {newState}, executing handler again.");
-        }
-        else
-        {
-            Debug.Log($"Transitioning to new state: {newState}");
-            CurrentState = newState;
+            Debug.LogWarning($"GameFlowController: Already in state {newState}, skipping execution.");
+            return;
         }
 
-        // Execute the state handler
+        Debug.Log($"Transitioning from {CurrentState} to {newState}");
+        CurrentState = newState;
+
         switch (newState)
         {
+            case GameState.Initial:
+                Debug.Log("GameFlowController: Initial state. Waiting to transition...");
+                break;
             case GameState.GameStart:
                 StartGame();
                 break;
@@ -75,8 +74,8 @@ public class GameFlowController : MonoBehaviour
                 StartGameplay();
                 break;
             default:
-            Debug.LogError($"GameFlowController: Unhandled state {newState}.");
-            break;
+                Debug.LogError($"GameFlowController: Unhandled state {newState}.");
+                break;
         }
     }
 
@@ -102,29 +101,22 @@ public class GameFlowController : MonoBehaviour
         }
 
         Debug.Log("GameFlowController: Generating map...");
-        MapGenerator.OnMapGenerated -= OnMapGenerated; // Prevent duplicate subscriptions
+        MapGenerator.OnMapGenerated -= OnMapGenerated;
         MapGenerator.OnMapGenerated += OnMapGenerated;
         MapGenerator.GenerateMap();
     }
 
     private void OnMapGenerated(Dictionary<Vector2Int, TileData> mapData)
     {
-        try
+        if (mapData == null || mapData.Count == 0)
         {
-            if (mapData == null || mapData.Count == 0)
-            {
-                Debug.LogError("GameFlowController: Map generation failed or returned empty data.");
-                return;
-            }
+            Debug.LogError("GameFlowController: Map generation failed.");
+            return;
+        }
 
-            Debug.Log("GameFlowController: Map generation complete!");
-            isMapGenerated = true;
-            TransitionToState(GameState.GridInitialization);
-        }
-        finally
-        {
-            MapGenerator.OnMapGenerated -= OnMapGenerated;
-        }
+        Debug.Log("GameFlowController: Map generation complete!");
+        isMapGenerated = true;
+        TransitionToState(GameState.GridInitialization);
     }
 
     private void InitializeGrid()
@@ -136,37 +128,23 @@ public class GameFlowController : MonoBehaviour
         }
 
         Debug.Log("GameFlowController: Initializing grid...");
-
-        if (MapGenerator.GeneratedMapData == null || MapGenerator.GeneratedMapData.Count == 0)
-        {
-            Debug.LogError("GameFlowController: Cannot initialize grid. Generated map data is null or empty.");
-            return;
-        }
-
-        GridManager.OnGridReady -= OnGridReady; // Prevent duplicate subscriptions
+        GridManager.OnGridReady -= OnGridReady;
         GridManager.OnGridReady += OnGridReady;
         GridManager.InitializeGrid(MapGenerator.GeneratedMapData);
     }
 
     private void OnGridReady(Dictionary<Vector2, Tile> hexCells)
     {
-        try
+        if (hexCells == null || hexCells.Count == 0)
         {
-            if (hexCells == null || hexCells.Count == 0)
-            {
-                Debug.LogError("GameFlowController: Grid initialization failed or returned no tiles.");
-                return;
-            }
+            Debug.LogError("GameFlowController: Grid initialization failed.");
+            return;
+        }
 
-            Debug.Log($"GameFlowController: Grid initialization complete with {hexCells.Count} tiles.");
-            cachedHexCells = hexCells;
-            isGridInitialized = true;
-            TransitionToState(GameState.MapRendering);
-        }
-        finally
-        {
-            GridManager.OnGridReady -= OnGridReady;
-        }
+        Debug.Log($"GameFlowController: Grid initialized with {hexCells.Count} tiles.");
+        cachedHexCells = hexCells;
+        isGridInitialized = true;
+        TransitionToState(GameState.MapRendering);
     }
 
     private void RenderMap()
@@ -178,68 +156,22 @@ public class GameFlowController : MonoBehaviour
         }
 
         Debug.Log("GameFlowController: Rendering map...");
-
-        if (cachedHexCells == null || cachedHexCells.Count == 0)
-        {
-            Debug.LogError("GameFlowController: Cannot render map. Grid data is null or empty.");
-            return;
-        }
-
-        HexMapRenderer.OnRenderingComplete -= OnRenderingComplete; // Prevent duplicate subscriptions
-        HexMapRenderer.OnRenderingComplete += OnRenderingComplete;
         MapRenderer.RenderMap(cachedHexCells);
-    }
-
-    private void OnRenderingComplete()
-    {
-        try
-        {
-            Debug.Log("GameFlowController: Map rendering complete!");
-            isMapRendered = true;
-            TransitionToState(GameState.Gameplay);
-        }
-        finally
-        {
-            HexMapRenderer.OnRenderingComplete -= OnRenderingComplete;
-        }
+        isMapRendered = true;
+        TransitionToState(GameState.Gameplay);
     }
 
     private void StartGameplay()
     {
         Debug.Log("GameFlowController: Gameplay has started!");
-
-        if (MapRenderer == null || GridManager == null)
-        {
-            Debug.LogError("GameFlowController: Cannot start gameplay. Dependencies are missing!");
-            return;
-        }
-
-        Debug.Log("GameFlowController: Entering gameplay...");
     }
 
     public void ForceStateReEntry(GameState stateToReEnter)
     {
         Debug.Log($"GameFlowController: Forcing re-entry into state {stateToReEnter}.");
-        ResetExecutionFlags(); // Reset execution flags for all states
+        ResetExecutionFlags();
 
-        switch (stateToReEnter)
-        {
-            case GameState.GameStart:
-                StartGame();
-                break;
-            case GameState.MapGeneration:
-                GenerateMap();
-                break;
-            case GameState.GridInitialization:
-                InitializeGrid();
-                break;
-            case GameState.MapRendering:
-                RenderMap();
-                break;
-            case GameState.Gameplay:
-                StartGameplay();
-                break;
-        }
+        TransitionToState(stateToReEnter, forceReExecution: true); // Enforce re-execution of the handler
     }
 
     private void ResetExecutionFlags()
