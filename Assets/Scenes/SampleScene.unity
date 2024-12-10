@@ -132,6 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 598642641}
   - component: {fileID: 598642640}
+  - component: {fileID: 598642642}
   m_Layer: 0
   m_Name: GameFlowManager
   m_TagString: Untagged
@@ -146,7 +147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598642639}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fbe6cd06cf435d4bad78f60dec2484a, type: 3}
   m_Name: 
@@ -166,6 +167,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &598642642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598642639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1432179deb627b948af0acfadc718dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapGenerator: {fileID: 1923748403}
+  gridManager: {fileID: 1923748401}
+  mapRenderer: {fileID: 1923748402}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

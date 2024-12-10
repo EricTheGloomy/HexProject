@@ -2,26 +2,19 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class ProceduralMapGenerator : MonoBehaviour
+public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
 {
     [Header("Dependencies")]
     public MapConfig MapConfig;
     public MapGenerationConfig MapGenerationConfig;
     public TileTypeMappingConfig TileTypeMappingConfig;
 
-    public static event Action<Dictionary<Vector2Int, TileData>> OnMapGenerated;
+    public event Action<Dictionary<Vector2Int, TileData>> OnMapGenerated;
 
-    private void OnEnable()
-    {
-        GameManager.OnGameReady += GenerateMap;
-    }
+    private Dictionary<Vector2Int, TileData> generatedMapData;
+    public Dictionary<Vector2Int, TileData> GeneratedMapData => generatedMapData;
 
-    private void OnDisable()
-    {
-        GameManager.OnGameReady -= GenerateMap;
-    }
-
-    private void GenerateMap()
+    public void GenerateMap()
     {
         if (MapConfig == null || MapGenerationConfig == null || TileTypeMappingConfig == null)
         {
@@ -29,8 +22,8 @@ public class ProceduralMapGenerator : MonoBehaviour
             return;
         }
 
+        // Generate map data
         Dictionary<Vector2Int, TileData> mapData = new Dictionary<Vector2Int, TileData>();
-
         System.Random prng = new System.Random(MapGenerationConfig.Seed);
         Vector2[] octaveOffsets = GetPerlinOffsets(prng);
 
@@ -38,17 +31,16 @@ public class ProceduralMapGenerator : MonoBehaviour
         {
             for (int col = 0; col < MapConfig.MapWidth; col++)
             {
-                // Generate Perlin noise value
                 float perlinValue = GeneratePerlinValue(col, row, octaveOffsets);
-
-                // Assign TileType based on the noise value
                 TileData tileType = GetTileTypeFromNoise(perlinValue);
                 mapData[new Vector2Int(col, row)] = tileType;
             }
         }
 
-        Debug.Log("Map generation complete!");
-        OnMapGenerated?.Invoke(mapData); // Notify subscribers
+        generatedMapData = mapData; // Correctly assign the populated map data
+
+        Debug.Log("ProceduralMapGenerator: Map generation complete!");
+        OnMapGenerated?.Invoke(generatedMapData);
     }
 
     private Vector2[] GetPerlinOffsets(System.Random prng)
@@ -81,7 +73,7 @@ public class ProceduralMapGenerator : MonoBehaviour
             frequency *= MapGenerationConfig.Lacunarity;
         }
 
-        return Mathf.InverseLerp(MapGenerationConfig.NoiseMin, MapGenerationConfig.NoiseMax, noiseHeight); // Normalize based on config.
+        return Mathf.InverseLerp(MapGenerationConfig.NoiseMin, MapGenerationConfig.NoiseMax, noiseHeight);
     }
 
     private TileData GetTileTypeFromNoise(float noiseValue)

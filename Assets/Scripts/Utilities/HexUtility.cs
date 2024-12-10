@@ -22,7 +22,7 @@ public static class HexUtility
             }
             else
             {
-                Debug.Log($"No neighbor found for OffsetCoordinates: {neighborOffsetCoords}");
+                //Debug.Log($"No neighbor found for OffsetCoordinates: {neighborOffsetCoords}");
             }
         }
 

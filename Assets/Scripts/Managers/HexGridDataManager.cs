@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexGridDataManager : MonoBehaviour
+public class HexGridDataManager : MonoBehaviour, IGridManager
 {
-    public static event Action<Dictionary<Vector2, Tile>> OnGridInitialized;
+    public event Action<Dictionary<Vector2, Tile>> OnGridReady;
 
     public MapConfig MapConfiguration;
 
@@ -14,22 +14,18 @@ public class HexGridDataManager : MonoBehaviour
     private Dictionary<Vector2, Tile> hexCells = new Dictionary<Vector2, Tile>(); // For HexUtility
     public Dictionary<Vector2, Tile> GetHexCells() => hexCells;
     private Tile[,] mapGrid;
+    public bool isGridReady = false;
 
     private float hexWidth;
     private float hexHeight;
 
-    private void OnEnable()
+    public void InitializeGrid(Dictionary<Vector2Int, TileData> mapData)
     {
-        ProceduralMapGenerator.OnMapGenerated += InitializeGrid;
-    }
+        // Reset state
+        isGridReady = false;
+        Debug.Log("HexGridDataManager: Initializing grid...");
 
-    private void OnDisable()
-    {
-        ProceduralMapGenerator.OnMapGenerated -= InitializeGrid;
-    }
-
-    private void InitializeGrid(Dictionary<Vector2Int, TileData> mapData)
-    {
+        // Validate dependencies
         if (MapConfiguration == null || MapConfiguration.HexTilePrefabDefault == null)
         {
             Debug.LogError("HexGridDataManager: MapConfiguration or HexTilePrefabDefault is missing!");
@@ -45,7 +41,7 @@ public class HexGridDataManager : MonoBehaviour
         // Calculate hex dimensions from the default prefab
         CalculateHexSize(MapConfiguration.HexTilePrefabDefault);
 
-        // Initialize the grid
+        // Initialize grid containers
         mapGrid = new Tile[MapConfiguration.MapWidth, MapConfiguration.MapHeight];
         allTiles.Clear();
         hexCells.Clear();
@@ -64,7 +60,7 @@ public class HexGridDataManager : MonoBehaviour
             Tile tile = tileObject.GetComponent<Tile>();
             if (tile == null)
             {
-                Debug.LogError($"HexGridDataManager: TilePrefab is missing the Tile script!");
+                Debug.LogError($"HexGridDataManager: TilePrefab is missing the Tile script at {gridPosition}!");
                 continue;
             }
 
@@ -74,16 +70,21 @@ public class HexGridDataManager : MonoBehaviour
             // Store the tile in dictionaries
             allTiles[gridPosition] = tile;
             mapGrid[gridPosition.x, gridPosition.y] = tile;
-            hexCells[tile.OffsetCoordinates] = tile; // Use OffsetCoordinates for HexUtility
+
+            // Calculate and store offset coordinates for HexUtility
+            hexCells[tile.OffsetCoordinates] = tile;
         }
 
-        // Assign neighbors using HexUtility
+        // Assign neighbors to each tile using HexUtility
         AssignNeighbors();
 
+        // Mark the grid as ready
+        isGridReady = true;
         Debug.Log("HexGridDataManager: Grid initialized and neighbors assigned.");
+        Debug.Log($"HexGridDataManager: Invoking OnGridReady with {hexCells.Count} tiles.");
 
-        // Notify other systems that the grid is ready
-        OnGridInitialized?.Invoke(hexCells);
+        // Notify subscribers that the grid is ready
+        OnGridReady?.Invoke(hexCells);
     }
 
     private void CalculateHexSize(GameObject hexTilePrefab)

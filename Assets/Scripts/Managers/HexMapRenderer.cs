@@ -2,24 +2,16 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexMapRenderer : MonoBehaviour
+public class HexMapRenderer : MonoBehaviour, IRenderer
 {
     public MapConfig MapConfiguration;
 
     public static event Action OnRenderingComplete;
 
-    private void OnEnable()
+    public void RenderMap(Dictionary<Vector2, Tile> allTiles)
     {
-        HexGridDataManager.OnGridInitialized += RenderMap;
-    }
+        Debug.Log("HexMapRenderer: RenderMap invoked.");
 
-    private void OnDisable()
-    {
-        HexGridDataManager.OnGridInitialized -= RenderMap;
-    }
-
-    private void RenderMap(Dictionary<Vector2, Tile> allTiles)
-    {
         foreach (var entry in allTiles)
         {
             Tile tile = entry.Value;
