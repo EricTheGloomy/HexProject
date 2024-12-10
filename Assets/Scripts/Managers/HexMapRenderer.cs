@@ -6,84 +6,58 @@ public class HexMapRenderer : MonoBehaviour
 {
     public MapConfig MapConfiguration;
 
-    private float hexWidth;
-    private float hexHeight;
-
     public static event Action OnRenderingComplete;
 
     private void OnEnable()
     {
-        ProceduralMapGenerator.OnMapGenerated += RenderMap;
+        HexGridDataManager.OnGridInitialized += RenderMap;
     }
 
     private void OnDisable()
     {
-        ProceduralMapGenerator.OnMapGenerated -= RenderMap;
+        HexGridDataManager.OnGridInitialized -= RenderMap;
     }
 
-    private void RenderMap(Dictionary<Vector2Int, TileType> mapData)
+    private void RenderMap()
     {
-        if (MapConfiguration == null || MapConfiguration.HexTilePrefabDefault == null)
-        {
-            Debug.LogError("MapConfiguration or HexTilePrefab is missing!");
-            return;
-        }
-
-        CalculateHexSize();
-
         HexGridDataManager gridDataManager = FindObjectOfType<HexGridDataManager>();
         if (gridDataManager == null)
         {
-            Debug.LogError("HexGridDataManager is missing in the scene!");
+            Debug.LogError("HexMapRenderer: HexGridDataManager is missing in the scene!");
             return;
         }
 
-        // Initialize the grid BEFORE adding tiles
-        gridDataManager.InitializeGrid(MapConfiguration.MapWidth, MapConfiguration.MapHeight);
+        // Fetch all tiles from HexGridDataManager
+        var allTiles = gridDataManager.GetHexCells();
 
-        foreach (var entry in mapData)
+        foreach (var entry in allTiles)
         {
-            Vector2Int gridPosition = entry.Key;
-            TileType tileType = entry.Value;
+            Tile tile = entry.Value;
 
-            Vector3 worldPosition = CalculateHexPosition(gridPosition.y, gridPosition.x);
-            GameObject tilePrefab = Instantiate(tileType.Prefab, worldPosition, Quaternion.identity, transform);
-
-            Tile tile = tilePrefab.GetComponent<Tile>();
-            if (tile != null)
+            // Fetch the TileType
+            TileData tileType = tile.TileType;
+            if (tileType == null)
             {
-                tile.Initialize(gridPosition, hexWidth, hexHeight, tileType);
-                gridDataManager.AddTile(tile, gridPosition); // Add tile to the grid manager
+                Debug.LogError($"HexMapRenderer: Tile at {tile.GridPosition} is missing its TileType!");
+                continue;
             }
-            else
+
+            // Instantiate the TileModel and attach it
+            if (tileType.TileModel != null)
             {
-                Debug.LogWarning($"Tile prefab at ({gridPosition.x}, {gridPosition.y}) is missing a Tile component.");
+                GameObject modelInstance = Instantiate(tileType.TileModel, tile.TileModel.transform);
+                modelInstance.transform.localPosition = Vector3.zero;
+            }
+
+            // Instantiate the FogOverlay and attach it
+            if (tileType.FogOverlay != null)
+            {
+                GameObject fogInstance = Instantiate(tileType.FogOverlay, tile.FogOverlay.transform);
+                fogInstance.transform.localPosition = Vector3.zero;
             }
         }
 
-        Debug.Log("Map rendering complete!");
+        Debug.Log("HexMapRenderer: Map rendering complete!");
         OnRenderingComplete?.Invoke();
-    }
-
-    private void CalculateHexSize()
-    {
-        MeshRenderer renderer = MapConfiguration.HexTilePrefabDefault.GetComponentInChildren<MeshRenderer>();
-        if (renderer != null)
-        {
-            hexWidth = renderer.bounds.size.x;
-            hexHeight = renderer.bounds.size.z;
-        }
-        else
-        {
-            Debug.LogError("HexTilePrefab is missing a MeshRenderer!");
-        }
-    }
-
-    private Vector3 CalculateHexPosition(int row, int col)
-    {
-        float xOffset = (row % 2 == 0) ? 0 : hexWidth * 0.5f;
-        float x = col * hexWidth + xOffset;
-        float z = row * (hexHeight * 0.75f);
-        return new Vector3(x, 0, z);
     }
 }

@@ -7,7 +7,7 @@ public class TileTypeMappingConfig : ScriptableObject
     [System.Serializable]
     public class TileMapping
     {
-        public TileType TileType;
+        public TileData TileType;
         public float MinNoiseValue; // Minimum noise value for this TileType
         public float MaxNoiseValue; // Maximum noise value for this TileType
     }

@@ -446,6 +446,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf2897b053f707409c22bf0d225399a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapConfiguration: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
+  TilePrefab: {fileID: 8861407124780601471, guid: d404632ce42cbdf4093e6260deb4dfba, type: 3}
 --- !u!114 &1923748402
 MonoBehaviour:
   m_ObjectHideFlags: 0

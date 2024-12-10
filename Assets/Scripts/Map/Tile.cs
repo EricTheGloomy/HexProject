@@ -7,9 +7,11 @@ public class Tile : MonoBehaviour
     public Vector2Int GridPosition;
     public VisibilityState Visibility;
     public string TerrainType;
+    public GameObject TileModel;
+    public GameObject TileDecorations;
     public GameObject FogOverlay;
 
-    public TileType TileType { get; private set; } // Reference to the scriptable object
+    public TileData TileType { get; private set; } // Reference to the scriptable object
 
     public Vector2 OffsetCoordinates { get; private set; }
     public Vector3 CubeCoordinates { get; private set; }
@@ -18,7 +20,7 @@ public class Tile : MonoBehaviour
     private List<Tile> neighbors = new List<Tile>();
     public List<Tile> Neighbors => neighbors;
 
-    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileType tileType)
+    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileData tileType)
     {
         GridPosition = gridPosition;
         TileType = tileType;

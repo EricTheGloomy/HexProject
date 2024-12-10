@@ -9,7 +9,7 @@ public class ProceduralMapGenerator : MonoBehaviour
     public MapGenerationConfig MapGenerationConfig;
     public TileTypeMappingConfig TileTypeMappingConfig;
 
-    public static event Action<Dictionary<Vector2Int, TileType>> OnMapGenerated;
+    public static event Action<Dictionary<Vector2Int, TileData>> OnMapGenerated;
 
     private void OnEnable()
     {
@@ -29,7 +29,7 @@ public class ProceduralMapGenerator : MonoBehaviour
             return;
         }
 
-        Dictionary<Vector2Int, TileType> mapData = new Dictionary<Vector2Int, TileType>();
+        Dictionary<Vector2Int, TileData> mapData = new Dictionary<Vector2Int, TileData>();
 
         System.Random prng = new System.Random(MapGenerationConfig.Seed);
         Vector2[] octaveOffsets = GetPerlinOffsets(prng);
@@ -42,7 +42,7 @@ public class ProceduralMapGenerator : MonoBehaviour
                 float perlinValue = GeneratePerlinValue(col, row, octaveOffsets);
 
                 // Assign TileType based on the noise value
-                TileType tileType = GetTileTypeFromNoise(perlinValue);
+                TileData tileType = GetTileTypeFromNoise(perlinValue);
                 mapData[new Vector2Int(col, row)] = tileType;
             }
         }
@@ -84,7 +84,7 @@ public class ProceduralMapGenerator : MonoBehaviour
         return Mathf.InverseLerp(MapGenerationConfig.NoiseMin, MapGenerationConfig.NoiseMax, noiseHeight); // Normalize based on config.
     }
 
-    private TileType GetTileTypeFromNoise(float noiseValue)
+    private TileData GetTileTypeFromNoise(float noiseValue)
     {
         foreach (var mapping in TileTypeMappingConfig.TileMappings)
         {

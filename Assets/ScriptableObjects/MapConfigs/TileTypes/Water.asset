@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Water
   Description: 
-  Prefab: {fileID: 8861407124780601471, guid: 7c82a65121d45a64483ced052c652a95, type: 3}
+  TileModel: {fileID: 3497093088325243830, guid: f341167dc58abb8489cbb520192ba794, type: 3}
+  FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}

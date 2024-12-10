@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d125e048414bc4caa4af08a8e6d923, type: 3}
   m_Name: MapConfig
   m_EditorClassIdentifier: 
-  HexTilePrefabDefault: {fileID: 8861407124780601471, guid: 5a1f22557950b0649b6be8cd61407b35, type: 3}
+  HexTilePrefabDefault: {fileID: 8861407124780601471, guid: d404632ce42cbdf4093e6260deb4dfba, type: 3}
   MapWidth: 25
   MapHeight: 25

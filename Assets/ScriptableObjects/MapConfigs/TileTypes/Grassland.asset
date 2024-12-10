@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Grassland
   Description: 
-  Prefab: {fileID: 8861407124780601471, guid: 586b2e2245bd35d4f90c3914b6e4f8c6, type: 3}
+  TileModel: {fileID: 3497093088325243830, guid: 132f38536625e434eaedc72b974aee54, type: 3}
+  FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}

@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Plains
   Description: 
-  Prefab: {fileID: 8861407124780601471, guid: 63e4acc781ccf2243a25e98e9386e2c0, type: 3}
+  TileModel: {fileID: 3497093088325243830, guid: ee11fc2b6fa7160419463a4f68b833b5, type: 3}
+  FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}
