@@ -18,23 +18,12 @@ public class HexMapRenderer : MonoBehaviour
         HexGridDataManager.OnGridInitialized -= RenderMap;
     }
 
-    private void RenderMap()
+    private void RenderMap(Dictionary<Vector2, Tile> allTiles)
     {
-        HexGridDataManager gridDataManager = FindObjectOfType<HexGridDataManager>();
-        if (gridDataManager == null)
-        {
-            Debug.LogError("HexMapRenderer: HexGridDataManager is missing in the scene!");
-            return;
-        }
-
-        // Fetch all tiles from HexGridDataManager
-        var allTiles = gridDataManager.GetHexCells();
-
         foreach (var entry in allTiles)
         {
             Tile tile = entry.Value;
 
-            // Fetch the TileType
             TileData tileType = tile.TileType;
             if (tileType == null)
             {
@@ -42,14 +31,12 @@ public class HexMapRenderer : MonoBehaviour
                 continue;
             }
 
-            // Instantiate the TileModel and attach it
             if (tileType.TileModel != null)
             {
                 GameObject modelInstance = Instantiate(tileType.TileModel, tile.TileModel.transform);
                 modelInstance.transform.localPosition = Vector3.zero;
             }
 
-            // Instantiate the FogOverlay and attach it
             if (tileType.FogOverlay != null)
             {
                 GameObject fogInstance = Instantiate(tileType.FogOverlay, tile.FogOverlay.transform);

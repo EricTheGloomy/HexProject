@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HexGridDataManager : MonoBehaviour
 {
-    public static event Action OnGridInitialized;
+    public static event Action<Dictionary<Vector2, Tile>> OnGridInitialized;
 
     public MapConfig MapConfiguration;
 
@@ -83,7 +83,7 @@ public class HexGridDataManager : MonoBehaviour
         Debug.Log("HexGridDataManager: Grid initialized and neighbors assigned.");
 
         // Notify other systems that the grid is ready
-        OnGridInitialized?.Invoke();
+        OnGridInitialized?.Invoke(hexCells);
     }
 
     private void CalculateHexSize(GameObject hexTilePrefab)
