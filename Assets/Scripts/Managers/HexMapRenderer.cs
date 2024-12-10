@@ -9,59 +9,81 @@ public class HexMapRenderer : MonoBehaviour
     private float hexWidth;
     private float hexHeight;
 
+    public static event Action OnRenderingComplete;
+
     private void OnEnable()
     {
-        HexGridDataManager.OnGridReady += RenderMap;
+        ProceduralMapGenerator.OnMapGenerated += RenderMap;
     }
 
     private void OnDisable()
     {
-        HexGridDataManager.OnGridReady -= RenderMap;
+        ProceduralMapGenerator.OnMapGenerated -= RenderMap;
     }
 
-    private void RenderMap(Dictionary<Vector2Int, Vector3> positions, Dictionary<Vector2Int, TileType> tileTypes, float hexWidth, float hexHeight)
+    private void RenderMap(Dictionary<Vector2Int, TileType> mapData)
     {
-        if (MapConfiguration == null)
+        if (MapConfiguration == null || MapConfiguration.HexTilePrefabDefault == null)
         {
-            Debug.LogError("MapConfiguration is missing!");
+            Debug.LogError("MapConfiguration or HexTilePrefab is missing!");
             return;
         }
 
-    foreach (var entry in positions)
+        CalculateHexSize();
+
+        HexGridDataManager gridDataManager = FindObjectOfType<HexGridDataManager>();
+        if (gridDataManager == null)
+        {
+            Debug.LogError("HexGridDataManager is missing in the scene!");
+            return;
+        }
+
+        // Initialize the grid BEFORE adding tiles
+        gridDataManager.InitializeGrid(MapConfiguration.MapWidth, MapConfiguration.MapHeight);
+
+        foreach (var entry in mapData)
+        {
+            Vector2Int gridPosition = entry.Key;
+            TileType tileType = entry.Value;
+
+            Vector3 worldPosition = CalculateHexPosition(gridPosition.y, gridPosition.x);
+            GameObject tilePrefab = Instantiate(tileType.Prefab, worldPosition, Quaternion.identity, transform);
+
+            Tile tile = tilePrefab.GetComponent<Tile>();
+            if (tile != null)
+            {
+                tile.Initialize(gridPosition, hexWidth, hexHeight, tileType);
+                gridDataManager.AddTile(tile, gridPosition); // Add tile to the grid manager
+            }
+            else
+            {
+                Debug.LogWarning($"Tile prefab at ({gridPosition.x}, {gridPosition.y}) is missing a Tile component.");
+            }
+        }
+
+        Debug.Log("Map rendering complete!");
+        OnRenderingComplete?.Invoke();
+    }
+
+    private void CalculateHexSize()
     {
-        Vector2Int gridPosition = entry.Key;
-        Vector3 worldPosition = entry.Value;
-
-        Debug.Log($"Rendering tile at grid position {gridPosition}, world position {worldPosition}");
-        
-        if (!tileTypes.ContainsKey(gridPosition))
+        MeshRenderer renderer = MapConfiguration.HexTilePrefabDefault.GetComponentInChildren<MeshRenderer>();
+        if (renderer != null)
         {
-            Debug.LogError($"No tile type found for position {gridPosition}!");
-            continue;
-        }
-
-        TileType tileType = tileTypes[gridPosition];
-        GameObject tilePrefab = tileType.Prefab;
-
-        if (tilePrefab == null)
-        {
-            Debug.LogError($"TileType {tileType} is missing its prefab!");
-            continue;
-        }
-
-        GameObject tileInstance = Instantiate(tilePrefab, worldPosition, Quaternion.identity, transform);
-        Tile tile = tileInstance.GetComponent<Tile>();
-
-        if (tile != null)
-        {
-            tile.Initialize(gridPosition, hexWidth, hexHeight, tileType);
+            hexWidth = renderer.bounds.size.x;
+            hexHeight = renderer.bounds.size.z;
         }
         else
         {
-            Debug.LogWarning($"Tile prefab at {gridPosition} is missing a Tile component.");
+            Debug.LogError("HexTilePrefab is missing a MeshRenderer!");
         }
     }
 
-        Debug.Log("HexMapRenderer: Map rendering complete!");
+    private Vector3 CalculateHexPosition(int row, int col)
+    {
+        float xOffset = (row % 2 == 0) ? 0 : hexWidth * 0.5f;
+        float x = col * hexWidth + xOffset;
+        float z = row * (hexHeight * 0.75f);
+        return new Vector3(x, 0, z);
     }
 }
