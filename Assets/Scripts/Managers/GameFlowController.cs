@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameFlowController : MonoBehaviour
 {
-    public GameState CurrentState { get; private set; } = GameState.Initial;
+    public GameState CurrentState { get; private set; } = GameState.Initial; // Default state is Initial
 
     [Header("Dependencies")]
     [SerializeField] private ProceduralMapGenerator mapGenerator;
@@ -39,7 +39,7 @@ public class GameFlowController : MonoBehaviour
 
     private void Start()
     {
-        TransitionToState(GameState.GameStart);
+        TransitionToState(GameState.GameStart); // Transition from Initial to GameStart
     }
 
     private void TransitionToState(GameState newState, bool forceReExecution = false)
@@ -53,6 +53,7 @@ public class GameFlowController : MonoBehaviour
         Debug.Log($"Transitioning from {CurrentState} to {newState}");
         CurrentState = newState;
 
+        // Execute the state handler
         switch (newState)
         {
             case GameState.Initial:
@@ -169,7 +170,7 @@ public class GameFlowController : MonoBehaviour
     public void ForceStateReEntry(GameState stateToReEnter)
     {
         Debug.Log($"GameFlowController: Forcing re-entry into state {stateToReEnter}.");
-        ResetExecutionFlags();
+        ResetExecutionFlags(); // Reset execution flags for all states
 
         TransitionToState(stateToReEnter, forceReExecution: true); // Enforce re-execution of the handler
     }
