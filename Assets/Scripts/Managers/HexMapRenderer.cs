@@ -16,22 +16,22 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
         {
             Tile tile = entry.Value;
 
-            TileData tileType = tile.TileType;
-            if (tileType == null)
+            TileTypeData tileTypeData = tile.TileTypeData;
+            if (tileTypeData == null)
             {
-                Debug.LogError($"HexMapRenderer: Tile at {tile.GridPosition} is missing its TileType!");
+                Debug.LogError($"HexMapRenderer: Tile at {tile.GridPosition} is missing its TileTypeData!");
                 continue;
             }
 
-            if (tileType.TileModel != null)
+            if (tileTypeData.TileModel != null)
             {
-                GameObject modelInstance = Instantiate(tileType.TileModel, tile.TileModel.transform);
+                GameObject modelInstance = Instantiate(tileTypeData.TileModel, tile.TileModel.transform);
                 modelInstance.transform.localPosition = Vector3.zero;
             }
 
-            if (tileType.FogOverlay != null)
+            if (tileTypeData.FogOverlay != null)
             {
-                GameObject fogInstance = Instantiate(tileType.FogOverlay, tile.FogOverlay.transform);
+                GameObject fogInstance = Instantiate(tileTypeData.FogOverlay, tile.FogOverlay.transform);
                 fogInstance.transform.localPosition = Vector3.zero;
             }
         }

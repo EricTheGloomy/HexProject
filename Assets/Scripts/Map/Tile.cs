@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
     public GameObject TileDecorations;
     public GameObject FogOverlay;
 
-    public TileData TileType { get; private set; } // Reference to the scriptable object
+    public TileTypeData TileTypeData { get; private set; } // Reference to the scriptable object
 
     public Vector2 OffsetCoordinates { get; private set; }
     public Vector3 CubeCoordinates { get; private set; }
@@ -20,10 +20,12 @@ public class Tile : MonoBehaviour
     private List<Tile> neighbors = new List<Tile>();
     public List<Tile> Neighbors => neighbors;
 
-    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileData tileType)
+    public bool IsStartingLocation { get; private set; }
+
+    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileTypeData tileData)
     {
         GridPosition = gridPosition;
-        TileType = tileType;
+        TileTypeData = tileData;
 
         // Calculate Offset Coordinates
         OffsetCoordinates = new Vector2(gridPosition.x, gridPosition.y);
@@ -44,7 +46,7 @@ public class Tile : MonoBehaviour
         Renderer renderer = GetComponentInChildren<Renderer>();
         if (renderer != null)
         {
-            // Apply visuals based on TileType prefab (if needed later)
+            // Apply visuals based on TileData prefab (if needed later)
         }
     }
 
@@ -61,5 +63,12 @@ public class Tile : MonoBehaviour
     {
         Visibility = newState;
         FogOverlay?.SetActive(Visibility == VisibilityState.Hidden);
+    }
+
+    // NEW: Mark this tile as the starting location at runtime
+    public void SetAsStartingLocation()
+    {
+        IsStartingLocation = true; // Mark this tile
+        Debug.Log($"Tile at {GridPosition} marked as starting location.");
     }
 }

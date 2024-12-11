@@ -1,15 +1,15 @@
-// File: Scripts/Config/TileTypeMappingConfig.cs
+// File: Scripts/Config/TileTypeDataMappingConfig.cs
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TileTypeMappingConfig", menuName = "Game/TileTypeMappingConfig")]
-public class TileTypeMappingConfig : ScriptableObject
+[CreateAssetMenu(fileName = "TileTypeDataMappingConfig", menuName = "Game/TileTypeDataMappingConfig")]
+public class TileTypeDataMappingConfig : ScriptableObject
 {
     [System.Serializable]
     public class TileMapping
     {
-        public TileData TileType;
-        public float MinNoiseValue; // Minimum noise value for this TileType
-        public float MaxNoiseValue; // Maximum noise value for this TileType
+        public TileTypeData TileTypeData;
+        public float MinNoiseValue; // Minimum noise value for this TileTypeData
+        public float MaxNoiseValue; // Maximum noise value for this TileTypeData
     }
 
     public TileMapping[] TileMappings;

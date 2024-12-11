@@ -7,23 +7,23 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
     [Header("Dependencies")]
     public MapConfig MapConfig;
     public MapGenerationConfig MapGenerationConfig;
-    public TileTypeMappingConfig TileTypeMappingConfig;
+    public TileTypeDataMappingConfig TileTypeDataMappingConfig;
 
-    public event Action<Dictionary<Vector2Int, TileData>> OnMapGenerated;
+    public event Action<Dictionary<Vector2Int, TileTypeData>> OnMapGenerated;
 
-    private Dictionary<Vector2Int, TileData> generatedMapData;
-    public Dictionary<Vector2Int, TileData> GeneratedMapData => generatedMapData;
+    private Dictionary<Vector2Int, TileTypeData> generatedMapData;
+    public Dictionary<Vector2Int, TileTypeData> GeneratedMapData => generatedMapData;
 
     public void GenerateMap()
     {
-        if (MapConfig == null || MapGenerationConfig == null || TileTypeMappingConfig == null)
+        if (MapConfig == null || MapGenerationConfig == null || TileTypeDataMappingConfig == null)
         {
-            Debug.LogError("MapConfig, MapGenerationConfig, or TileTypeMappingConfig is missing!");
+            Debug.LogError("MapConfig, MapGenerationConfig, or TileTypeDataMappingConfig is missing!");
             return;
         }
 
         // Generate map data
-        Dictionary<Vector2Int, TileData> mapData = new Dictionary<Vector2Int, TileData>();
+        Dictionary<Vector2Int, TileTypeData> mapData = new Dictionary<Vector2Int, TileTypeData>();
         System.Random prng = new System.Random(MapGenerationConfig.Seed);
         Vector2[] octaveOffsets = GetPerlinOffsets(prng);
 
@@ -32,8 +32,8 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             for (int col = 0; col < MapConfig.MapWidth; col++)
             {
                 float perlinValue = GeneratePerlinValue(col, row, octaveOffsets);
-                TileData tileType = GetTileTypeFromNoise(perlinValue);
-                mapData[new Vector2Int(col, row)] = tileType;
+                TileTypeData tileTypeData = GetTileTypeDataFromNoise(perlinValue);
+                mapData[new Vector2Int(col, row)] = tileTypeData;
             }
         }
 
@@ -76,16 +76,16 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
         return Mathf.InverseLerp(MapGenerationConfig.NoiseMin, MapGenerationConfig.NoiseMax, noiseHeight);
     }
 
-    private TileData GetTileTypeFromNoise(float noiseValue)
+    private TileTypeData GetTileTypeDataFromNoise(float noiseValue)
     {
-        foreach (var mapping in TileTypeMappingConfig.TileMappings)
+        foreach (var mapping in TileTypeDataMappingConfig.TileMappings)
         {
             if (noiseValue >= mapping.MinNoiseValue && noiseValue <= mapping.MaxNoiseValue)
             {
-                return mapping.TileType;
+                return mapping.TileTypeData;
             }
         }
 
-        throw new InvalidOperationException($"No TileType found for noise value {noiseValue}");
+        throw new InvalidOperationException($"No TileTypeData found for noise value {noiseValue}");
     }
 }

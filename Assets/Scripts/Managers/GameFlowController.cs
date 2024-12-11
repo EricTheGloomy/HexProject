@@ -10,10 +10,12 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private ProceduralMapGenerator mapGenerator;
     [SerializeField] private HexGridDataManager gridManager;
     [SerializeField] private HexMapRenderer mapRenderer;
+    [SerializeField] private MapLocationManager locationManager;
 
     private IMapGenerator MapGenerator;
     private IGridManager GridManager;
     private IRenderer MapRenderer;
+    private IMapLocationManager LocationManager;
 
     private Dictionary<Vector2, Tile> cachedHexCells;
 
@@ -25,7 +27,7 @@ public class GameFlowController : MonoBehaviour
 
     private void Awake()
     {
-        if (!mapGenerator || !gridManager || !mapRenderer)
+        if (!mapGenerator || !gridManager || !mapRenderer || !locationManager)
         {
             Debug.LogError("GameFlowController: Missing dependencies in the Inspector!");
             enabled = false;
@@ -35,6 +37,7 @@ public class GameFlowController : MonoBehaviour
         MapGenerator = mapGenerator;
         GridManager = gridManager;
         MapRenderer = mapRenderer;
+        LocationManager = locationManager;
     }
 
     private void Start()
@@ -67,6 +70,9 @@ public class GameFlowController : MonoBehaviour
                 break;
             case GameState.GridInitialization:
                 InitializeGrid();
+                break;
+            case GameState.LocationsAssigning:
+                AssignLocations();
                 break;
             case GameState.MapRendering:
                 RenderMap();
@@ -107,7 +113,7 @@ public class GameFlowController : MonoBehaviour
         MapGenerator.GenerateMap();
     }
 
-    private void OnMapGenerated(Dictionary<Vector2Int, TileData> mapData)
+    private void OnMapGenerated(Dictionary<Vector2Int, TileTypeData> mapData)
     {
         if (mapData == null || mapData.Count == 0)
         {
@@ -145,6 +151,17 @@ public class GameFlowController : MonoBehaviour
         Debug.Log($"GameFlowController: Grid initialized with {hexCells.Count} tiles.");
         cachedHexCells = hexCells;
         isGridInitialized = true;
+        TransitionToState(GameState.LocationsAssigning);
+    }
+
+    private void AssignLocations()
+    {
+        Debug.Log("GameFlowController: Assigning map locations...");
+
+        // Provide grid data explicitly
+        LocationManager.AssignLocations(cachedHexCells);
+
+        // Transition to the next state
         TransitionToState(GameState.MapRendering);
     }
 

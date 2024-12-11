@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IMapGenerator
 {
-    event Action<Dictionary<Vector2Int, TileData>> OnMapGenerated;
+    event Action<Dictionary<Vector2Int, TileTypeData>> OnMapGenerated;
     void GenerateMap();
 
-    Dictionary<Vector2Int, TileData> GeneratedMapData { get; }
+    Dictionary<Vector2Int, TileTypeData> GeneratedMapData { get; }
 }
