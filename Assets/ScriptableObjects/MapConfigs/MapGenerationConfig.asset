@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f241903fc15b3f04aab78b5d7fb18cf5, type: 3}
   m_Name: MapGenerationConfig
   m_EditorClassIdentifier: 
-  NoiseScale: 5
-  Octaves: 8
+  NoiseScale: 4
+  Octaves: 4
   Persistence: 0.5
   Lacunarity: 2
   seed: 42

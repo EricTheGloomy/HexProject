@@ -50,7 +50,7 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
         foreach (var entry in mapData)
         {
             Vector2Int gridPosition = entry.Key;
-            TileTypeData tileData = entry.Value;
+            TileTypeData tileTypeData = entry.Value;
 
             // Instantiate the tile prefab
             GameObject tileObject = Instantiate(TilePrefab, transform);
@@ -65,7 +65,7 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
             }
 
             // Initialize the tile
-            tile.Initialize(gridPosition, hexWidth, hexHeight, tileData);
+            tile.Initialize(gridPosition, hexWidth, hexHeight, tileTypeData);
 
             // Store the tile in dictionaries
             allTiles[gridPosition] = tile;

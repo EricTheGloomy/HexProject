@@ -22,10 +22,10 @@ public class Tile : MonoBehaviour
 
     public bool IsStartingLocation { get; private set; }
 
-    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileTypeData tileData)
+    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileTypeData tileTypeData)
     {
         GridPosition = gridPosition;
-        TileTypeData = tileData;
+        TileTypeData = tileTypeData;
 
         // Calculate Offset Coordinates
         OffsetCoordinates = new Vector2(gridPosition.x, gridPosition.y);
@@ -46,7 +46,7 @@ public class Tile : MonoBehaviour
         Renderer renderer = GetComponentInChildren<Renderer>();
         if (renderer != null)
         {
-            // Apply visuals based on TileData prefab (if needed later)
+            // Apply visuals based on TileTypeData prefab (if needed later)
         }
     }
 
