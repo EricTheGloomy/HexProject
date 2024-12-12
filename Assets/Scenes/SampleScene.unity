@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b01062ca122c494381d6a3f4df58519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  revealRadius: 8
+  fogConfig: {fileID: 11400000, guid: b808ca978a714ad46aa597cca3f38af6, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

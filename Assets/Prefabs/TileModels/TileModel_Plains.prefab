@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2832100845626660810}
   - component: {fileID: 3986204344082231267}
   m_Layer: 0
-  m_Name: TileModel_Water_test
+  m_Name: TileModel_Plains
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 01cc59e98a1659947a70bea33761b737, type: 2}
+  - {fileID: 2100000, guid: 120c184e958154e4092388b848237263, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
