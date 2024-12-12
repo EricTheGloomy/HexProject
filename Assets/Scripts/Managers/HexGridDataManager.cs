@@ -16,8 +16,8 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
     private Tile[,] mapGrid;
     public bool isGridReady = false;
 
-    private float hexWidth;
-    private float hexHeight;
+    private float hexPrefabWidth;
+    private float hexPrefabHeight;
 
     public void InitializeGrid(Dictionary<Vector2Int, TileTypeData> mapData)
     {
@@ -65,7 +65,7 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
             }
 
             // Initialize the tile
-            tile.Initialize(gridPosition, hexWidth, hexHeight, tileTypeData);
+            tile.Initialize(gridPosition, hexPrefabWidth, hexPrefabHeight, tileTypeData);
 
             // Store the tile in dictionaries
             allTiles[gridPosition] = tile;
@@ -96,15 +96,15 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
             return;
         }
 
-        hexWidth = renderer.bounds.size.x;
-        hexHeight = renderer.bounds.size.z;
+        hexPrefabWidth = renderer.bounds.size.x;
+        hexPrefabHeight = renderer.bounds.size.z;
 
-        if (hexWidth == 0 || hexHeight == 0)
+        if (hexPrefabWidth == 0 || hexPrefabHeight == 0)
         {
             Debug.LogError("HexGridDataManager: Invalid hex size! Check HexTilePrefabDefault.");
         }
 
-        Debug.Log($"HexGridDataManager: Hex size calculated: width={hexWidth}, height={hexHeight}");
+        Debug.Log($"HexGridDataManager: Hex size calculated: width={hexPrefabWidth}, height={hexPrefabHeight}");
     }
 
     private void AssignNeighbors()
@@ -131,4 +131,21 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
     {
         return allTiles.TryGetValue(position, out Tile tile) ? tile : null;
     }
+
+    public Vector2Int GetMapDimensions()
+    {
+        return new Vector2Int(MapConfiguration.MapWidth, MapConfiguration.MapHeight);
+    }
+
+    public float GetTileWidth()
+    {
+        return hexPrefabWidth; // Ensure hexWidth is correctly calculated in InitializeGrid
+    }
+
+    public float GetTileHeight()
+    {
+        return hexPrefabHeight; // Ensure hexHeight is correctly calculated in InitializeGrid
+    }
+
+
 }

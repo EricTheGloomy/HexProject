@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameFlowController : MonoBehaviour
 {
-    public GameState CurrentState { get; private set; } = GameState.Initial; // Default state is Initial
+    public GameState CurrentState { get; private set; } = GameState.Initial;
 
     [Header("Dependencies")]
     [SerializeField] private ProceduralMapGenerator mapGenerator;
@@ -12,12 +12,14 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private HexMapRenderer mapRenderer;
     [SerializeField] private MapLocationManager locationManager;
     [SerializeField] private FogOfWarManager fogOfWarManager;
+    [SerializeField] private CameraManager cameraManager;
 
     private IMapGenerator MapGenerator;
     private IGridManager GridManager;
     private IRenderer MapRenderer;
     private IMapLocationManager LocationManager;
     private IFogOfWarManager FogOfWarManager;
+    private ICameraManager CameraManager;
 
     private Dictionary<Vector2, Tile> cachedHexCells;
 
@@ -29,7 +31,7 @@ public class GameFlowController : MonoBehaviour
 
     private void Awake()
     {
-        if (!mapGenerator || !gridManager || !mapRenderer || !locationManager || !fogOfWarManager)
+        if (!mapGenerator || !gridManager || !mapRenderer || !locationManager || !fogOfWarManager || !cameraManager)
         {
             Debug.LogError("GameFlowController: Missing dependencies in the Inspector!");
             enabled = false;
@@ -41,6 +43,7 @@ public class GameFlowController : MonoBehaviour
         MapRenderer = mapRenderer;
         LocationManager = locationManager;
         FogOfWarManager = fogOfWarManager;
+        CameraManager = cameraManager;
     }
 
     private void Start()
@@ -82,6 +85,9 @@ public class GameFlowController : MonoBehaviour
                 break;
             case GameState.FogOfWarInitialization:
                 InitializeFogOfWar();
+                break;
+            case GameState.CameraInitialization:
+                InitializeCamera();
                 break;
             case GameState.Gameplay:
                 StartGameplay();
@@ -167,7 +173,6 @@ public class GameFlowController : MonoBehaviour
         // Provide grid data explicitly
         LocationManager.AssignLocations(cachedHexCells);
 
-        // Transition to the next state
         TransitionToState(GameState.MapRendering);
     }
 
@@ -188,7 +193,21 @@ public class GameFlowController : MonoBehaviour
     private void InitializeFogOfWar()
     {
         Debug.Log("GameFlowController: Initializing fog of war...");
-        FogOfWarManager.Initialize(cachedHexCells); // FogOfWarManager handles starting tile internally
+        FogOfWarManager.Initialize(cachedHexCells);
+        TransitionToState(GameState.CameraInitialization);
+    }
+
+    private void InitializeCamera()
+    {
+        Debug.Log("GameFlowController: Initializing camera...");
+
+        // Retrieve tile size from HexGridDataManager
+        float tileSizeX = gridManager.GetTileWidth();
+        float tileSizeZ = gridManager.GetTileHeight();
+
+        // Pass the necessary data to CameraManager
+        CameraManager.Initialize(cachedHexCells, tileSizeX, tileSizeZ);
+
         TransitionToState(GameState.Gameplay); // Proceed to gameplay
     }
 

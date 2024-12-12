@@ -7,5 +7,6 @@ public enum GameState
     LocationsAssigning,     // Assigning special locations (starting point, etc.)
     MapRendering,           // Rendering the map
     FogOfWarInitialization, //Initialize fog of war
+    CameraInitialization,   //Initialize the camera
     Gameplay,               // Main gameplay loop
 }
