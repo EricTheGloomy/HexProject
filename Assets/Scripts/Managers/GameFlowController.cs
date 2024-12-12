@@ -11,11 +11,13 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private HexGridDataManager gridManager;
     [SerializeField] private HexMapRenderer mapRenderer;
     [SerializeField] private MapLocationManager locationManager;
+    [SerializeField] private FogOfWarManager fogOfWarManager;
 
     private IMapGenerator MapGenerator;
     private IGridManager GridManager;
     private IRenderer MapRenderer;
     private IMapLocationManager LocationManager;
+    private IFogOfWarManager FogOfWarManager;
 
     private Dictionary<Vector2, Tile> cachedHexCells;
 
@@ -27,7 +29,7 @@ public class GameFlowController : MonoBehaviour
 
     private void Awake()
     {
-        if (!mapGenerator || !gridManager || !mapRenderer || !locationManager)
+        if (!mapGenerator || !gridManager || !mapRenderer || !locationManager || !fogOfWarManager)
         {
             Debug.LogError("GameFlowController: Missing dependencies in the Inspector!");
             enabled = false;
@@ -38,6 +40,7 @@ public class GameFlowController : MonoBehaviour
         GridManager = gridManager;
         MapRenderer = mapRenderer;
         LocationManager = locationManager;
+        FogOfWarManager = fogOfWarManager;
     }
 
     private void Start()
@@ -76,6 +79,9 @@ public class GameFlowController : MonoBehaviour
                 break;
             case GameState.MapRendering:
                 RenderMap();
+                break;
+            case GameState.FogOfWarInitialization:
+                InitializeFogOfWar();
                 break;
             case GameState.Gameplay:
                 StartGameplay();
@@ -176,7 +182,14 @@ public class GameFlowController : MonoBehaviour
         Debug.Log("GameFlowController: Rendering map...");
         MapRenderer.RenderMap(cachedHexCells);
         isMapRendered = true;
-        TransitionToState(GameState.Gameplay);
+        TransitionToState(GameState.FogOfWarInitialization);
+    }
+
+    private void InitializeFogOfWar()
+    {
+        Debug.Log("GameFlowController: Initializing fog of war...");
+        FogOfWarManager.Initialize(cachedHexCells); // FogOfWarManager handles starting tile internally
+        TransitionToState(GameState.Gameplay); // Proceed to gameplay
     }
 
     private void StartGameplay()

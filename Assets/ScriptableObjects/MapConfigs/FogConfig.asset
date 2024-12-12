@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30d125e048414bc4caa4af08a8e6d923, type: 3}
-  m_Name: MapConfig
+  m_Script: {fileID: 11500000, guid: 158d34acff4e54a489fc67c16a24b559, type: 3}
+  m_Name: FogConfig
   m_EditorClassIdentifier: 
-  HexTilePrefabDefault: {fileID: 3497093088325243830, guid: 607d008e6649a824f9ffd504d89cc88a, type: 3}
-  MapWidth: 25
-  MapHeight: 25
+  RevealRadius: 4
