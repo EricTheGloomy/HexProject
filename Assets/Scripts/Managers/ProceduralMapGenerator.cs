@@ -14,32 +14,35 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
     private Dictionary<Vector2Int, TileTypeData> generatedMapData;
     public Dictionary<Vector2Int, TileTypeData> GeneratedMapData => generatedMapData;
 
-    public void GenerateMap()
+    public void ApplyTileTypeData(Dictionary<Vector2, Tile> tiles)
     {
-        if (MapConfig == null || MapGenerationConfig == null || TileTypeDataMappingConfig == null)
+        Debug.Log("ProceduralMapGenerator: Applying TileTypeData...");
+
+        if (tiles == null || tiles.Count == 0)
         {
-            Debug.LogError("MapConfig, MapGenerationConfig, or TileTypeDataMappingConfig is missing!");
+            Debug.LogError("ProceduralMapGenerator: Received empty tile data.");
             return;
         }
 
-        // Generate map data
-        Dictionary<Vector2Int, TileTypeData> mapData = new Dictionary<Vector2Int, TileTypeData>();
-        System.Random prng = new System.Random(MapGenerationConfig.Seed);
-        Vector2[] octaveOffsets = GetPerlinOffsets(prng);
+        generatedMapData = new Dictionary<Vector2Int, TileTypeData>(); // Ensure it's initialized
 
-        for (int row = 0; row < MapConfig.MapHeight; row++)
+        foreach (var tileEntry in tiles)
         {
-            for (int col = 0; col < MapConfig.MapWidth; col++)
-            {
-                float perlinValue = GeneratePerlinValue(col, row, octaveOffsets);
-                TileTypeData tileTypeData = GetTileTypeDataFromNoise(perlinValue);
-                mapData[new Vector2Int(col, row)] = tileTypeData;
-            }
+            Vector2Int gridPosition = new Vector2Int((int)tileEntry.Key.x, (int)tileEntry.Key.y);
+            Tile tile = tileEntry.Value;
+
+            // Generate TileTypeData using map generation logic
+            float perlinValue = GeneratePerlinValue(gridPosition.x, gridPosition.y, GetPerlinOffsets(new System.Random(MapGenerationConfig.Seed)));
+            TileTypeData tileTypeData = GetTileTypeDataFromNoise(perlinValue);
+
+            // Update the tile with generated data
+            tile.SetTileTypeData(tileTypeData);
+
+            // Store the mapping for external use
+            generatedMapData[gridPosition] = tileTypeData;
         }
 
-        generatedMapData = mapData; // Correctly assign the populated map data
-
-        Debug.Log("ProceduralMapGenerator: Map generation complete!");
+        Debug.Log("ProceduralMapGenerator: TileTypeData applied successfully.");
         OnMapGenerated?.Invoke(generatedMapData);
     }
 

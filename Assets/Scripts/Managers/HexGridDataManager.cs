@@ -19,13 +19,12 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
     private float hexPrefabWidth;
     private float hexPrefabHeight;
 
-    public void InitializeGrid(Dictionary<Vector2Int, TileTypeData> mapData)
+    public void InitializeGrid()
     {
         // Reset state
         isGridReady = false;
         Debug.Log("HexGridDataManager: Initializing grid...");
 
-        // Validate dependencies
         if (MapConfiguration == null || MapConfiguration.HexTilePrefabDefault == null)
         {
             Debug.LogError("HexGridDataManager: MapConfiguration or HexTilePrefabDefault is missing!");
@@ -38,7 +37,7 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
             return;
         }
 
-        // Calculate hex dimensions from the default prefab
+        // Calculate hex dimensions
         CalculateHexSize(MapConfiguration.HexTilePrefabDefault);
 
         // Initialize grid containers
@@ -46,44 +45,42 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
         allTiles.Clear();
         hexCells.Clear();
 
-        // Instantiate and initialize each tile
-        foreach (var entry in mapData)
+        // Instantiate and initialize each tile with default data
+        for (int row = 0; row < MapConfiguration.MapHeight; row++)
         {
-            Vector2Int gridPosition = entry.Key;
-            TileTypeData tileTypeData = entry.Value;
-
-            // Instantiate the tile prefab
-            GameObject tileObject = Instantiate(TilePrefab, transform);
-            tileObject.name = $"Tile_{gridPosition.x}_{gridPosition.y}";
-
-            // Get the Tile script from the prefab
-            Tile tile = tileObject.GetComponent<Tile>();
-            if (tile == null)
+            for (int col = 0; col < MapConfiguration.MapWidth; col++)
             {
-                Debug.LogError($"HexGridDataManager: TilePrefab is missing the Tile script at {gridPosition}!");
-                continue;
+                Vector2Int gridPosition = new Vector2Int(col, row);
+
+                // Instantiate the tile prefab
+                GameObject tileObject = Instantiate(TilePrefab, transform);
+                tileObject.name = $"Tile_{gridPosition.x}_{gridPosition.y}";
+
+                // Get the Tile script from the prefab
+                Tile tile = tileObject.GetComponent<Tile>();
+                if (tile == null)
+                {
+                    Debug.LogError($"HexGridDataManager: TilePrefab is missing the Tile script at {gridPosition}!");
+                    continue;
+                }
+
+                // Initialize the tile with placeholder data
+                var defaultTileTypeData = ScriptableObject.CreateInstance<TileTypeData>();
+                defaultTileTypeData.Name = "Default"; // Optional: set default fields
+                
+                tile.Initialize(gridPosition, hexPrefabWidth, hexPrefabHeight, defaultTileTypeData);
+
+                // Store the tile in dictionaries
+                allTiles[gridPosition] = tile;
+                mapGrid[gridPosition.x, gridPosition.y] = tile;
+                hexCells[tile.OffsetCoordinates] = tile;
             }
-
-            // Initialize the tile
-            tile.Initialize(gridPosition, hexPrefabWidth, hexPrefabHeight, tileTypeData);
-
-            // Store the tile in dictionaries
-            allTiles[gridPosition] = tile;
-            mapGrid[gridPosition.x, gridPosition.y] = tile;
-
-            // Calculate and store offset coordinates for HexUtility
-            hexCells[tile.OffsetCoordinates] = tile;
         }
 
-        // Assign neighbors to each tile using HexUtility
         AssignNeighbors();
 
-        // Mark the grid as ready
         isGridReady = true;
         Debug.Log("HexGridDataManager: Grid initialized and neighbors assigned.");
-        Debug.Log($"HexGridDataManager: Invoking OnGridReady with {hexCells.Count} tiles.");
-
-        // Notify subscribers that the grid is ready
         OnGridReady?.Invoke(hexCells);
     }
 

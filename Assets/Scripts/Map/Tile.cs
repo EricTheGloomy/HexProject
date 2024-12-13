@@ -71,4 +71,9 @@ public class Tile : MonoBehaviour
         IsStartingLocation = true; // Mark this tile
         Debug.Log($"Tile at {GridPosition} marked as starting location.");
     }
+
+    public void SetTileTypeData(TileTypeData tileTypeData)
+    {
+        TileTypeData = tileTypeData;
+    }
 }

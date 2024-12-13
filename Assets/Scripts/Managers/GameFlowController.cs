@@ -14,13 +14,6 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private FogOfWarManager fogOfWarManager;
     [SerializeField] private CameraManager cameraManager;
 
-    private IMapGenerator MapGenerator => mapGenerator;
-    private IGridManager GridManager => gridManager;
-    private IRenderer MapRenderer => mapRenderer;
-    private IMapLocationManager LocationManager => locationManager;
-    private IFogOfWarManager FogOfWarManager => fogOfWarManager;
-    private ICameraManager CameraManager => cameraManager;
-
     private Dictionary<Vector2, Tile> cachedHexCells;
 
     private void Awake()
@@ -36,14 +29,14 @@ public class GameFlowController : MonoBehaviour
 
     private void Start()
     {
-        TransitionToState(GameState.GameStart);
+        TransitionToState(GameState.GridInitialization);
     }
 
     private void TransitionToState(GameState newState)
     {
         if (CurrentState == newState)
         {
-            Debug.LogWarning($"GameFlowController: Already in state {newState}, skipping redundant transition.");
+            Debug.LogWarning($"Already in state {newState}, skipping transition.");
             return;
         }
 
@@ -52,16 +45,12 @@ public class GameFlowController : MonoBehaviour
 
         switch (newState)
         {
-            case GameState.GameStart:
-                StartGame();
+            case GameState.GridInitialization:
+                InitializeGrid();
                 break;
 
             case GameState.MapGeneration:
                 GenerateMap();
-                break;
-
-            case GameState.GridInitialization:
-                InitializeGrid();
                 break;
 
             case GameState.LocationsAssigning:
@@ -90,36 +79,10 @@ public class GameFlowController : MonoBehaviour
         }
     }
 
-    private void StartGame()
-    {
-        Debug.Log("Starting game...");
-        TransitionToState(GameState.MapGeneration); // Transition to the next state
-    }
-
-    private void GenerateMap()
-    {
-        Debug.Log("Generating map...");
-        MapGenerator.GenerateMap();
-        // Transition happens in OnMapGenerated
-    }
-
-    private void OnMapGenerated(Dictionary<Vector2Int, TileTypeData> mapData)
-    {
-        if (mapData == null || mapData.Count == 0)
-        {
-            Debug.LogError("Map generation failed.");
-            return;
-        }
-
-        Debug.Log("Map generation complete!");
-        TransitionToState(GameState.GridInitialization); // Transition to the next state
-    }
-
     private void InitializeGrid()
     {
         Debug.Log("Initializing grid...");
-        GridManager.InitializeGrid(MapGenerator.GeneratedMapData);
-        // Transition happens in OnGridReady
+        gridManager.InitializeGrid(); // No map data needed
     }
 
     private void OnGridReady(Dictionary<Vector2, Tile> hexCells)
@@ -132,39 +95,57 @@ public class GameFlowController : MonoBehaviour
 
         Debug.Log($"Grid initialized with {hexCells.Count} tiles.");
         cachedHexCells = hexCells;
-        TransitionToState(GameState.LocationsAssigning); // Transition to the next state
+        TransitionToState(GameState.MapGeneration);
+    }
+
+    private void GenerateMap()
+    {
+        Debug.Log("Generating map...");
+        mapGenerator.ApplyTileTypeData(cachedHexCells); // Pass the grid to ProceduralMapGenerator
+    }
+
+    private void OnMapGenerated(Dictionary<Vector2Int, TileTypeData> mapData)
+    {
+        if (mapData == null || mapData.Count == 0)
+        {
+            Debug.LogError("Map generation failed.");
+            return;
+        }
+
+        Debug.Log("Map generation complete!");
+        TransitionToState(GameState.LocationsAssigning);
     }
 
     private void AssignLocations()
     {
         Debug.Log("Assigning map locations...");
-        LocationManager.AssignLocations(cachedHexCells);
-        TransitionToState(GameState.MapRendering); // Transition to the next state
+        locationManager.AssignLocations(cachedHexCells);
+        TransitionToState(GameState.MapRendering);
     }
 
     private void RenderMap()
     {
         Debug.Log("Rendering map...");
-        MapRenderer.RenderMap(cachedHexCells);
-        TransitionToState(GameState.FogOfWarInitialization); // Transition to the next state
+        mapRenderer.RenderMap(cachedHexCells);
+        TransitionToState(GameState.FogOfWarInitialization);
     }
 
     private void InitializeFogOfWar()
     {
         Debug.Log("Initializing fog of war...");
-        FogOfWarManager.Initialize(cachedHexCells);
-        TransitionToState(GameState.CameraInitialization); // Transition to the next state
+        fogOfWarManager.Initialize(cachedHexCells);
+        TransitionToState(GameState.CameraInitialization);
     }
 
     private void InitializeCamera()
     {
         Debug.Log("Initializing camera...");
 
-        float tileSizeX = GridManager.GetTileWidth();
-        float tileSizeZ = GridManager.GetTileHeight();
+        float tileSizeX = gridManager.GetTileWidth();
+        float tileSizeZ = gridManager.GetTileHeight();
 
-        CameraManager.Initialize(cachedHexCells, tileSizeX, tileSizeZ);
-        TransitionToState(GameState.Gameplay); // Transition to the next state
+        cameraManager.Initialize(cachedHexCells, tileSizeX, tileSizeZ);
+        TransitionToState(GameState.Gameplay);
     }
 
     private void StartGameplay()
@@ -174,14 +155,14 @@ public class GameFlowController : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        MapGenerator.OnMapGenerated += OnMapGenerated;
-        GridManager.OnGridReady += OnGridReady;
+        gridManager.OnGridReady += OnGridReady;
+        mapGenerator.OnMapGenerated += OnMapGenerated;
     }
 
     private void UnsubscribeFromEvents()
     {
-        if (MapGenerator != null) MapGenerator.OnMapGenerated -= OnMapGenerated;
-        if (GridManager != null) GridManager.OnGridReady -= OnGridReady;
+        if (gridManager != null) gridManager.OnGridReady -= OnGridReady;
+        if (mapGenerator != null) mapGenerator.OnMapGenerated -= OnMapGenerated;
     }
 
     private void ValidateDependencies()
