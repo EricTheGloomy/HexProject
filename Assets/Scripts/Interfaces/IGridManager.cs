@@ -8,4 +8,7 @@ public interface IGridManager
     void InitializeGrid(Dictionary<Vector2Int, TileTypeData> mapData);
 
     Dictionary<Vector2, Tile> GetHexCells();
+
+    float GetTileWidth();
+    float GetTileHeight();
 }

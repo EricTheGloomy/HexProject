@@ -14,221 +14,187 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private FogOfWarManager fogOfWarManager;
     [SerializeField] private CameraManager cameraManager;
 
-    private IMapGenerator MapGenerator;
-    private IGridManager GridManager;
-    private IRenderer MapRenderer;
-    private IMapLocationManager LocationManager;
-    private IFogOfWarManager FogOfWarManager;
-    private ICameraManager CameraManager;
+    private IMapGenerator MapGenerator => mapGenerator;
+    private IGridManager GridManager => gridManager;
+    private IRenderer MapRenderer => mapRenderer;
+    private IMapLocationManager LocationManager => locationManager;
+    private IFogOfWarManager FogOfWarManager => fogOfWarManager;
+    private ICameraManager CameraManager => cameraManager;
 
     private Dictionary<Vector2, Tile> cachedHexCells;
 
-    // Execution flags for state handlers
-    private bool isGameStarted = false;
-    private bool isMapGenerated = false;
-    private bool isGridInitialized = false;
-    private bool isMapRendered = false;
-
     private void Awake()
     {
-        if (!mapGenerator || !gridManager || !mapRenderer || !locationManager || !fogOfWarManager || !cameraManager)
-        {
-            Debug.LogError("GameFlowController: Missing dependencies in the Inspector!");
-            enabled = false;
-            return;
-        }
+        ValidateDependencies();
+        SubscribeToEvents();
+    }
 
-        MapGenerator = mapGenerator;
-        GridManager = gridManager;
-        MapRenderer = mapRenderer;
-        LocationManager = locationManager;
-        FogOfWarManager = fogOfWarManager;
-        CameraManager = cameraManager;
+    private void OnDestroy()
+    {
+        UnsubscribeFromEvents();
     }
 
     private void Start()
     {
-        TransitionToState(GameState.GameStart); // Transition from Initial to GameStart
+        TransitionToState(GameState.GameStart);
     }
 
-    private void TransitionToState(GameState newState, bool forceReExecution = false)
+    private void TransitionToState(GameState newState)
     {
-        if (CurrentState == newState && !forceReExecution)
+        if (CurrentState == newState)
         {
-            Debug.LogWarning($"GameFlowController: Already in state {newState}, skipping execution.");
+            Debug.LogWarning($"GameFlowController: Already in state {newState}, skipping redundant transition.");
             return;
         }
 
         Debug.Log($"Transitioning from {CurrentState} to {newState}");
         CurrentState = newState;
 
-        // Execute the state handler
         switch (newState)
         {
-            case GameState.Initial:
-                Debug.Log("GameFlowController: Initial state. Waiting to transition...");
-                break;
             case GameState.GameStart:
                 StartGame();
                 break;
+
             case GameState.MapGeneration:
                 GenerateMap();
                 break;
+
             case GameState.GridInitialization:
                 InitializeGrid();
                 break;
+
             case GameState.LocationsAssigning:
                 AssignLocations();
                 break;
+
             case GameState.MapRendering:
                 RenderMap();
                 break;
+
             case GameState.FogOfWarInitialization:
                 InitializeFogOfWar();
                 break;
+
             case GameState.CameraInitialization:
                 InitializeCamera();
                 break;
+
             case GameState.Gameplay:
                 StartGameplay();
                 break;
+
             default:
-                Debug.LogError($"GameFlowController: Unhandled state {newState}.");
+                Debug.LogError($"Unhandled state {newState}");
                 break;
         }
     }
 
     private void StartGame()
     {
-        if (isGameStarted)
-        {
-            Debug.LogWarning("GameFlowController: GameStart already executed, skipping.");
-            return;
-        }
-
-        Debug.Log("GameFlowController: Starting game...");
-        isGameStarted = true;
-        TransitionToState(GameState.MapGeneration);
+        Debug.Log("Starting game...");
+        TransitionToState(GameState.MapGeneration); // Transition to the next state
     }
 
     private void GenerateMap()
     {
-        if (isMapGenerated)
-        {
-            Debug.LogWarning("GameFlowController: MapGeneration already executed, skipping.");
-            return;
-        }
-
-        Debug.Log("GameFlowController: Generating map...");
-        MapGenerator.OnMapGenerated -= OnMapGenerated;
-        MapGenerator.OnMapGenerated += OnMapGenerated;
+        Debug.Log("Generating map...");
         MapGenerator.GenerateMap();
+        // Transition happens in OnMapGenerated
     }
 
     private void OnMapGenerated(Dictionary<Vector2Int, TileTypeData> mapData)
     {
         if (mapData == null || mapData.Count == 0)
         {
-            Debug.LogError("GameFlowController: Map generation failed.");
+            Debug.LogError("Map generation failed.");
             return;
         }
 
-        Debug.Log("GameFlowController: Map generation complete!");
-        isMapGenerated = true;
-        TransitionToState(GameState.GridInitialization);
+        Debug.Log("Map generation complete!");
+        TransitionToState(GameState.GridInitialization); // Transition to the next state
     }
 
     private void InitializeGrid()
     {
-        if (isGridInitialized)
-        {
-            Debug.LogWarning("GameFlowController: GridInitialization already executed, skipping.");
-            return;
-        }
-
-        Debug.Log("GameFlowController: Initializing grid...");
-        GridManager.OnGridReady -= OnGridReady;
-        GridManager.OnGridReady += OnGridReady;
+        Debug.Log("Initializing grid...");
         GridManager.InitializeGrid(MapGenerator.GeneratedMapData);
+        // Transition happens in OnGridReady
     }
 
     private void OnGridReady(Dictionary<Vector2, Tile> hexCells)
     {
         if (hexCells == null || hexCells.Count == 0)
         {
-            Debug.LogError("GameFlowController: Grid initialization failed.");
+            Debug.LogError("Grid initialization failed.");
             return;
         }
 
-        Debug.Log($"GameFlowController: Grid initialized with {hexCells.Count} tiles.");
+        Debug.Log($"Grid initialized with {hexCells.Count} tiles.");
         cachedHexCells = hexCells;
-        isGridInitialized = true;
-        TransitionToState(GameState.LocationsAssigning);
+        TransitionToState(GameState.LocationsAssigning); // Transition to the next state
     }
 
     private void AssignLocations()
     {
-        Debug.Log("GameFlowController: Assigning map locations...");
-
-        // Provide grid data explicitly
+        Debug.Log("Assigning map locations...");
         LocationManager.AssignLocations(cachedHexCells);
-
-        TransitionToState(GameState.MapRendering);
+        TransitionToState(GameState.MapRendering); // Transition to the next state
     }
 
     private void RenderMap()
     {
-        if (isMapRendered)
-        {
-            Debug.LogWarning("GameFlowController: MapRendering already executed, skipping.");
-            return;
-        }
-
-        Debug.Log("GameFlowController: Rendering map...");
+        Debug.Log("Rendering map...");
         MapRenderer.RenderMap(cachedHexCells);
-        isMapRendered = true;
-        TransitionToState(GameState.FogOfWarInitialization);
+        TransitionToState(GameState.FogOfWarInitialization); // Transition to the next state
     }
 
     private void InitializeFogOfWar()
     {
-        Debug.Log("GameFlowController: Initializing fog of war...");
+        Debug.Log("Initializing fog of war...");
         FogOfWarManager.Initialize(cachedHexCells);
-        TransitionToState(GameState.CameraInitialization);
+        TransitionToState(GameState.CameraInitialization); // Transition to the next state
     }
 
     private void InitializeCamera()
     {
-        Debug.Log("GameFlowController: Initializing camera...");
+        Debug.Log("Initializing camera...");
 
-        // Retrieve tile size from HexGridDataManager
-        float tileSizeX = gridManager.GetTileWidth();
-        float tileSizeZ = gridManager.GetTileHeight();
+        float tileSizeX = GridManager.GetTileWidth();
+        float tileSizeZ = GridManager.GetTileHeight();
 
-        // Pass the necessary data to CameraManager
         CameraManager.Initialize(cachedHexCells, tileSizeX, tileSizeZ);
-
-        TransitionToState(GameState.Gameplay); // Proceed to gameplay
+        TransitionToState(GameState.Gameplay); // Transition to the next state
     }
 
     private void StartGameplay()
     {
-        Debug.Log("GameFlowController: Gameplay has started!");
+        Debug.Log("Gameplay has started!");
     }
 
-    public void ForceStateReEntry(GameState stateToReEnter)
+    private void SubscribeToEvents()
     {
-        Debug.Log($"GameFlowController: Forcing re-entry into state {stateToReEnter}.");
-        ResetExecutionFlags(); // Reset execution flags for all states
-
-        TransitionToState(stateToReEnter, forceReExecution: true); // Enforce re-execution of the handler
+        MapGenerator.OnMapGenerated += OnMapGenerated;
+        GridManager.OnGridReady += OnGridReady;
     }
 
-    private void ResetExecutionFlags()
+    private void UnsubscribeFromEvents()
     {
-        isGameStarted = false;
-        isMapGenerated = false;
-        isGridInitialized = false;
-        isMapRendered = false;
+        if (MapGenerator != null) MapGenerator.OnMapGenerated -= OnMapGenerated;
+        if (GridManager != null) GridManager.OnGridReady -= OnGridReady;
+    }
+
+    private void ValidateDependencies()
+    {
+        bool hasError = false;
+
+        if (!mapGenerator) { Debug.LogError("Missing 'MapGenerator'!"); hasError = true; }
+        if (!gridManager) { Debug.LogError("Missing 'GridManager'!"); hasError = true; }
+        if (!mapRenderer) { Debug.LogError("Missing 'MapRenderer'!"); hasError = true; }
+        if (!locationManager) { Debug.LogError("Missing 'LocationManager'!"); hasError = true; }
+        if (!fogOfWarManager) { Debug.LogError("Missing 'FogOfWarManager'!"); hasError = true; }
+        if (!cameraManager) { Debug.LogError("Missing 'CameraManager'!"); hasError = true; }
+
+        if (hasError) enabled = false;
     }
 }
