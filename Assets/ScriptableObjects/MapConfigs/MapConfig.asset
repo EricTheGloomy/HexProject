@@ -15,3 +15,4 @@ MonoBehaviour:
   HexTilePrefabDefault: {fileID: 3497093088325243830, guid: 607d008e6649a824f9ffd504d89cc88a, type: 3}
   MapWidth: 25
   MapHeight: 25
+  useFlatTop: 0

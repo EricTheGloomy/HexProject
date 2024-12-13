@@ -6,7 +6,6 @@ public interface IMapGenerator
 {
     event Action<Dictionary<Vector2Int, TileTypeData>> OnMapGenerated;
 
-    void ApplyTileTypeData(Dictionary<Vector2, Tile> tiles); // New method to update tiles
+    void ApplyTileTypeData(Dictionary<Vector2, Tile> tiles);
     Dictionary<Vector2Int, TileTypeData> GeneratedMapData { get; }
 }
-

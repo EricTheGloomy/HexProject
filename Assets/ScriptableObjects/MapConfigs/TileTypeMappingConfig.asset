@@ -22,3 +22,4 @@ MonoBehaviour:
   - TileTypeData: {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}
     MinNoiseValue: 0.6
     MaxNoiseValue: 1
+  FallbackTileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}

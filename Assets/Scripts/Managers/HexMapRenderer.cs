@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class HexMapRenderer : MonoBehaviour, IRenderer
 {
-    public MapConfig MapConfiguration;
-
     public static event Action OnRenderingComplete;
 
     public void RenderMap(Dictionary<Vector2, Tile> allTiles)

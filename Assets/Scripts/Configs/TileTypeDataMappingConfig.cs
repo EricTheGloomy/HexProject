@@ -8,9 +8,12 @@ public class TileTypeDataMappingConfig : ScriptableObject
     public class TileMapping
     {
         public TileTypeData TileTypeData;
-        public float MinNoiseValue; // Minimum noise value for this TileTypeData
-        public float MaxNoiseValue; // Maximum noise value for this TileTypeData
+        public float MinNoiseValue;
+        public float MaxNoiseValue;
     }
 
     public TileMapping[] TileMappings;
+
+    [Header("Fallback Settings")]
+    public TileTypeData FallbackTileTypeData; // Default TileTypeData if no mapping matches
 }

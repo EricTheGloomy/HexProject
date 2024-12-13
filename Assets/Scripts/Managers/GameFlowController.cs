@@ -82,7 +82,7 @@ public class GameFlowController : MonoBehaviour
     private void InitializeGrid()
     {
         Debug.Log("Initializing grid...");
-        gridManager.InitializeGrid(); // No map data needed
+        gridManager.InitializeGrid();
     }
 
     private void OnGridReady(Dictionary<Vector2, Tile> hexCells)
@@ -101,7 +101,7 @@ public class GameFlowController : MonoBehaviour
     private void GenerateMap()
     {
         Debug.Log("Generating map...");
-        mapGenerator.ApplyTileTypeData(cachedHexCells); // Pass the grid to ProceduralMapGenerator
+        mapGenerator.ApplyTileTypeData(cachedHexCells);
     }
 
     private void OnMapGenerated(Dictionary<Vector2Int, TileTypeData> mapData)

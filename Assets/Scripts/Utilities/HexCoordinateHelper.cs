@@ -60,5 +60,4 @@ public static class HexCoordinateHelper
             new Vector3(0, -1, 1)   // -Z
         };
     }
-
 }

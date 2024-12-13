@@ -14,10 +14,9 @@ public class MapLocationManager : MonoBehaviour, IMapLocationManager
             return;
         }
 
-        hexCells = grid; // Store grid for further use
+        hexCells = grid;
         Debug.Log("MapLocationManager: Received grid data for location assignment.");
 
-        // Select eligible tiles
         var eligibleTiles = new List<Tile>();
         foreach (var tile in hexCells.Values)
         {
@@ -35,7 +34,7 @@ public class MapLocationManager : MonoBehaviour, IMapLocationManager
 
         // Randomly select a starting tile
         var startingTile = eligibleTiles[Random.Range(0, eligibleTiles.Count)];
-        startingTile.SetAsStartingLocation(); // Mark the tile as the starting location at runtime
+        startingTile.SetAsStartingLocation();
 
         Debug.Log($"MapLocationManager: Starting location assigned at {startingTile.GridPosition}.");
     }
@@ -50,7 +49,7 @@ public class MapLocationManager : MonoBehaviour, IMapLocationManager
 
         foreach (var tile in hexCells.Values)
         {
-            if (tile.IsStartingLocation) // Check runtime-specific property
+            if (tile.IsStartingLocation)
             {
                 return tile;
             }

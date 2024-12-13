@@ -8,9 +8,9 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
 
     public MapConfig MapConfiguration;
 
-    public GameObject TilePrefab; // Assign the prefab in the Unity Inspector
+    public GameObject TilePrefab;
 
-    private Dictionary<Vector2Int, Tile> allTiles = new Dictionary<Vector2Int, Tile>(); // Renamed for clarity
+    private Dictionary<Vector2Int, Tile> allTiles = new Dictionary<Vector2Int, Tile>();
     private Dictionary<Vector2, Tile> hexCells = new Dictionary<Vector2, Tile>(); // For HexUtility
     public Dictionary<Vector2, Tile> GetHexCells() => hexCells;
     private Tile[,] mapGrid;
@@ -21,7 +21,6 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
 
     public void InitializeGrid()
     {
-        // Reset state
         isGridReady = false;
         Debug.Log("HexGridDataManager: Initializing grid...");
 
@@ -37,13 +36,13 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
             return;
         }
 
-        // Calculate hex dimensions
         CalculateHexSize(MapConfiguration.HexTilePrefabDefault);
 
-        // Initialize grid containers
         mapGrid = new Tile[MapConfiguration.MapWidth, MapConfiguration.MapHeight];
         allTiles.Clear();
         hexCells.Clear();
+
+        bool useFlatTop = MapConfiguration.useFlatTop;
 
         // Instantiate and initialize each tile with default data
         for (int row = 0; row < MapConfiguration.MapHeight; row++)
@@ -52,11 +51,9 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
             {
                 Vector2Int gridPosition = new Vector2Int(col, row);
 
-                // Instantiate the tile prefab
                 GameObject tileObject = Instantiate(TilePrefab, transform);
                 tileObject.name = $"Tile_{gridPosition.x}_{gridPosition.y}";
 
-                // Get the Tile script from the prefab
                 Tile tile = tileObject.GetComponent<Tile>();
                 if (tile == null)
                 {
@@ -64,13 +61,11 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
                     continue;
                 }
 
-                // Initialize the tile with placeholder data
                 var defaultTileTypeData = ScriptableObject.CreateInstance<TileTypeData>();
                 defaultTileTypeData.Name = "Default"; // Optional: set default fields
                 
-                tile.Initialize(gridPosition, hexPrefabWidth, hexPrefabHeight, defaultTileTypeData);
+                tile.Initialize(gridPosition, useFlatTop, hexPrefabWidth, hexPrefabHeight, defaultTileTypeData);
 
-                // Store the tile in dictionaries
                 allTiles[gridPosition] = tile;
                 mapGrid[gridPosition.x, gridPosition.y] = tile;
                 hexCells[tile.OffsetCoordinates] = tile;
@@ -112,7 +107,6 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
         {
             Tile tile = entry.Value;
 
-            // Use HexUtility to find neighbors
             List<Tile> neighbors = HexUtility.GetNeighbors(tile, hexCells);
 
             foreach (Tile neighbor in neighbors)
@@ -136,13 +130,12 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
 
     public float GetTileWidth()
     {
-        return hexPrefabWidth; // Ensure hexWidth is correctly calculated in InitializeGrid
+        return hexPrefabWidth;
     }
 
     public float GetTileHeight()
     {
-        return hexPrefabHeight; // Ensure hexHeight is correctly calculated in InitializeGrid
+        return hexPrefabHeight;
     }
-
 
 }

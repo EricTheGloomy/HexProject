@@ -16,7 +16,13 @@ MonoBehaviour:
   Octaves: 4
   Persistence: 0.5
   Lacunarity: 2
+  InitialAmplitude: 1
+  InitialFrequency: 1
+  NoiseAdjustmentFactor: 2
   seed: 42
+  isSeedRandomized: 0
+  RandomSeedMin: 0
+  RandomSeedMax: 10000
   OffsetRangeMin: -100000
   OffsetRangeMax: 100000
   NoiseMin: -1

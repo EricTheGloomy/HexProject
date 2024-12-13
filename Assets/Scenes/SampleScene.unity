@@ -131,7 +131,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 598642641}
-  - component: {fileID: 598642640}
   - component: {fileID: 598642642}
   m_Layer: 0
   m_Name: GameFlowManager
@@ -140,18 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &598642640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 598642639}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fbe6cd06cf435d4bad78f60dec2484a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &598642641
 Transform:
   m_ObjectHideFlags: 0
@@ -279,54 +266,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &936767788
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 936767790}
-  - component: {fileID: 936767789}
-  m_Layer: 0
-  m_Name: Debugger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &936767789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 936767788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bb799b55af84ef49adaf06006c47bdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GridManager: {fileID: 1923748401}
-  DebugCubePrefab: {fileID: 3300558315700360500, guid: 401b091dde57a844eaae732bca65c4d7, type: 3}
-  CenterTilePosition: {x: 0, y: 0}
-  Range: 1
---- !u!4 &936767790
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 936767788}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,6 +405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CameraAnchor: {fileID: 1027813250}
   cameraConfig: {fileID: 11400000, guid: 0b5076d8bac928740a0d03d18140411c, type: 2}
+  mapConfig: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
   MinBounds: {x: 0, y: 0, z: 0}
   MaxBounds: {x: 0, y: 0, z: 0}
 --- !u!1 &1923748398
@@ -531,7 +471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ece903c8c32f647bf142e2aaebbe2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapConfiguration: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
 --- !u!114 &1923748403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,7 +483,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f5640590e7d3747af1097de73402f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapConfig: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
   MapGenerationConfig: {fileID: 11400000, guid: 4cabaf96612277c47be04a221f3ea9b3, type: 2}
   TileTypeDataMappingConfig: {fileID: 11400000, guid: 83bb729403a9edd44b795d38cfa7a48c, type: 2}
 --- !u!114 &1923748404
@@ -578,6 +516,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 705507995}
   - {fileID: 1923748400}
-  - {fileID: 936767790}
   - {fileID: 598642641}
   - {fileID: 1027813250}

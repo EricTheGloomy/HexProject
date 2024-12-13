@@ -4,16 +4,15 @@ using UnityEngine;
 public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
 {
     [Header("Configuration")]
-    [SerializeField] private FogConfig fogConfig; // Reference to the ScriptableObject
+    [SerializeField] private FogConfig fogConfig;
 
-    private Dictionary<Vector2, Tile> allTiles; // Dictionary of all tiles
-    private HashSet<Tile> revealedTiles = new HashSet<Tile>(); // Tracks tiles that are revealed
+    private Dictionary<Vector2, Tile> allTiles;
+    private HashSet<Tile> revealedTiles = new HashSet<Tile>();
 
     public void Initialize(Dictionary<Vector2, Tile> tiles)
     {
         allTiles = tiles;
 
-        // Set all tiles to Hidden initially
         foreach (var tile in allTiles.Values)
         {
             tile.SetVisibility(VisibilityState.Hidden);
@@ -21,7 +20,6 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
 
         Debug.Log("FogOfWarManager: All tiles initialized under fog.");
 
-        // Find and reveal the starting location
         Tile startingTile = FindStartingTile();
         if (startingTile != null)
         {
@@ -37,7 +35,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
     {
         foreach (var tile in allTiles.Values)
         {
-            if (tile.IsStartingLocation) // Check runtime-specific flag
+            if (tile.IsStartingLocation)
             {
                 return tile;
             }
@@ -55,17 +53,15 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
             return;
         }
 
-        // Get tiles in the specified radius
-        int radius = fogConfig != null ? fogConfig.RevealRadius : 2; // Fallback to 2 if config is missing
+        int radius = fogConfig != null ? fogConfig.RevealRadius : 4; // Fallback to 4 if config is missing
         var tilesToReveal = HexUtility.GetHexesInRange(centerTile, radius, allTiles);
 
-        // Reveal each tile in the range
         foreach (var tile in tilesToReveal)
         {
             if (!revealedTiles.Contains(tile))
             {
-                tile.SetVisibility(VisibilityState.Visible); // Update tile visibility
-                revealedTiles.Add(tile); // Mark the tile as revealed
+                tile.SetVisibility(VisibilityState.Visible);
+                revealedTiles.Add(tile);
             }
         }
 
@@ -77,7 +73,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
         if (tile == null)
         {
             Debug.LogError("FogOfWarManager: Tile is null. Cannot determine fog state.");
-            return VisibilityState.Hidden; // Default to hidden for invalid input
+            return VisibilityState.Hidden;
         }
 
         return revealedTiles.Contains(tile) ? VisibilityState.Visible : VisibilityState.Hidden;

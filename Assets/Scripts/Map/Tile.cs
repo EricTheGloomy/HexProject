@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
     public GameObject TileDecorations;
     public GameObject FogOverlay;
 
-    public TileTypeData TileTypeData { get; private set; } // Reference to the scriptable object
+    public TileTypeData TileTypeData { get; private set; }
 
     public Vector2 OffsetCoordinates { get; private set; }
     public Vector3 CubeCoordinates { get; private set; }
@@ -22,22 +22,18 @@ public class Tile : MonoBehaviour
 
     public bool IsStartingLocation { get; private set; }
 
-    public void Initialize(Vector2Int gridPosition, float hexWidth, float hexHeight, TileTypeData tileTypeData)
+    public void Initialize(Vector2Int gridPosition, bool useFlatTop, float hexWidth, float hexHeight, TileTypeData tileTypeData)
     {
         GridPosition = gridPosition;
         TileTypeData = tileTypeData;
 
-        // Calculate Offset Coordinates
         OffsetCoordinates = new Vector2(gridPosition.x, gridPosition.y);
 
-        // Calculate Cube Coordinates
         Vector2 axialCoords = HexCoordinateHelper.OffsetToAxial(OffsetCoordinates);
         CubeCoordinates = HexCoordinateHelper.AxialToCube(axialCoords);
 
-        // Set World Position
-        transform.position = HexCoordinateHelper.GetWorldPosition(OffsetCoordinates, false, hexWidth, hexHeight);
+        transform.position = HexCoordinateHelper.GetWorldPosition(OffsetCoordinates, useFlatTop, hexWidth, hexHeight);
 
-        // Apply tile-specific visuals (if necessary)
         ApplyTileVisuals();
     }
 
@@ -65,10 +61,9 @@ public class Tile : MonoBehaviour
         FogOverlay?.SetActive(Visibility == VisibilityState.Hidden);
     }
 
-    // NEW: Mark this tile as the starting location at runtime
     public void SetAsStartingLocation()
     {
-        IsStartingLocation = true; // Mark this tile
+        IsStartingLocation = true;
         Debug.Log($"Tile at {GridPosition} marked as starting location.");
     }
 

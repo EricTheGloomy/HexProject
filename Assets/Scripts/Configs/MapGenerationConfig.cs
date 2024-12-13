@@ -1,4 +1,3 @@
-// File: Scripts/Config/MapGenerationConfig.cs
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapGenerationConfig", menuName = "Game/MapGenerationConfig")]
@@ -9,26 +8,36 @@ public class MapGenerationConfig : ScriptableObject
     [Range(1, 8)] public int Octaves = 4;
     [Range(0f, 1f)] public float Persistence = 0.5f;
     [Range(1f, 5f)] public float Lacunarity = 2f;
+
+    [Header("Initial Perlin Settings")]
+    public float InitialAmplitude = 1f;
+    public float InitialFrequency = 1f;
+
+    [Header("Perlin Noise Adjustment")]
+    public float NoiseAdjustmentFactor = 2f;
+
+    [Header("Seed Settings")]
     [SerializeField] private int seed = 42;
-    private int? cachedSeed = null;
+    [SerializeField] private bool isSeedRandomized = false; // If true, use random seed
     public int Seed
     {
         get
         {
-            // If the seed is -1, generate a random one, but cache it so it's consistent for this session
-            if (seed == -1)
+            if (isSeedRandomized)
             {
                 if (cachedSeed == null)
                 {
-                    cachedSeed = Random.Range(0, 10001);
+                    cachedSeed = Random.Range(RandomSeedMin, RandomSeedMax + 1);
                     Debug.Log($"Random Seed generated: {cachedSeed}");
                 }
                 return cachedSeed.Value;
             }
-
             return seed;
         }
     }
+    private int? cachedSeed = null;
+    public int RandomSeedMin = 0;
+    public int RandomSeedMax = 10000;
 
     [Header("Perlin Noise Offsets")]
     public int OffsetRangeMin = -100000;

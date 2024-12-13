@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
 {
     [Header("Dependencies")]
-    public MapConfig MapConfig;
     public MapGenerationConfig MapGenerationConfig;
     public TileTypeDataMappingConfig TileTypeDataMappingConfig;
 
@@ -24,7 +23,7 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             return;
         }
 
-        generatedMapData = new Dictionary<Vector2Int, TileTypeData>(); // Ensure it's initialized
+        generatedMapData = new Dictionary<Vector2Int, TileTypeData>();
 
         foreach (var tileEntry in tiles)
         {
@@ -35,10 +34,8 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             float perlinValue = GeneratePerlinValue(gridPosition.x, gridPosition.y, GetPerlinOffsets(new System.Random(MapGenerationConfig.Seed)));
             TileTypeData tileTypeData = GetTileTypeDataFromNoise(perlinValue);
 
-            // Update the tile with generated data
             tile.SetTileTypeData(tileTypeData);
 
-            // Store the mapping for external use
             generatedMapData[gridPosition] = tileTypeData;
         }
 
@@ -60,8 +57,8 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
 
     private float GeneratePerlinValue(int col, int row, Vector2[] octaveOffsets)
     {
-        float amplitude = 1f;
-        float frequency = 1f;
+        float amplitude = MapGenerationConfig.InitialAmplitude;
+        float frequency = MapGenerationConfig.InitialFrequency;
         float noiseHeight = 0f;
 
         for (int i = 0; i < MapGenerationConfig.Octaves; i++)
@@ -69,7 +66,7 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             float sampleX = (col / MapGenerationConfig.NoiseScale) * frequency + octaveOffsets[i].x;
             float sampleY = (row / MapGenerationConfig.NoiseScale) * frequency + octaveOffsets[i].y;
 
-            float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
+            float perlinValue = (Mathf.PerlinNoise(sampleX, sampleY) * MapGenerationConfig.NoiseAdjustmentFactor) - 1;
             noiseHeight += perlinValue * amplitude;
 
             amplitude *= MapGenerationConfig.Persistence;
@@ -89,6 +86,7 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             }
         }
 
-        throw new InvalidOperationException($"No TileTypeData found for noise value {noiseValue}");
+        Debug.LogWarning($"ProceduralMapGenerator: No TileTypeData found for noise value {noiseValue}. Using fallback.");
+        return TileTypeDataMappingConfig.FallbackTileTypeData;
     }
 }
