@@ -14,10 +14,10 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
         {
             Tile tile = entry.Value;
 
-            TileTypeData tileTypeData = tile.TileTypeData;
+            TileTypeData tileTypeData = tile.Attributes.TileTypeData;
             if (tileTypeData == null)
             {
-                Debug.LogError($"HexMapRenderer: Tile at {tile.GridPosition} is missing its TileTypeData!");
+                Debug.LogError($"HexMapRenderer: Tile at {tile.Attributes.GridPosition} is missing its TileTypeData!");
                 continue;
             }
 

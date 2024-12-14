@@ -115,4 +115,14 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
         Debug.LogWarning($"ProceduralMapGenerator: No TileTypeData found for noise value {noiseValue}. Using fallback.");
         return TileTypeDataMappingConfig.FallbackTileTypeData;
     }
+
+    private void GenerateTileAttributes(Tile tile, Vector2Int gridPosition)
+    {
+        //tile.Attributes.Elevation = GeneratePerlinValue(gridPosition.x, gridPosition.y, elevationNoiseSettings);
+        //tile.Attributes.Moisture = GeneratePerlinValue(gridPosition.x, gridPosition.y, moistureNoiseSettings);
+        //tile.Attributes.Temperature = GeneratePerlinValue(gridPosition.x, gridPosition.y, temperatureNoiseSettings);
+
+        // Example: Assign vegetation based on attributes
+        //tile.Attributes.HasVegetation = tile.Attributes.Moisture > 0.7f && tile.Attributes.Elevation < 0.5f;
+    }
 }

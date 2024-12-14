@@ -44,31 +44,18 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
 
         bool useFlatTop = MapConfiguration.useFlatTop;
 
-        // Instantiate and initialize each tile with default data
+        // Instantiate and initialize each tile
         for (int row = 0; row < MapConfiguration.MapHeight; row++)
         {
             for (int col = 0; col < MapConfiguration.MapWidth; col++)
             {
                 Vector2Int gridPosition = new Vector2Int(col, row);
 
-                GameObject tileObject = Instantiate(TilePrefab, transform);
-                tileObject.name = $"Tile_{gridPosition.x}_{gridPosition.y}";
-
-                Tile tile = tileObject.GetComponent<Tile>();
-                if (tile == null)
-                {
-                    Debug.LogError($"HexGridDataManager: TilePrefab is missing the Tile script at {gridPosition}!");
-                    continue;
-                }
-
+                // Replace manual instantiation with CreateTile
                 var defaultTileTypeData = ScriptableObject.CreateInstance<TileTypeData>();
                 defaultTileTypeData.Name = "Default"; // Optional: set default fields
-                
-                tile.Initialize(gridPosition, useFlatTop, hexPrefabWidth, hexPrefabHeight, defaultTileTypeData);
 
-                allTiles[gridPosition] = tile;
-                mapGrid[gridPosition.x, gridPosition.y] = tile;
-                hexCells[tile.OffsetCoordinates] = tile;
+                CreateTile(gridPosition, defaultTileTypeData);
             }
         }
 
@@ -136,6 +123,39 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
     public float GetTileHeight()
     {
         return hexPrefabHeight;
+    }
+    private void CreateTile(Vector2Int gridPosition, TileTypeData tileTypeData)
+    {
+        // Create attributes for the tile
+        var attributes = new TileAttributes
+        {
+            GridPosition = gridPosition,
+            TileTypeData = tileTypeData
+        };
+
+        // Calculate CubeCoordinates and OffsetCoordinates
+        attributes.CubeCoordinates = HexCoordinateHelper.AxialToCube(HexCoordinateHelper.OffsetToAxial(new Vector2(gridPosition.x, gridPosition.y)));
+        attributes.OffsetCoordinates = HexCoordinateHelper.AxialToOffset(HexCoordinateHelper.CubeToAxial(attributes.CubeCoordinates));
+
+        // Instantiate the tile object
+        GameObject tileObject = Instantiate(TilePrefab, transform);
+        tileObject.name = $"Tile_{gridPosition.x}_{gridPosition.y}";
+
+        Tile tile = tileObject.GetComponent<Tile>();
+        if (tile != null)
+        {
+            // Initialize tile with attributes
+            tile.Initialize(attributes, useFlatTop: MapConfiguration.useFlatTop, hexPrefabWidth, hexPrefabHeight);
+
+            // Store tile in dictionaries
+            allTiles[gridPosition] = tile;
+            mapGrid[gridPosition.x, gridPosition.y] = tile;
+            hexCells[attributes.OffsetCoordinates] = tile; // Ensure OffsetCoordinates is populated
+        }
+        else
+        {
+            Debug.LogError($"HexGridDataManager: TilePrefab is missing the Tile script at {gridPosition}!");
+        }
     }
 
 }

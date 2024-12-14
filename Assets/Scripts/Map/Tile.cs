@@ -1,94 +1,38 @@
-// Tile.cs - Updated to implement IInteractable
 using UnityEngine;
 using System.Collections.Generic;
 
 public class Tile : MonoBehaviour, IInteractable
 {
-    public Vector2Int GridPosition;
-    public VisibilityState Visibility;
-    public string TerrainType;
+    // Reference to TileAttributes, serialized for Inspector visibility
+    [SerializeField]
+    private TileAttributes attributes;
+    public TileAttributes Attributes => attributes; // Read-only accessor
+
+    [Header("Tile Components")]
     public GameObject TileModel;
     public GameObject TileDecorations;
     public GameObject FogOverlay;
-
-    public TileTypeData TileTypeData { get; private set; }
-
-    public Vector2 OffsetCoordinates { get; private set; }
-    public Vector3 CubeCoordinates { get; private set; }
 
     [SerializeField]
     private List<Tile> neighbors = new List<Tile>();
     public List<Tile> Neighbors => neighbors;
 
-    public bool IsStartingLocation { get; private set; }
+    public bool IsSelected { get; private set; }
 
-    [SerializeField]
-    private bool isSelected = false; // Tracks whether this tile is selected
-    public bool IsSelected
+    public void Initialize(TileAttributes newAttributes, bool useFlatTop, float tileSizeX, float tileSizeZ)
     {
-        get => isSelected;
-        set
-        {
-            isSelected = value;
-            OnSelectionStateChanged(isSelected);
-        }
-    }
+        attributes = newAttributes;
 
-    public void Interact()
-    {
-        SetSelected(!isSelected);
-    }
+        // Calculate coordinates
+        attributes.OffsetCoordinates = new Vector2(attributes.GridPosition.x, attributes.GridPosition.y);
+        Vector2 axialCoords = HexCoordinateHelper.OffsetToAxial(attributes.OffsetCoordinates);
+        attributes.CubeCoordinates = HexCoordinateHelper.AxialToCube(axialCoords);
 
-    public bool CanInteract()
-    {
-        return true; // Tiles are always interactable for now
-    }
+        // Set world position
+        transform.position = HexCoordinateHelper.GetWorldPosition(attributes.OffsetCoordinates, useFlatTop, tileSizeX, tileSizeZ);
 
-    public string GetInteractionDescription()
-    {
-        return isSelected ? "Tile is already selected" : "Click to select this tile";
-    }
-
-    private void OnSelectionStateChanged(bool isSelected)
-    {
-        if (isSelected)
-        {
-            Debug.Log($"Tile at {GridPosition} is selected.");
-        }
-        else
-        {
-            Debug.Log($"Tile at {GridPosition} is deselected.");
-        }
-    }
-
-    public void Initialize(Vector2Int gridPosition, bool useFlatTop, float hexWidth, float hexHeight, TileTypeData tileTypeData)
-    {
-        GridPosition = gridPosition;
-        TileTypeData = tileTypeData;
-
-        OffsetCoordinates = new Vector2(gridPosition.x, gridPosition.y);
-
-        Vector2 axialCoords = HexCoordinateHelper.OffsetToAxial(OffsetCoordinates);
-        CubeCoordinates = HexCoordinateHelper.AxialToCube(axialCoords);
-
-        transform.position = HexCoordinateHelper.GetWorldPosition(OffsetCoordinates, useFlatTop, hexWidth, hexHeight);
-
+        // Apply visuals
         ApplyTileVisuals();
-    }
-
-    private void ApplyTileVisuals()
-    {
-        Renderer renderer = GetComponentInChildren<Renderer>();
-        if (renderer != null)
-        {
-            // Apply visuals based on TileTypeData prefab
-        }
-    }
-
-    public void SetSelected(bool selected)
-    {
-        isSelected = selected;
-        OnSelectionStateChanged(selected);
     }
 
     public void AddNeighbor(Tile neighbor)
@@ -96,24 +40,56 @@ public class Tile : MonoBehaviour, IInteractable
         if (!neighbors.Contains(neighbor))
         {
             neighbors.Add(neighbor);
-            neighbor.neighbors.Add(this); // Ensure bi-directional relationship
+            neighbor.neighbors.Add(this);
         }
     }
 
-    public void SetVisibility(VisibilityState newState)
+    private void ApplyTileVisuals()
     {
-        Visibility = newState;
-        FogOverlay?.SetActive(Visibility == VisibilityState.Hidden);
+        if (attributes.TileTypeData != null && TileModel != null)
+        {
+            Renderer renderer = TileModel.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                // Apply visual updates here if necessary
+            }
+        }
     }
 
-    public void SetAsStartingLocation()
+    public void SetVisibility(VisibilityState state)
     {
-        IsStartingLocation = true;
-        Debug.Log($"Tile at {GridPosition} marked as starting location.");
+        attributes.Visibility = state;
+        if (FogOverlay != null)
+        {
+            FogOverlay.SetActive(state == VisibilityState.Hidden);
+        }
     }
 
     public void SetTileTypeData(TileTypeData tileTypeData)
     {
-        TileTypeData = tileTypeData;
+        attributes.TileTypeData = tileTypeData;
+        ApplyTileVisuals();
+    }
+
+    public void SetAsStartingLocation()
+    {
+        attributes.IsStartingLocation = true;
+        Debug.Log($"Tile at {attributes.GridPosition} marked as starting location.");
+    }
+
+    public void Interact()
+    {
+        IsSelected = !IsSelected;
+        Debug.Log($"Tile at {attributes.GridPosition} {(IsSelected ? "selected" : "deselected")}.");
+    }
+
+    public bool CanInteract()
+    {
+        return true;
+    }
+
+    public string GetInteractionDescription()
+    {
+        return IsSelected ? "Tile is already selected" : "Click to select this tile";
     }
 }

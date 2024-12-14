@@ -35,14 +35,14 @@ public class CameraManager : MonoBehaviour, ICameraManager
         if (startingTile != null)
         {
             Vector3 startingPosition = HexCoordinateHelper.GetWorldPosition(
-                startingTile.OffsetCoordinates,
+                startingTile.Attributes.OffsetCoordinates,
                 useFlatTop,
                 hexWidth,
                 hexHeight
             );
             CameraAnchor.position = startingPosition;
 
-            Debug.Log($"CameraManager: Camera positioned at starting tile {startingTile.GridPosition}.");
+            Debug.Log($"CameraManager: Camera positioned at starting tile {startingTile.Attributes.GridPosition}.");
         }
         else
         {
@@ -58,7 +58,7 @@ public class CameraManager : MonoBehaviour, ICameraManager
         // Find min and max offset coordinates
         foreach (var tile in allTiles.Values)
         {
-            Vector2 offsetCoords = tile.OffsetCoordinates;
+            Vector2 offsetCoords = tile.Attributes.OffsetCoordinates;
             if (offsetCoords.x < minCoords.x) minCoords.x = offsetCoords.x;
             if (offsetCoords.y < minCoords.y) minCoords.y = offsetCoords.y;
             if (offsetCoords.x > maxCoords.x) maxCoords.x = offsetCoords.x;
@@ -76,7 +76,7 @@ public class CameraManager : MonoBehaviour, ICameraManager
     {
         foreach (var tile in allTiles.Values)
         {
-            if (tile.IsStartingLocation)
+            if (tile.Attributes.IsStartingLocation)
             {
                 return tile;
             }

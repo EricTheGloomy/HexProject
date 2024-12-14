@@ -10,7 +10,7 @@ public static class HexUtility
 
         foreach (var offset in neighborOffsets)
         {
-            Vector3 neighborCubeCoords = tile.CubeCoordinates + offset;
+            Vector3 neighborCubeCoords = tile.Attributes.CubeCoordinates + offset;
 
             // Convert cube coordinates back to offset for lookup
             Vector2 neighborOffsetCoords = HexCoordinateHelper.CubeToAxial(neighborCubeCoords);

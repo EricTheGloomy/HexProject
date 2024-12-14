@@ -13,12 +13,10 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
     {
         allTiles = tiles;
 
-        foreach (var tile in allTiles.Values)
+        foreach (var tile in tiles.Values)
         {
             tile.SetVisibility(VisibilityState.Hidden);
         }
-
-        Debug.Log("FogOfWarManager: All tiles initialized under fog.");
 
         Tile startingTile = FindStartingTile();
         if (startingTile != null)
@@ -33,15 +31,22 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
 
     private Tile FindStartingTile()
     {
+        if (allTiles == null || allTiles.Count == 0)
+        {
+            Debug.LogError("FogOfWarManager: Tile grid is null or empty. Cannot find starting tile.");
+            return null;
+        }
+
         foreach (var tile in allTiles.Values)
         {
-            if (tile.IsStartingLocation)
+            if (tile.Attributes.IsStartingLocation)
             {
+                Debug.Log($"FogOfWarManager: Found starting tile at {tile.Attributes.GridPosition}.");
                 return tile;
             }
         }
 
-        Debug.LogError("FogOfWarManager: No starting tile marked as starting location.");
+        Debug.LogError("FogOfWarManager: No starting tile found.");
         return null;
     }
 
@@ -65,7 +70,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
             }
         }
 
-        Debug.Log($"FogOfWarManager: Revealed {tilesToReveal.Count} tiles around {centerTile.GridPosition}.");
+        Debug.Log($"FogOfWarManager: Revealed {tilesToReveal.Count} tiles around {centerTile.Attributes.GridPosition}.");
     }
 
     public VisibilityState GetFogState(Tile tile)
