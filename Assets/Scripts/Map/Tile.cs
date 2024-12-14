@@ -21,6 +21,32 @@ public class Tile : MonoBehaviour
     public List<Tile> Neighbors => neighbors;
 
     public bool IsStartingLocation { get; private set; }
+    
+    [SerializeField]
+    private bool isSelected = false; // Tracks whether this tile is selected
+    public bool IsSelected
+    {
+        get => isSelected;
+        set
+        {
+            isSelected = value;
+            OnSelectionStateChanged(isSelected);
+        }
+    }
+
+    private void OnSelectionStateChanged(bool isSelected)
+    {
+        // This method can be expanded for custom behaviors when selection changes
+        // For example, you might want to trigger a visual effect or log changes
+        if (isSelected)
+        {
+            Debug.Log($"Tile at {GridPosition} is selected.");
+        }
+        else
+        {
+            Debug.Log($"Tile at {GridPosition} is deselected.");
+        }
+    }
 
     public void Initialize(Vector2Int gridPosition, bool useFlatTop, float hexWidth, float hexHeight, TileTypeData tileTypeData)
     {
