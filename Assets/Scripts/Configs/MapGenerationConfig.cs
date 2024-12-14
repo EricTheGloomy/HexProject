@@ -46,4 +46,11 @@ public class MapGenerationConfig : ScriptableObject
     [Header("Noise Normalization")]
     public float NoiseMin = -1f;
     public float NoiseMax = 1f;
+
+    [Header("Noise Output Scaling")]
+    public float NoiseHeightMultiplier = 1f;
+
+    [Header("Height Clamping")]
+    public float MinHeightClamp = -1f;
+    public float MaxHeightClamp = 1f;
 }

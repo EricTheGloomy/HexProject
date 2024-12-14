@@ -11,6 +11,8 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
     public event Action<Dictionary<Vector2Int, TileTypeData>> OnMapGenerated;
 
     private Dictionary<Vector2Int, TileTypeData> generatedMapData;
+    private Dictionary<Vector2Int, float> precomputedNoise; // Precomputed noise
+
     public Dictionary<Vector2Int, TileTypeData> GeneratedMapData => generatedMapData;
 
     public void ApplyTileTypeData(Dictionary<Vector2, Tile> tiles)
@@ -23,6 +25,8 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             return;
         }
 
+        PrecomputeNoise(tiles); // Precompute noise
+
         generatedMapData = new Dictionary<Vector2Int, TileTypeData>();
 
         foreach (var tileEntry in tiles)
@@ -30,17 +34,32 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             Vector2Int gridPosition = new Vector2Int((int)tileEntry.Key.x, (int)tileEntry.Key.y);
             Tile tile = tileEntry.Value;
 
-            // Generate TileTypeData using map generation logic
-            float perlinValue = GeneratePerlinValue(gridPosition.x, gridPosition.y, GetPerlinOffsets(new System.Random(MapGenerationConfig.Seed)));
+            float perlinValue = precomputedNoise[gridPosition]; // Use precomputed noise
             TileTypeData tileTypeData = GetTileTypeDataFromNoise(perlinValue);
 
             tile.SetTileTypeData(tileTypeData);
-
             generatedMapData[gridPosition] = tileTypeData;
         }
 
         Debug.Log("ProceduralMapGenerator: TileTypeData applied successfully.");
         OnMapGenerated?.Invoke(generatedMapData);
+    }
+
+    private void PrecomputeNoise(Dictionary<Vector2, Tile> tiles)
+    {
+        Debug.Log("ProceduralMapGenerator: Precomputing Perlin noise...");
+
+        precomputedNoise = new Dictionary<Vector2Int, float>();
+        Vector2[] octaveOffsets = GetPerlinOffsets(new System.Random(MapGenerationConfig.Seed));
+
+        foreach (var tileEntry in tiles)
+        {
+            Vector2Int gridPosition = new Vector2Int((int)tileEntry.Key.x, (int)tileEntry.Key.y);
+            float perlinValue = GeneratePerlinValue(gridPosition.x, gridPosition.y, octaveOffsets);
+            precomputedNoise[gridPosition] = perlinValue;
+        }
+
+        Debug.Log($"ProceduralMapGenerator: Precomputed noise for {precomputedNoise.Count} tiles.");
     }
 
     private Vector2[] GetPerlinOffsets(System.Random prng)
@@ -73,6 +92,13 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             frequency *= MapGenerationConfig.Lacunarity;
         }
 
+        // Apply the noise height multiplier
+        noiseHeight *= MapGenerationConfig.NoiseHeightMultiplier;
+
+        // Clamp the final noise height
+        noiseHeight = Mathf.Clamp(noiseHeight, MapGenerationConfig.MinHeightClamp, MapGenerationConfig.MaxHeightClamp);
+
+        // Normalize the clamped noise height
         return Mathf.InverseLerp(MapGenerationConfig.NoiseMin, MapGenerationConfig.NoiseMax, noiseHeight);
     }
 
