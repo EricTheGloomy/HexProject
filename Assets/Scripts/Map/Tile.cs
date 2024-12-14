@@ -1,8 +1,8 @@
-// File: Scripts/Map/Tile.cs
+// Tile.cs - Updated to implement IInteractable
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IInteractable
 {
     public Vector2Int GridPosition;
     public VisibilityState Visibility;
@@ -21,7 +21,7 @@ public class Tile : MonoBehaviour
     public List<Tile> Neighbors => neighbors;
 
     public bool IsStartingLocation { get; private set; }
-    
+
     [SerializeField]
     private bool isSelected = false; // Tracks whether this tile is selected
     public bool IsSelected
@@ -34,10 +34,23 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public void Interact()
+    {
+        SetSelected(!isSelected);
+    }
+
+    public bool CanInteract()
+    {
+        return true; // Tiles are always interactable for now
+    }
+
+    public string GetInteractionDescription()
+    {
+        return isSelected ? "Tile is already selected" : "Click to select this tile";
+    }
+
     private void OnSelectionStateChanged(bool isSelected)
     {
-        // This method can be expanded for custom behaviors when selection changes
-        // For example, you might want to trigger a visual effect or log changes
         if (isSelected)
         {
             Debug.Log($"Tile at {GridPosition} is selected.");
@@ -68,8 +81,14 @@ public class Tile : MonoBehaviour
         Renderer renderer = GetComponentInChildren<Renderer>();
         if (renderer != null)
         {
-            // Apply visuals based on TileTypeData prefab (if needed later)
+            // Apply visuals based on TileTypeData prefab
         }
+    }
+
+    public void SetSelected(bool selected)
+    {
+        isSelected = selected;
+        OnSelectionStateChanged(selected);
     }
 
     public void AddNeighbor(Tile neighbor)

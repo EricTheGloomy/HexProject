@@ -1,21 +1,20 @@
-// File: Scripts/Managers/TileInteractionManager.cs
+// TileInteractionManager.cs - Updated to use IInteractable
 using UnityEngine;
 
 public class TileInteractionManager : MonoBehaviour
 {
-    public Camera mainCamera; // Assign the main camera in the editor
-    private Tile selectedTile;
+    public Camera mainCamera;
+    public GameObject selectionIndicatorPrefab;
 
-    [SerializeField] private GameObject selectionIndicatorPrefab; // Prefab for the selection indicator
     private GameObject activeSelectionIndicator;
+    private IInteractable currentInteractable;
 
     private void Start()
     {
-        // Instantiate the selection indicator once and disable it initially
         if (selectionIndicatorPrefab != null)
         {
             activeSelectionIndicator = Instantiate(selectionIndicatorPrefab);
-            activeSelectionIndicator.SetActive(false); // Ensure it's not visible until a tile is selected
+            activeSelectionIndicator.SetActive(false);
         }
         else
         {
@@ -25,73 +24,43 @@ public class TileInteractionManager : MonoBehaviour
 
     private void Update()
     {
-        HandleTileSelection();
-        HandleTileDeselection(); // Check for right-click to deselect
+        if (Input.GetMouseButtonDown(0)) // Left-click
+        {
+            HandleTileInteraction();
+        }
     }
 
-    private void HandleTileSelection()
+    private void HandleTileInteraction()
     {
-        if (Input.GetMouseButtonDown(0)) // Left mouse button click
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+
+            if (interactable != null)
             {
-                Tile clickedTile = hit.collider.GetComponent<Tile>();
-                if (clickedTile != null && clickedTile.Visibility == VisibilityState.Visible)
+                if (currentInteractable != null)
                 {
-                    SelectTile(clickedTile);
+                    // Deselect the previous tile
+                    currentInteractable.Interact(); 
                 }
+
+                // Interact with the new tile
+                interactable.Interact();
+                currentInteractable = interactable;
+
+                // Update selection indicator
+                UpdateSelectionIndicator(hit.collider.transform.position);
             }
         }
     }
 
-    private void HandleTileDeselection()
+    private void UpdateSelectionIndicator(Vector3 position)
     {
-        if (Input.GetMouseButtonDown(1)) // Right mouse button click
-        {
-            if (selectedTile != null) // Check if a tile is currently selected
-            {
-                DeselectCurrentTile();
-                Debug.Log("Tile deselected via right mouse button.");
-            }
-        }
-    }
-
-    private void SelectTile(Tile tile)
-    {
-        if (selectedTile == tile)
-        {
-            Debug.Log("Tile is already selected.");
-            return;
-        }
-
-        DeselectCurrentTile();
-
-        selectedTile = tile;
-        selectedTile.IsSelected = true;
-
-        // Update the position of the selection indicator and activate it
         if (activeSelectionIndicator != null)
         {
-            activeSelectionIndicator.transform.position = tile.transform.position;
+            activeSelectionIndicator.transform.position = position;
             activeSelectionIndicator.SetActive(true);
-        }
-
-        Debug.Log($"Tile at {tile.GridPosition} selected.");
-    }
-
-    private void DeselectCurrentTile()
-    {
-        if (selectedTile != null)
-        {
-            selectedTile.IsSelected = false;
-            selectedTile = null; // Clear the reference to the selected tile
-        }
-
-        // Hide the selection indicator when no tile is selected
-        if (activeSelectionIndicator != null)
-        {
-            activeSelectionIndicator.SetActive(false);
         }
     }
 }
