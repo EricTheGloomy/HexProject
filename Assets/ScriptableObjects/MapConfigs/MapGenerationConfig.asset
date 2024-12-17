@@ -15,10 +15,13 @@ MonoBehaviour:
   SelectedMoistureMode: 1
   MoistureDecayRate: 0.2
   MoistureJitter: 0.05
-  MoistureMaxRange: 3
+  MoistureMaxRange: 4
   SelectedTemperatureMode: 1
   PolarTemperatureMin: 0
   PolarTemperatureMax: 1
+  TemperatureJitter: 0.05
+  ElevationTemperatureDropRate: 0.2
+  ElevationTemperatureThreshold: 0.5
   seed: 42
   isSeedRandomized: 0
   ElevationScale: 4
