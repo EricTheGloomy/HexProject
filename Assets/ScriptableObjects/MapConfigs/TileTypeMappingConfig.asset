@@ -30,9 +30,7 @@ MonoBehaviour:
     MinElevation: 0.3
     MaxElevation: 0.7
   - Category: 2
-    TileTypeData: {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}
+    TileTypeData: {fileID: 11400000, guid: 54a6858f68528b74cb178a99911a0344, type: 2}
     MinElevation: 0.7
     MaxElevation: 1
-  MoistureMappings: []
-  TemperatureMappings: []
   FallbackTileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}

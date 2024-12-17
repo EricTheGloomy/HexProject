@@ -20,25 +20,7 @@ public class TileTypeDataMappingConfig : ScriptableObject
         public float MaxElevation;          // Maximum elevation range
     }
 
-    [System.Serializable]
-    public class MoistureMapping
-    {
-        public TileTypeData TileTypeData;
-        public float MinMoisture;
-        public float MaxMoisture;
-    }
-
-    [System.Serializable]
-    public class TemperatureMapping
-    {
-        public TileTypeData TileTypeData;
-        public float MinTemperature;
-        public float MaxTemperature;
-    }
-
-    public ElevationMapping[] ElevationMappings; // For Pass 1
-    public MoistureMapping[] MoistureMappings;   // For Pass 2
-    public TemperatureMapping[] TemperatureMappings; // For Pass 3
+    public ElevationMapping[] ElevationMappings; 
 
     public TileTypeData FallbackTileTypeData; // Default biome if no mapping matches
 }

@@ -12,24 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f241903fc15b3f04aab78b5d7fb18cf5, type: 3}
   m_Name: MapGenerationConfig
   m_EditorClassIdentifier: 
-  NoiseScale: 4
-  Octaves: 4
-  Persistence: 0.5
-  Lacunarity: 2
-  InitialAmplitude: 1
-  InitialFrequency: 1
-  NoiseAdjustmentFactor: 2
+  SelectedMoistureMode: 1
+  MoistureDecayRate: 0.2
+  MoistureJitter: 0.05
+  MoistureMaxRange: 3
+  SelectedTemperatureMode: 1
+  PolarTemperatureMin: 0
+  PolarTemperatureMax: 1
   seed: 42
   isSeedRandomized: 0
-  RandomSeedMin: 0
-  RandomSeedMax: 10000
-  OffsetRangeMin: -100000
-  OffsetRangeMax: 100000
-  NoiseMin: -1
-  NoiseMax: 1
-  NoiseHeightMultiplier: 1
-  MinHeightClamp: -1
-  MaxHeightClamp: 1
   ElevationScale: 4
   ElevationOctaves: 8
   ElevationPersistence: 0.5
@@ -42,3 +33,19 @@ MonoBehaviour:
   TemperatureOctaves: 6
   TemperaturePersistence: 0.4
   TemperatureLacunarity: 2.2
+  RandomSeedMin: 0
+  RandomSeedMax: 10000
+  NoiseScale: 4
+  Octaves: 4
+  Persistence: 0.5
+  Lacunarity: 2
+  InitialAmplitude: 1
+  InitialFrequency: 1
+  NoiseAdjustmentFactor: 2
+  OffsetRangeMin: -100000
+  OffsetRangeMax: 100000
+  NoiseMin: -1
+  NoiseMax: 1
+  NoiseHeightMultiplier: 1
+  MinHeightClamp: -1
+  MaxHeightClamp: 1
