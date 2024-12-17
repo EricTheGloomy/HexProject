@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MapGenerationConfig", menuName = "Game/MapGenerationConfig")]
 public class MapGenerationConfig : ScriptableObject
 {
-    [Header("Perlin Noise Settings")]
+    [Header("General Perlin Noise Settings")]
     [Range(0.1f, 10f)] public float NoiseScale = 1f;
     [Range(1, 8)] public int Octaves = 4;
     [Range(0f, 1f)] public float Persistence = 0.5f;
@@ -53,4 +53,22 @@ public class MapGenerationConfig : ScriptableObject
     [Header("Height Clamping")]
     public float MinHeightClamp = -1f;
     public float MaxHeightClamp = 1f;
+
+    [Header("Elevation Noise Settings")]
+    public float ElevationScale = 1f;
+    public int ElevationOctaves = 4;
+    public float ElevationPersistence = 0.5f;
+    public float ElevationLacunarity = 2f;
+
+    [Header("Moisture Noise Settings")]
+    public float MoistureScale = 1.5f;
+    public int MoistureOctaves = 3;
+    public float MoisturePersistence = 0.6f;
+    public float MoistureLacunarity = 1.8f;
+
+    [Header("Temperature Noise Settings")]
+    public float TemperatureScale = 2f;
+    public int TemperatureOctaves = 2;
+    public float TemperaturePersistence = 0.4f;
+    public float TemperatureLacunarity = 2.2f;
 }

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1093f81d86e02a64da2fcb602e809501, type: 3}
-  m_Name: Water
+  m_Name: Swamp
   m_EditorClassIdentifier: 
-  Name: Water
+  Name: Swamp
   Description: 
-  TileModel: {fileID: 3497093088325243830, guid: 61c41e75715c6144495732a789a55aa7, type: 3}
+  TileModel: {fileID: 3497093088325243830, guid: 381faf26c5686bd4db3a7fccd7241f22, type: 3}
   FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}
-  isEligibleForStart: 0
+  isEligibleForStart: 1

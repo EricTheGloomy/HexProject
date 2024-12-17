@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Grassland
   Description: 
-  TileModel: {fileID: 3497093088325243830, guid: 132f38536625e434eaedc72b974aee54, type: 3}
+  TileModel: {fileID: 3497093088325243830, guid: 8f80ca6789dccb74dacd52d118ece436, type: 3}
   FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}
   isEligibleForStart: 1

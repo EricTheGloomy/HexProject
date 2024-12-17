@@ -27,3 +27,18 @@ MonoBehaviour:
   OffsetRangeMax: 100000
   NoiseMin: -1
   NoiseMax: 1
+  NoiseHeightMultiplier: 1
+  MinHeightClamp: -1
+  MaxHeightClamp: 1
+  ElevationScale: 4
+  ElevationOctaves: 8
+  ElevationPersistence: 0.5
+  ElevationLacunarity: 2
+  MoistureScale: 3
+  MoistureOctaves: 6
+  MoisturePersistence: 0.6
+  MoistureLacunarity: 1.8
+  TemperatureScale: 3
+  TemperatureOctaves: 6
+  TemperaturePersistence: 0.4
+  TemperatureLacunarity: 2.2
