@@ -61,4 +61,22 @@ public static class HexUtility
 
         return hexesInRange;
     }
+
+    public static int GetEdgeBetweenTiles(Tile currentTile, Tile neighborTile)
+    {
+        Vector2 currentPos = currentTile.Attributes.GridPosition;
+        Vector2 neighborPos = neighborTile.Attributes.GridPosition;
+
+        Vector2 direction = neighborPos - currentPos;
+
+        if (direction == new Vector2(0, 1)) return 0;  // Top Right
+        if (direction == new Vector2(1, 0)) return 1;  // Right
+        if (direction == new Vector2(1, -1)) return 2; // Bottom Right
+        if (direction == new Vector2(0, -1)) return 3; // Bottom Left
+        if (direction == new Vector2(-1, 0)) return 4; // Left
+        if (direction == new Vector2(-1, 1)) return 5; // Top Left
+
+        return -1; // Invalid direction
+    }
+
 }

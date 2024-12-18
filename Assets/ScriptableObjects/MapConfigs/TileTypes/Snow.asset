@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Snow
   Description: 
-  TileModel: {fileID: 3497093088325243830, guid: 8a7ce3f9d1fa0cf41a96ec547b93daf0, type: 3}
+  TileModel: {fileID: 3497093088325243830, guid: 66505fb4a38386043b3a7fe7b060d398, type: 3}
   FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}
+  BaseMaterial: {fileID: 2100000, guid: 6bdbf71311675ee449ea324fbc36892f, type: 2}
+  RiverMaterial: {fileID: 2100000, guid: e4f84aba56023894f96b3099d3a3e586, type: 2}
   isEligibleForStart: 0

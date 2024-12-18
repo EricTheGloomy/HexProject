@@ -9,4 +9,5 @@ public class GameplayTileAttributes
     public bool HasResources;
     public bool HasRoads;
     public bool HasRiver;
+    public bool[] RiverConnections = new bool[6];
 }

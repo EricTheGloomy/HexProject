@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27d7d4860bbdc9c439a84bbdde484bbd, type: 3}
+  m_Name: RiverModelConfig
+  m_EditorClassIdentifier: 
+  RiverStart:
+    Name: 
+    Model: {fileID: 3497093088325243830, guid: c8c532dd65ced8f4487647f4cb652afd, type: 3}
+    Connections: 000000000100
+  RiverStraight:
+    Name: 
+    Model: {fileID: 3497093088325243830, guid: f57e7180b9252b14e9920a5837a00136, type: 3}
+    Connections: 000100000100
+  CurvedRivers:
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: e266b8cf9d1aa7848b396e0cfbceced2, type: 3}
+    Connections: 000000000101
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: 8d20ea3f23b95f242a496e6a187a086f, type: 3}
+    Connections: 010000000100
+  TJunctions:
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: 5450415ccb462ea45aa803c20f8ffb06, type: 3}
+    Connections: 010000000101
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: 62db0900e5b12ed41aa11d1ac9ca01e5, type: 3}
+    Connections: 010001000100
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: 1e5686aadbad77b43b5fcdb635adbedc, type: 3}
+    Connections: 000100010100
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: efedf7f5ce81e1c4d85dd9cb89b309a0, type: 3}
+    Connections: 010001000101
+  FourWayJunctions:
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: 31aac4b8d95671c4ca37a6e77f1b925d, type: 3}
+    Connections: 010100000101
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: 2b74d2b0b913d0f4caeda64400247bc9, type: 3}
+    Connections: 000101000101
+  - Name: 
+    Model: {fileID: 3497093088325243830, guid: ca4341548560d784896850c19d3ee96d, type: 3}
+    Connections: 010001000101
+  River5Way:
+    Name: 
+    Model: {fileID: 3497093088325243830, guid: 2ec8da83efe335b4a87bd6bda07a84f0, type: 3}
+    Connections: 010101010001
+  River6Way:
+    Name: 
+    Model: {fileID: 3497093088325243830, guid: 9cadf9307f3dbc3449c1bc34b29b65dc, type: 3}
+    Connections: 010101010101
