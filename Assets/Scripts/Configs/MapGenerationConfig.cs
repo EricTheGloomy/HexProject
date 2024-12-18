@@ -1,6 +1,7 @@
 using UnityEngine;
 
 
+public enum ElevationGenerationMode { PerlinNoise, LandBudget }
 public enum MoistureGenerationMode { PerlinNoise, WaterPropagation }
 public enum TemperatureGenerationMode { PerlinNoise, PolarToEquator, EquatorCentered }
 
@@ -8,6 +9,26 @@ public enum TemperatureGenerationMode { PerlinNoise, PolarToEquator, EquatorCent
 [CreateAssetMenu(fileName = "MapGenerationConfig", menuName = "Game/MapGenerationConfig")]
 public class MapGenerationConfig : ScriptableObject
 {
+    [Header("Elevation Settings")]
+    public ElevationGenerationMode SelectedElevationMode = ElevationGenerationMode.PerlinNoise; // Default to PerlinNoise
+    [Header("Land Budget Settings")]
+    public float LandBudget = 500; // Total land budget
+    public int AddElevationCycles = 5; // Number of add elevation cycles
+    public int SubtractElevationCycles = 3; // Number of subtract elevation cycles
+    [Header("Add Elevation Settings")]
+    public float AddMinElevationChange = 0.1f; // Minimum elevation to add
+    public float AddMaxElevationChange = 0.3f; // Maximum elevation to add
+    public int AddElevationRadius = 3; // Radius for add elevation
+    public float AddAffectedTilePercentage = 0.5f; // Percentage of affected tiles for add
+
+    [Header("Subtract Elevation Settings")]
+    public float SubtractMinElevationChange = 0.1f; // Minimum elevation to subtract
+    public float SubtractMaxElevationChange = 0.3f; // Maximum elevation to subtract
+    public int SubtractElevationRadius = 3; // Radius for subtract elevation
+    public float SubtractAffectedTilePercentage = 0.5f; // Percentage of affected tiles for subtract
+    [Header("Smoothing Settings")]
+    public bool ApplySmoothing = false; // Toggle smoothing after elevation generation
+
     [Header("Water Propagation Settings")]
     public MoistureGenerationMode SelectedMoistureMode = MoistureGenerationMode.PerlinNoise; // Add this field
     public float MoistureDecayRate = 0.2f;    // % moisture lost per tile distance

@@ -12,10 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f241903fc15b3f04aab78b5d7fb18cf5, type: 3}
   m_Name: MapGenerationConfig
   m_EditorClassIdentifier: 
+  SelectedElevationMode: 0
+  LandBudget: 25
+  AddElevationCycles: 5
+  SubtractElevationCycles: 3
+  MinElevationChange: 0.1
+  MaxElevationChange: 0.3
+  ElevationRadius: 3
+  AffectedTilePercentage: 0.5
+  ApplySmoothing: 0
   SelectedMoistureMode: 1
-  MoistureDecayRate: 0.2
+  MoistureDecayRate: 0.7
   MoistureJitter: 0.05
-  MoistureMaxRange: 4
+  MoistureMaxRange: 5
   SelectedTemperatureMode: 1
   PolarTemperatureMin: 0
   PolarTemperatureMax: 1

@@ -29,7 +29,7 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
         }
 
         // Step 1: Precompute Elevation
-        PrecomputeNoise(tiles);
+        PrecomputeElevationNoise(tiles);
 
         // Step 2: Assign Elevation Categories
         foreach (var tile in tiles.Values)
@@ -106,18 +106,35 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
         return mapData;
     }
 
-    private void PrecomputeNoise(Dictionary<Vector2, Tile> tiles)
+    private void PrecomputeElevationNoise(Dictionary<Vector2, Tile> tiles)
     {
-        Debug.Log("ProceduralMapGenerator: Precomputing Perlin noise for Elevation...");
+        Debug.Log("ProceduralMapGenerator: Generating elevation...");
 
-        Vector2[] octaveOffsets = GetPerlinOffsets(new System.Random(MapGenerationConfig.Seed));
+        switch (MapGenerationConfig.SelectedElevationMode)
+        {
+            case ElevationGenerationMode.PerlinNoise:
+                GenerateElevationWithPerlinNoise(tiles);
+                break;
+
+            case ElevationGenerationMode.LandBudget:
+                GenerateElevationWithLandBudget(tiles);
+                break;
+
+            default:
+                Debug.LogError($"Unsupported elevation generation mode: {MapGenerationConfig.SelectedElevationMode}");
+                break;
+        }
+    }
+
+    private void GenerateElevationWithPerlinNoise(Dictionary<Vector2, Tile> tiles)
+    {
+        Debug.Log("ProceduralMapGenerator: Generating elevation using Perlin Noise...");
 
         foreach (var tileEntry in tiles)
         {
             Vector2Int gridPosition = new Vector2Int((int)tileEntry.Key.x, (int)tileEntry.Key.y);
             Tile tile = tileEntry.Value;
 
-            // Generate Elevation
             tile.Attributes.Procedural.Elevation = GeneratePerlinValue(
                 gridPosition.x, gridPosition.y,
                 MapGenerationConfig.ElevationScale,
@@ -127,7 +144,139 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             );
         }
 
-        Debug.Log("ProceduralMapGenerator: Elevation noise generation complete.");
+        Debug.Log("ProceduralMapGenerator: Elevation generation with Perlin Noise complete.");
+    }
+
+    private void GenerateElevationWithLandBudget(Dictionary<Vector2, Tile> tiles)
+    {
+        float landBudget = MapGenerationConfig.LandBudget; // Changed to float
+
+        int safetyCounter = 10000; // Prevent infinite loops
+        while (landBudget > 0f && safetyCounter > 0)
+        {
+            for (int i = 0; i < MapGenerationConfig.AddElevationCycles; i++)
+            {
+                AddElevation(tiles, ref landBudget);
+            }
+
+            for (int i = 0; i < MapGenerationConfig.SubtractElevationCycles; i++)
+            {
+                SubtractElevation(tiles, ref landBudget);
+            }
+
+            safetyCounter--;
+        }
+
+        if (safetyCounter <= 0)
+        {
+            Debug.LogError("GenerateElevationWithLandBudget: Terminating due to potential infinite loop.");
+        }
+
+        Debug.Log("Elevation map generation complete.");
+
+        if (MapGenerationConfig.ApplySmoothing)
+        {
+            SmoothElevation(tiles);
+        }
+    }
+
+    private void AddElevation(Dictionary<Vector2, Tile> tiles, ref float landBudget)
+    {
+        Tile centerTile = GetRandomTile(tiles);
+        List<Tile> affectedTiles = GetTilesInRadius(
+            centerTile,
+            MapGenerationConfig.AddElevationRadius,
+            tiles
+        );
+
+        foreach (var tile in affectedTiles)
+        {
+            // Skip tiles that are already at maximum elevation
+            if (tile.Attributes.Procedural.Elevation >= 1f) continue;
+
+            if (landBudget <= 0f) break;
+
+            float elevationChange = UnityEngine.Random.Range(
+                MapGenerationConfig.AddMinElevationChange,
+                MapGenerationConfig.AddMaxElevationChange
+            );
+
+            // Ensure we don't exceed the remaining budget
+            elevationChange = Mathf.Min(elevationChange, landBudget);
+
+            // Clamp final elevation to max 1
+            tile.Attributes.Procedural.Elevation = Mathf.Clamp(
+                tile.Attributes.Procedural.Elevation + elevationChange,
+                0f,
+                1f
+            );
+
+            landBudget -= elevationChange; // Decrement budget directly with float
+        }
+    }
+
+    private void SubtractElevation(Dictionary<Vector2, Tile> tiles, ref float landBudget)
+    {
+        Tile centerTile = GetRandomTile(tiles);
+        List<Tile> affectedTiles = GetTilesInRadius(
+            centerTile,
+            MapGenerationConfig.SubtractElevationRadius,
+            tiles
+        );
+
+        foreach (var tile in affectedTiles)
+        {
+            // Skip tiles that are already at minimum elevation
+            if (tile.Attributes.Procedural.Elevation <= 0f) continue;
+
+            if (landBudget <= 0f) break;
+
+            float elevationChange = UnityEngine.Random.Range(
+                MapGenerationConfig.SubtractMinElevationChange,
+                MapGenerationConfig.SubtractMaxElevationChange
+            );
+
+            // Ensure we don't exceed the remaining budget
+            elevationChange = Mathf.Min(elevationChange, landBudget);
+
+            // Clamp final elevation to min 0
+            tile.Attributes.Procedural.Elevation = Mathf.Clamp(
+                tile.Attributes.Procedural.Elevation - elevationChange,
+                0f,
+                1f
+            );
+
+            landBudget += elevationChange; // Increment budget directly with float
+        }
+    }
+
+    private void SmoothElevation(Dictionary<Vector2, Tile> tiles)
+    {
+        if (tiles == null || tiles.Count == 0) return;
+
+        foreach (var tile in tiles.Values)
+        {
+            var neighbors = HexUtility.GetNeighbors(tile, tiles);
+            if (neighbors.Count > 0)
+            {
+                float averageElevation = neighbors.Average(neighbor => neighbor.Attributes.Procedural.Elevation);
+                tile.Attributes.Procedural.Elevation = Mathf.Lerp(tile.Attributes.Procedural.Elevation, averageElevation, 0.5f);
+            }
+        }
+
+        Debug.Log("Smoothing complete.");
+    }
+
+    private List<Tile> GetTilesInRadius(Tile centerTile, int radius, Dictionary<Vector2, Tile> tiles)
+    {
+        return HexUtility.GetHexesInRange(centerTile, radius, tiles);
+    }
+
+    private Tile GetRandomTile(Dictionary<Vector2, Tile> tiles)
+    {
+        List<Tile> tileList = new List<Tile>(tiles.Values);
+        int randomIndex = UnityEngine.Random.Range(0, tileList.Count);
+        return tileList[randomIndex];
     }
 
     private void PrecomputeMoisture(Dictionary<Vector2, Tile> tiles)
@@ -161,56 +310,49 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
 
     private void SpreadMoistureFromWater(Dictionary<Vector2, Tile> tiles)
     {
-        Debug.Log("ProceduralMapGenerator: Starting moisture propagation...");
-
-        // BFS frontier for spreading moisture
         Queue<(Tile tile, int distance)> frontier = new Queue<(Tile, int)>();
         HashSet<Tile> visited = new HashSet<Tile>();
 
-        // Step 1: Initialize water tiles
         foreach (var tile in tiles.Values)
         {
             if (tile.Attributes.Procedural.FixedElevationCategory == TileTypeDataMappingConfig.ElevationCategory.Water)
             {
-                tile.Attributes.Procedural.Moisture = 1.0f; // Water tiles start with full moisture
-                frontier.Enqueue((tile, 0)); // Start BFS from water tiles
+                tile.Attributes.Procedural.Moisture = 1.0f;
+                frontier.Enqueue((tile, 0));
                 visited.Add(tile);
             }
             else
             {
-                tile.Attributes.Procedural.Moisture = 0.0f; // Initialize non-water tiles to 0
+                tile.Attributes.Procedural.Moisture = 0.0f;
             }
         }
 
-        // Step 2: Propagate moisture
-        while (frontier.Count > 0)
+        int safetyCounter = 10000; // Prevent infinite BFS
+        while (frontier.Count > 0 && safetyCounter > 0)
         {
             var (currentTile, distance) = frontier.Dequeue();
-
-            // Stop if range limit is reached
-            if (distance >= MapGenerationConfig.MoistureMaxRange)
-                continue;
+            if (distance >= MapGenerationConfig.MoistureMaxRange) continue;
 
             foreach (Tile neighbor in HexUtility.GetNeighbors(currentTile, tiles))
             {
-                // Calculate moisture to transfer
-                float decayMoisture = currentTile.Attributes.Procedural.Moisture * MapGenerationConfig.MoistureDecayRate;
-                float jitter = UnityEngine.Random.Range(-MapGenerationConfig.MoistureJitter, MapGenerationConfig.MoistureJitter);
-                float moistureContribution = Mathf.Clamp01(decayMoisture + jitter);
-
-                // Add moisture contribution to the neighbor
-                float newMoisture = neighbor.Attributes.Procedural.Moisture + moistureContribution;
-
-                // Clamp final moisture value to [0, 1]
-                neighbor.Attributes.Procedural.Moisture = Mathf.Clamp01(newMoisture);
-
-                // Enqueue neighbor for further spreading if not already visited
                 if (!visited.Contains(neighbor))
                 {
+                    float decayMoisture = currentTile.Attributes.Procedural.Moisture * MapGenerationConfig.MoistureDecayRate;
+                    float jitter = UnityEngine.Random.Range(-MapGenerationConfig.MoistureJitter, MapGenerationConfig.MoistureJitter);
+                    float moistureContribution = Mathf.Clamp01(decayMoisture + jitter);
+
+                    neighbor.Attributes.Procedural.Moisture = Mathf.Clamp01(neighbor.Attributes.Procedural.Moisture + moistureContribution);
                     frontier.Enqueue((neighbor, distance + 1));
                     visited.Add(neighbor);
                 }
             }
+
+            safetyCounter--;
+        }
+
+        if (safetyCounter <= 0)
+        {
+            Debug.LogError("SpreadMoistureFromWater: Terminating due to potential infinite loop.");
         }
 
         Debug.Log("ProceduralMapGenerator: Moisture propagation complete.");
