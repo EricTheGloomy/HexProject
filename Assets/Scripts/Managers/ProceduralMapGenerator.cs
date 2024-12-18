@@ -337,22 +337,28 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
         return offsets;
     }
 
-    private float GeneratePerlinValue(int col, int row, float scale, int octaves, float persistence, float lacunarity)
+    private float GeneratePerlinValue(int col, int row, float? scale = null, int? octaves = null, float? persistence = null, float? lacunarity = null)
     {
+        // Use specific parameters if provided, otherwise fallback to general defaults
+        float finalScale = scale ?? MapGenerationConfig.NoiseScale;
+        int finalOctaves = octaves ?? MapGenerationConfig.Octaves;
+        float finalPersistence = persistence ?? MapGenerationConfig.Persistence;
+        float finalLacunarity = lacunarity ?? MapGenerationConfig.Lacunarity;
+
         float amplitude = MapGenerationConfig.InitialAmplitude;
         float frequency = MapGenerationConfig.InitialFrequency;
         float noiseHeight = 0f;
 
-        for (int i = 0; i < octaves; i++)
+        for (int i = 0; i < finalOctaves; i++)
         {
-            float sampleX = (col / scale) * frequency;
-            float sampleY = (row / scale) * frequency;
+            float sampleX = (col / finalScale) * frequency;
+            float sampleY = (row / finalScale) * frequency;
 
-            float perlinValue = (Mathf.PerlinNoise(sampleX, sampleY) * MapGenerationConfig.NoiseAdjustmentFactor) - 1;
+            float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
             noiseHeight += perlinValue * amplitude;
 
-            amplitude *= persistence;
-            frequency *= lacunarity;
+            amplitude *= finalPersistence;
+            frequency *= finalLacunarity;
         }
 
         noiseHeight *= MapGenerationConfig.NoiseHeightMultiplier;
