@@ -501,6 +501,37 @@ MonoBehaviour:
   mapConfig: {fileID: 11400000, guid: e43d37b628195e84bbac91a17c1408ad, type: 2}
   MinBounds: {x: 0, y: 0, z: 0}
   MaxBounds: {x: 0, y: 0, z: 0}
+--- !u!1 &1468459262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1468459263}
+  m_Layer: 0
+  m_Name: MapGenerators
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1468459263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1468459262}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1923748398
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,3 +645,4 @@ SceneRoots:
   - {fileID: 1027813250}
   - {fileID: 244454543}
   - {fileID: 904050373}
+  - {fileID: 1468459263}

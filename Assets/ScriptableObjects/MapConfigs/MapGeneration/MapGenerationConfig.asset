@@ -13,16 +13,20 @@ MonoBehaviour:
   m_Name: MapGenerationConfig
   m_EditorClassIdentifier: 
   SelectedElevationMode: 0
-  LandBudget: 25
-  AddElevationCycles: 5
-  SubtractElevationCycles: 3
-  MinElevationChange: 0.1
-  MaxElevationChange: 0.3
-  ElevationRadius: 3
-  AffectedTilePercentage: 0.5
+  LandBudget: 250
+  AddElevationCycles: 4
+  SubtractElevationCycles: 2
+  AddMinElevationChange: 0.01
+  AddMaxElevationChange: 0.1
+  AddElevationRadius: 5
+  AddAffectedTilePercentage: 0.75
+  SubtractMinElevationChange: 0.01
+  SubtractMaxElevationChange: 0.1
+  SubtractElevationRadius: 5
+  SubtractAffectedTilePercentage: 0.75
   ApplySmoothing: 0
   SelectedMoistureMode: 1
-  MoistureDecayRate: 0.7
+  MoistureDecayRate: 0.6
   MoistureJitter: 0.05
   MoistureMaxRange: 5
   SelectedTemperatureMode: 1
