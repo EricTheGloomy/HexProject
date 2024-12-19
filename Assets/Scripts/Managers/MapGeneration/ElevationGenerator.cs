@@ -86,7 +86,7 @@ public class ElevationGenerator : IMapGenerationStep
             Vector2Int gridPosition = new Vector2Int((int)tileEntry.Key.x, (int)tileEntry.Key.y);
             Tile tile = tileEntry.Value;
 
-            tile.Attributes.Procedural.Elevation = GeneratePerlinValue(
+            tile.Attributes.Procedural.Elevation = NoiseGenerationUtility.GeneratePerlinValue(
                 gridPosition.x, gridPosition.y,
                 config.ElevationScale,
                 config.ElevationOctaves,
@@ -134,7 +134,7 @@ public class ElevationGenerator : IMapGenerationStep
     private void AddElevation(Dictionary<Vector2, Tile> tiles, ref float landBudget)
     {
         Tile centerTile = GetRandomTile(tiles);
-        List<Tile> affectedTiles = GetTilesInRadius(
+        List<Tile> affectedTiles = HexUtility.GetHexesInRange(
             centerTile,
             config.AddElevationRadius,
             tiles
@@ -166,7 +166,7 @@ public class ElevationGenerator : IMapGenerationStep
     private void SubtractElevation(Dictionary<Vector2, Tile> tiles, ref float landBudget)
     {
         Tile centerTile = GetRandomTile(tiles);
-        List<Tile> affectedTiles = GetTilesInRadius(
+        List<Tile> affectedTiles = HexUtility.GetHexesInRange(
             centerTile,
             config.SubtractElevationRadius,
             tiles
@@ -212,43 +212,10 @@ public class ElevationGenerator : IMapGenerationStep
         Debug.Log("Smoothing complete.");
     }
 
-    private List<Tile> GetTilesInRadius(Tile centerTile, int radius, Dictionary<Vector2, Tile> tiles)
-    {
-        return HexUtility.GetHexesInRange(centerTile, radius, tiles);
-    }
-
     private Tile GetRandomTile(Dictionary<Vector2, Tile> tiles)
     {
         List<Tile> tileList = new List<Tile>(tiles.Values);
         int randomIndex = UnityEngine.Random.Range(0, tileList.Count);
         return tileList[randomIndex];
-    }
-
-    private float GeneratePerlinValue(int col, int row, float? scale = null, int? octaves = null, float? persistence = null, float? lacunarity = null)
-    {
-        float finalScale = scale ?? config.NoiseScale;
-        int finalOctaves = octaves ?? config.Octaves;
-        float finalPersistence = persistence ?? config.Persistence;
-        float finalLacunarity = lacunarity ?? config.Lacunarity;
-
-        float amplitude = config.InitialAmplitude;
-        float frequency = config.InitialFrequency;
-        float noiseHeight = 0f;
-
-        for (int i = 0; i < finalOctaves; i++)
-        {
-            float sampleX = (col / finalScale) * frequency;
-            float sampleY = (row / finalScale) * frequency;
-
-            float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
-            noiseHeight += perlinValue * amplitude;
-
-            amplitude *= finalPersistence;
-            frequency *= finalLacunarity;
-        }
-
-        noiseHeight *= config.NoiseHeightMultiplier;
-        noiseHeight = Mathf.Clamp(noiseHeight, config.MinHeightClamp, config.MaxHeightClamp);
-        return Mathf.InverseLerp(config.NoiseMin, config.NoiseMax, noiseHeight);
     }
 }

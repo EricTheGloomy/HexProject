@@ -78,5 +78,21 @@ public static class HexUtility
 
         return -1; // Invalid direction
     }
+    public static int GetHexDistance(Tile origin, Tile target)
+    {
+        Vector3 originCube = origin.Attributes.CubeCoordinates;
+        Vector3 targetCube = target.Attributes.CubeCoordinates;
+
+        return (int)((Mathf.Abs(originCube.x - targetCube.x) 
+                    + Mathf.Abs(originCube.y - targetCube.y) 
+                    + Mathf.Abs(originCube.z - targetCube.z)) / 2);
+    }
+
+    public static int GetHexDistance(Vector3 originCube, Vector3 targetCube)
+    {
+        return (int)((Mathf.Abs(originCube.x - targetCube.x) 
+                    + Mathf.Abs(originCube.y - targetCube.y) 
+                    + Mathf.Abs(originCube.z - targetCube.z)) / 2);
+    }
 
 }

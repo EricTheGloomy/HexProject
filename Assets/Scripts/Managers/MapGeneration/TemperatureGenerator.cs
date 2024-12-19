@@ -49,7 +49,7 @@ public class TemperatureGenerator : IMapGenerationStep
         foreach (var tile in tiles.Values)
         {
             Vector2Int gridPosition = new Vector2Int((int)tile.Attributes.GridPosition.x, (int)tile.Attributes.GridPosition.y);
-            tile.Attributes.Procedural.Temperature = GeneratePerlinValue(
+            tile.Attributes.Procedural.Temperature = NoiseGenerationUtility.GeneratePerlinValue(
                 gridPosition.x, gridPosition.y,
                 config.TemperatureScale,
                 config.TemperatureOctaves,
@@ -116,33 +116,5 @@ public class TemperatureGenerator : IMapGenerationStep
             tile.Attributes.Procedural.Temperature = Mathf.Clamp01(baseTemperature + jitter);
         }
         Debug.Log("TemperatureGenerator: Applied elevation-based temperature adjustment and jitter.");
-    }
-
-    private float GeneratePerlinValue(int col, int row, float? scale = null, int? octaves = null, float? persistence = null, float? lacunarity = null)
-    {
-        float finalScale = scale ?? config.NoiseScale;
-        int finalOctaves = octaves ?? config.Octaves;
-        float finalPersistence = persistence ?? config.Persistence;
-        float finalLacunarity = lacunarity ?? config.Lacunarity;
-
-        float amplitude = config.InitialAmplitude;
-        float frequency = config.InitialFrequency;
-        float noiseHeight = 0f;
-
-        for (int i = 0; i < finalOctaves; i++)
-        {
-            float sampleX = (col / finalScale) * frequency;
-            float sampleY = (row / finalScale) * frequency;
-
-            float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
-            noiseHeight += perlinValue * amplitude;
-
-            amplitude *= finalPersistence;
-            frequency *= finalLacunarity;
-        }
-
-        noiseHeight *= config.NoiseHeightMultiplier;
-        noiseHeight = Mathf.Clamp(noiseHeight, config.MinHeightClamp, config.MaxHeightClamp);
-        return Mathf.InverseLerp(config.NoiseMin, config.NoiseMax, noiseHeight);
     }
 }
