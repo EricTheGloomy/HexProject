@@ -26,6 +26,27 @@ public static class NoiseGenerationUtility
         noiseHeight = Mathf.Clamp(noiseHeight, minClamp, maxClamp);
         return Mathf.InverseLerp(minClamp, maxClamp, noiseHeight);
     }
+    public static float GeneratePerlinValue(int x, int y, float scale, int octaves, float persistence, float lacunarity, Vector2[] offsets, float minClamp = -1f, float maxClamp = 1f)
+    {
+        float amplitude = 1f;
+        float frequency = 1f;
+        float noiseHeight = 0f;
+
+        for (int i = 0; i < octaves; i++)
+        {
+            float sampleX = ((x / scale) + offsets[i].x) * frequency;
+            float sampleY = ((y / scale) + offsets[i].y) * frequency;
+
+            float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2f - 1f;
+            noiseHeight += perlinValue * amplitude;
+
+            amplitude *= persistence;
+            frequency *= lacunarity;
+        }
+
+        noiseHeight = Mathf.Clamp(noiseHeight, minClamp, maxClamp);
+        return Mathf.InverseLerp(minClamp, maxClamp, noiseHeight);
+    }
 
     public static Vector2[] GetPerlinOffsets(int octaves, int offsetRangeMin, int offsetRangeMax, System.Random random)
     {
