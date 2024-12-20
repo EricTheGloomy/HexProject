@@ -54,6 +54,13 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
                 }
             }
 
+            if (tile.Attributes.Gameplay.HasVegetation && tileTypeData.VegetationDecoration != null)
+            {
+                GameObject vegetationInstance = Instantiate(tileTypeData.VegetationDecoration, tile.TileDecorations.transform);
+                vegetationInstance.transform.localPosition = Vector3.zero;
+                vegetationInstance.transform.localRotation = Quaternion.identity;
+            }
+
             // Instantiate fog overlay if applicable
             if (tileTypeData.FogOverlay != null)
             {

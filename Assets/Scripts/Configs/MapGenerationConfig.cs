@@ -86,6 +86,14 @@ public class MapGenerationConfig : ScriptableObject
     public float MinTemperatureForHousing = 0.3f;
     public float MaxTemperatureForHousing = 0.6f;
 
+    [Header("Vegetation Settings")]
+    public int MaxVegetationTiles = 100; // Maximum tiles to populate with vegetation
+    public float MinVegetationElevation = 0.31f; // Minimum elevation for vegetation
+    public float MaxVegetationElevation = 0.6f; // Maximum elevation for vegetation
+    public float MinVegetationMoisture = 0.4f; // Minimum moisture for vegetation
+    public float MaxVegetationMoisture = 1.0f; // Maximum moisture for vegetation
+    public float VegetationChance = 0.75f; // Probability a suitable tile gets vegetation
+
     [Range(0f, 1f)]
     public float ExtremeSettlementChance = 0.1f; // 10% chance
 
