@@ -163,9 +163,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7e75d36dc50093428ce69b62582bf5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridPosition: {x: 0, y: 0}
-  Visibility: 0
-  TerrainType: 
+  attributes:
+    GridPosition: {x: 0, y: 0}
+    OffsetCoordinates: {x: 0, y: 0}
+    CubeCoordinates: {x: 0, y: 0, z: 0}
+    procedural:
+      Elevation: 0
+      Moisture: 0
+      Temperature: 0
+      TileTypeData: {fileID: 0}
+      FixedElevationCategory: 0
+    gameplay:
+      Population: 0
+      Happiness: 0
+      HasHousing: 0
+      HasVegetation: 0
+      HasResources: 0
+      HasRoads: 0
+      HasRiver: 0
+      RiverConnections: 000000000000
+    TerrainType: 
+    TileTypeData: {fileID: 0}
+    IsStartingLocation: 0
+    Visibility: 0
   TileModel: {fileID: 5438955915930239084}
   TileDecorations: {fileID: 79545109506298433}
   FogOverlay: {fileID: 8616161777867570241}
