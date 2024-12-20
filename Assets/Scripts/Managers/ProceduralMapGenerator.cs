@@ -31,7 +31,7 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             // Debug logs to ensure each tile has updated data after processing
             foreach (var tile in tiles)
             {
-                Debug.Log($"Tile at {tile.Key}: Elevation = {tile.Value.Attributes.Procedural.Elevation}, TileTypeData = {tile.Value.Attributes.TileTypeData}");
+//                Debug.Log($"Tile at {tile.Key}: Elevation = {tile.Value.Attributes.Procedural.Elevation}, TileTypeData = {tile.Value.Attributes.TileTypeData}");
             }
         }
 
@@ -52,7 +52,8 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             new ElevationGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
             new MoistureGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
             new TemperatureGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
-            new BiomeGenerator(BiomeBandConfig, TileTypeDataMappingConfig)
+            new BiomeGenerator(BiomeBandConfig, TileTypeDataMappingConfig),
+            new PopulationGenerator(MapGenerationConfig, TileTypeDataMappingConfig)
             // Add more generators here as needed
         };
     }

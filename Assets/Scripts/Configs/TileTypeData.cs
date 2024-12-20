@@ -10,4 +10,11 @@ public class TileTypeData : ScriptableObject
     public Material BaseMaterial;          // Base material for the terrain
     public Material OverlayMaterial;       // Material for rivers, roads, etc.
     public bool isEligibleForStart;        // Can the tile type be chosen as a starting location
+    
+    [Header("Housing Decorations")]
+    public GameObject CityHousingDecoration;
+    public GameObject TownHousingDecoration;
+    public GameObject VillageHousingDecoration;
+    public GameObject HamletHousingDecoration;
+
 }

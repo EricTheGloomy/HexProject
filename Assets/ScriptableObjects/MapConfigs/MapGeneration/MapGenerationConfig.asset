@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f241903fc15b3f04aab78b5d7fb18cf5, type: 3}
   m_Name: MapGenerationConfig
   m_EditorClassIdentifier: 
-  SelectedElevationMode: 0
+  SelectedElevationMode: 1
   LandBudget: 250
   AddElevationCycles: 4
   SubtractElevationCycles: 2
@@ -35,6 +35,40 @@ MonoBehaviour:
   TemperatureJitter: 0.05
   ElevationTemperatureDropRate: 0.2
   ElevationTemperatureThreshold: 0.5
+  MinPopulation: 10
+  MaxPopulation: 500
+  HousingPopulationThreshold: 400
+  NumberOfCities: 3
+  NumberOfTowns: 5
+  NumberOfVillages: 10
+  NumberOfHamlets: 20
+  CityMinPopulation: 500
+  CityMaxPopulation: 1000
+  CityRadius: 5
+  TownMinPopulation: 200
+  TownMaxPopulation: 499
+  TownRadius: 4
+  VillageMinPopulation: 50
+  VillageMaxPopulation: 199
+  VillageRadius: 3
+  HamletMinPopulation: 10
+  HamletMaxPopulation: 49
+  HamletRadius: 2
+  PlacementRetries: 10
+  MinPopulationForUninhabited: 1
+  MaxPopulationForUninhabited: 10
+  MaxClusters: 9
+  ClusterRadius: 1
+  ClusterDensityDecay: 0.2
+  MinClusterPopulation: 150
+  MaxClusterPopulation: 300
+  MinElevationForHousing: 0.35
+  MaxElevationForHousing: 0.55
+  MinMoistureForHousing: 0.25
+  MaxMoistureForHousing: 0.69
+  MinTemperatureForHousing: 0.25
+  MaxTemperatureForHousing: 0.69
+  ExtremeSettlementChance: 0.2
   seed: 42
   isSeedRandomized: 0
   ElevationScale: 4

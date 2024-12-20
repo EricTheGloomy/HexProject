@@ -49,6 +49,46 @@ public class MapGenerationConfig : ScriptableObject
     public float ElevationTemperatureDropRate = 0.1f; // Temperature decrease per unit elevation
     public float ElevationTemperatureThreshold = 0.5f; // Elevation at which temperature starts dropping
 
+    [Header("Settlement Settings")]
+    public int NumberOfCities = 3;
+    public int NumberOfTowns = 5;
+    public int NumberOfVillages = 10;
+    public int NumberOfHamlets = 20;
+
+    public int CityMinPopulation = 500;
+    public int CityMaxPopulation = 1000;
+    public int CityRadius = 4;
+
+    public int TownMinPopulation = 200;
+    public int TownMaxPopulation = 499;
+    public int TownRadius = 3;
+
+    public int VillageMinPopulation = 50;
+    public int VillageMaxPopulation = 199;
+    public int VillageRadius = 2;
+
+    public int HamletMinPopulation = 10;
+    public int HamletMaxPopulation = 49;
+    public int HamletRadius = 1;
+
+    public int PlacementRetries = 10; // Limit retries to avoid infinite loops
+    [Header("Population for Tiles Without Housing")]
+    public int MinPopulationForUninhabited = 1;
+    public int MaxPopulationForUninhabited = 10;
+
+    [Header("Terrain Suitability Settings")]
+    public float MinElevationForHousing = 0.35f;
+    public float MaxElevationForHousing = 0.55f;
+
+    public float MinMoistureForHousing = 0.3f;
+    public float MaxMoistureForHousing = 0.6f;
+
+    public float MinTemperatureForHousing = 0.3f;
+    public float MaxTemperatureForHousing = 0.6f;
+
+    [Range(0f, 1f)]
+    public float ExtremeSettlementChance = 0.1f; // 10% chance
+
     [Header("Seed Settings")]
     [SerializeField] private int seed = 42;
     [SerializeField] private bool isSeedRandomized = false; // If true, use random seed

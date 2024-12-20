@@ -17,5 +17,9 @@ MonoBehaviour:
   TileModel: {fileID: 3497093088325243830, guid: 66505fb4a38386043b3a7fe7b060d398, type: 3}
   FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}
   BaseMaterial: {fileID: 2100000, guid: 60f19f203cb280847aa5cc5a041d9157, type: 2}
-  RiverMaterial: {fileID: 2100000, guid: e4f84aba56023894f96b3099d3a3e586, type: 2}
+  OverlayMaterial: {fileID: 0}
   isEligibleForStart: 0
+  CityHousingDecoration: {fileID: 8823183034249352666, guid: e47442839bb91a84fb5fbd413846f366, type: 3}
+  TownHousingDecoration: {fileID: 8823183034249352666, guid: 457146e527c13154a9223a9d71bbe05c, type: 3}
+  VillageHousingDecoration: {fileID: 8823183034249352666, guid: beb2be4e69bed404dbf45c2cf832afe9, type: 3}
+  HamletHousingDecoration: {fileID: 8823183034249352666, guid: 6316f568d90de3849ad62a03ba9dbea2, type: 3}

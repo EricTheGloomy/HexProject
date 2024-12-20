@@ -13,8 +13,8 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
         foreach (var entry in allTiles)
         {
             Tile tile = entry.Value;
-
             TileTypeData tileTypeData = tile.Attributes.TileTypeData;
+
             if (tileTypeData == null)
             {
                 Debug.LogError($"HexMapRenderer: Tile at {tile.Attributes.GridPosition} is missing its TileTypeData!");
@@ -27,11 +27,24 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
                 GameObject modelInstance = Instantiate(tileTypeData.TileModel, tile.TileModel.transform);
                 modelInstance.transform.localPosition = Vector3.zero;
 
-                // Apply both base and overlay materials
+                // Apply materials
                 ApplyTileMaterials(modelInstance, tileTypeData.BaseMaterial, tileTypeData.OverlayMaterial);
             }
 
-            // Fog overlay remains unchanged
+            // Instantiate housing decorations if applicable
+            if (tile.Attributes.Gameplay.HasHousing)
+            {
+                GameObject decorationPrefab = GetHousingDecoration(tile.Attributes.Gameplay.SettlementType, tileTypeData);
+
+                if (decorationPrefab != null)
+                {
+                    GameObject decorationInstance = Instantiate(decorationPrefab, tile.TileDecorations.transform);
+                    decorationInstance.transform.localPosition = Vector3.zero;
+                    decorationInstance.transform.localRotation = Quaternion.identity;
+                }
+            }
+
+            // Instantiate fog overlay if applicable
             if (tileTypeData.FogOverlay != null)
             {
                 GameObject fogInstance = Instantiate(tileTypeData.FogOverlay, tile.FogOverlay.transform);
@@ -41,6 +54,18 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
 
         Debug.Log("HexMapRenderer: Map rendering complete!");
         OnRenderingComplete?.Invoke();
+    }
+
+    private GameObject GetHousingDecoration(SettlementType settlementType, TileTypeData tileTypeData)
+    {
+        return settlementType switch
+        {
+            SettlementType.City => tileTypeData.CityHousingDecoration,
+            SettlementType.Town => tileTypeData.TownHousingDecoration,
+            SettlementType.Village => tileTypeData.VillageHousingDecoration,
+            SettlementType.Hamlet => tileTypeData.HamletHousingDecoration,
+            _ => null,
+        };
     }
 
     private void ApplyTileMaterials(GameObject tileModel, Material baseMaterial, Material overlayMaterial)
@@ -54,14 +79,12 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
 
             if (materials.Length == 1)
             {
-                // Apply only the base material if the model has one slot
                 materials[0] = baseMaterial;
             }
             else if (materials.Length >= 2 && overlayMaterial != null)
             {
-                // Apply both base and overlay materials if there are at least two slots
-                materials[0] = baseMaterial;   // Base material
-                materials[1] = overlayMaterial; // Overlay material
+                materials[0] = baseMaterial;
+                materials[1] = overlayMaterial;
             }
 
             renderer.materials = materials;
@@ -71,5 +94,5 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
             Debug.LogWarning("HexMapRenderer: No Renderer found on the TileModel.");
         }
     }
-
 }
+
