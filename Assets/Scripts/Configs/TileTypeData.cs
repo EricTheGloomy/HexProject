@@ -17,4 +17,7 @@ public class TileTypeData : ScriptableObject
     public GameObject VillageHousingDecoration;
     public GameObject HamletHousingDecoration;
 
+    [Header("Starting Location Decoration")]
+    public GameObject StartingLocationDecoration;
+
 }

@@ -76,7 +76,7 @@ public class CameraManager : MonoBehaviour, ICameraManager
     {
         foreach (var tile in allTiles.Values)
         {
-            if (tile.Attributes.IsStartingLocation)
+            if (tile.Attributes.Gameplay.IsStartingLocation)
             {
                 return tile;
             }

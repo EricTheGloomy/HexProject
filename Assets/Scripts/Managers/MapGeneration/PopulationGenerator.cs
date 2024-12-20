@@ -46,6 +46,7 @@ public class PopulationGenerator : IMapGenerationStep
                     int population = Random.Range(minPop, maxPop + 1);
                     candidate.Attributes.Gameplay.Population = population;
                     candidate.Attributes.Gameplay.HasHousing = true;
+                    candidate.Attributes.Gameplay.IsOccupied = true;
                     candidate.Attributes.Gameplay.SettlementType = type; // Assign SettlementType
                     placedSettlements.Add(candidate);
 

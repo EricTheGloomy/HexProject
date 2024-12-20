@@ -39,7 +39,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
 
         foreach (var tile in allTiles.Values)
         {
-            if (tile.Attributes.IsStartingLocation)
+            if (tile.Attributes.Gameplay.IsStartingLocation)
             {
                 Debug.Log($"FogOfWarManager: Found starting tile at {tile.Attributes.GridPosition}.");
                 return tile;

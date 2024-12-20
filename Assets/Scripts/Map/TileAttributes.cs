@@ -21,7 +21,6 @@ public class TileAttributes
     [Header("Terrain Data")]
     public string TerrainType;
     public TileTypeData TileTypeData;
-    public bool IsStartingLocation;
 
     [Header("Visibility")]
     public VisibilityState Visibility;

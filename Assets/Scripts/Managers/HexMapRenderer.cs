@@ -31,8 +31,18 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
                 ApplyTileMaterials(modelInstance, tileTypeData.BaseMaterial, tileTypeData.OverlayMaterial);
             }
 
+            if (tile.Attributes.Gameplay.IsStartingLocation)
+            {
+                if (tileTypeData.StartingLocationDecoration != null)
+                {
+                    GameObject startingLocationInstance = Instantiate(tileTypeData.StartingLocationDecoration, tile.TileDecorations.transform);
+                    startingLocationInstance.transform.localPosition = Vector3.zero;
+                    startingLocationInstance.transform.localRotation = Quaternion.identity;
+                }
+            }
+
             // Instantiate housing decorations if applicable
-            if (tile.Attributes.Gameplay.HasHousing)
+            if (tile.Attributes.Gameplay.HasHousing && !tile.Attributes.Gameplay.IsStartingLocation)
             {
                 GameObject decorationPrefab = GetHousingDecoration(tile.Attributes.Gameplay.SettlementType, tileTypeData);
 

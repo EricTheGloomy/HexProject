@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 79545109506298433}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7009351949061935984}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &5438955915930239084
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,14 +177,17 @@ MonoBehaviour:
       Population: 0
       Happiness: 0
       HasHousing: 0
+      IsExtremeSettlement: 0
       HasVegetation: 0
       HasResources: 0
       HasRoads: 0
       HasRiver: 0
       RiverConnections: 000000000000
+      SettlementType: 0
+      IsOccupied: 0
+      IsStartingLocation: 0
     TerrainType: 
     TileTypeData: {fileID: 0}
-    IsStartingLocation: 0
     Visibility: 0
   TileModel: {fileID: 5438955915930239084}
   TileDecorations: {fileID: 79545109506298433}

@@ -73,7 +73,9 @@ public class Tile : MonoBehaviour, IInteractable
 
     public void SetAsStartingLocation()
     {
-        attributes.IsStartingLocation = true;
+        attributes.Gameplay.IsStartingLocation = true;
+        attributes.Gameplay.HasHousing = true;
+        attributes.Gameplay.IsOccupied = true;
         Debug.Log($"Tile at {attributes.GridPosition} marked as starting location.");
     }
 

@@ -19,7 +19,7 @@ public class MapLocationManager : MonoBehaviour, IMapLocationManager
         var eligibleTiles = new List<Tile>();
         foreach (var tile in grid.Values)
         {
-            if (tile.Attributes.TileTypeData.isEligibleForStart)
+            if (tile.Attributes.TileTypeData.isEligibleForStart && tile.Attributes.Gameplay.HasHousing)
             {
                 eligibleTiles.Add(tile);
             }
@@ -53,7 +53,7 @@ public class MapLocationManager : MonoBehaviour, IMapLocationManager
 
         foreach (var tile in hexCells.Values)
         {
-            if (tile.Attributes.IsStartingLocation)
+            if (tile.Attributes.Gameplay.IsStartingLocation)
             {
                 return tile;
             }

@@ -14,4 +14,7 @@ public class GameplayTileAttributes
 
     // Add SettlementType
     public SettlementType SettlementType; // Type of settlement for housing
+    public bool IsOccupied; // New Attribute
+    public bool IsStartingLocation;
+
 }
