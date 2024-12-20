@@ -16,5 +16,6 @@ public class GameplayTileAttributes
     public SettlementType SettlementType; // Type of settlement for housing
     public bool IsOccupied; // New Attribute
     public bool IsStartingLocation;
+    public MountainType MountainType;
 
 }

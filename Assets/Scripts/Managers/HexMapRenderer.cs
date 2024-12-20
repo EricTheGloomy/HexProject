@@ -61,6 +61,19 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
                 vegetationInstance.transform.localRotation = Quaternion.identity;
             }
 
+            if (tile.Attributes.Gameplay.MountainType == MountainType.LowMountain && tileTypeData.LowMountainDecoration != null)
+            {
+                GameObject decorationInstance = Instantiate(tileTypeData.LowMountainDecoration, tile.TileDecorations.transform);
+                decorationInstance.transform.localPosition = Vector3.zero;
+                decorationInstance.transform.localRotation = Quaternion.identity;
+            }
+            else if (tile.Attributes.Gameplay.MountainType == MountainType.HighMountain && tileTypeData.HighMountainDecoration != null)
+            {
+                GameObject decorationInstance = Instantiate(tileTypeData.HighMountainDecoration, tile.TileDecorations.transform);
+                decorationInstance.transform.localPosition = Vector3.zero;
+                decorationInstance.transform.localRotation = Quaternion.identity;
+            }
+
             // Instantiate fog overlay if applicable
             if (tileTypeData.FogOverlay != null)
             {

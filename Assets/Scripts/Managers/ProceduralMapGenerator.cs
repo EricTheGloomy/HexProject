@@ -54,7 +54,8 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
             new TemperatureGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
             new BiomeGenerator(BiomeBandConfig, TileTypeDataMappingConfig),
             new PopulationGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
-            new VegetationGenerator(MapGenerationConfig)
+            new VegetationGenerator(MapGenerationConfig),
+            new DecorationsGenerator(MapGenerationConfig, TileTypeDataMappingConfig)
             // Add more generators here as needed
         };
     }

@@ -94,6 +94,11 @@ public class MapGenerationConfig : ScriptableObject
     public float MaxVegetationMoisture = 1.0f; // Maximum moisture for vegetation
     public float VegetationChance = 0.75f; // Probability a suitable tile gets vegetation
 
+    [Header("Mountain Decorations")]
+    [Range(0f, 100f)] public float LowMountainPercentage = 50f; // Percent of mountain range for low mountains
+    [Range(0f, 100f)] public float HighMountainPercentage = 50f; // Percent of mountain range for high mountains
+
+
     [Range(0f, 1f)]
     public float ExtremeSettlementChance = 0.1f; // 10% chance
 

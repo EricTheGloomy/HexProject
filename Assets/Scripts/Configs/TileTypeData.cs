@@ -23,4 +23,9 @@ public class TileTypeData : ScriptableObject
     [Header("Vegetation Decorations")]
     public GameObject VegetationDecoration;
 
+    [Header("Mountain Decorations")]
+    public GameObject LowMountainDecoration;
+    public GameObject HighMountainDecoration;
+
+
 }

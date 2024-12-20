@@ -23,3 +23,7 @@ MonoBehaviour:
   TownHousingDecoration: {fileID: 8823183034249352666, guid: 457146e527c13154a9223a9d71bbe05c, type: 3}
   VillageHousingDecoration: {fileID: 8823183034249352666, guid: beb2be4e69bed404dbf45c2cf832afe9, type: 3}
   HamletHousingDecoration: {fileID: 8823183034249352666, guid: 6316f568d90de3849ad62a03ba9dbea2, type: 3}
+  StartingLocationDecoration: {fileID: 8823183034249352666, guid: 5ee8a84ab0b5528438f604bed59f8b62, type: 3}
+  VegetationDecoration: {fileID: 8484662910265437372, guid: ac15780ed86c6cb4886efb635fca5b32, type: 3}
+  LowMountainDecoration: {fileID: 8484662910265437372, guid: 98c9de1bf5f2c6b4ea38a2e8552fb094, type: 3}
+  HighMountainDecoration: {fileID: 8484662910265437372, guid: a3cd2d2eb20bcce4992e3c0116619e70, type: 3}

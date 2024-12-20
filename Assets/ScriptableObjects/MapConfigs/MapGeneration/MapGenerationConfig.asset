@@ -60,6 +60,14 @@ MonoBehaviour:
   MaxMoistureForHousing: 0.69
   MinTemperatureForHousing: 0.25
   MaxTemperatureForHousing: 0.69
+  MaxVegetationTiles: 300
+  MinVegetationElevation: 0.31
+  MaxVegetationElevation: 0.6
+  MinVegetationMoisture: 0.3
+  MaxVegetationMoisture: 1
+  VegetationChance: 0.75
+  LowMountainPercentage: 50
+  HighMountainPercentage: 50
   ExtremeSettlementChance: 0.2
   seed: 42
   isSeedRandomized: 0
