@@ -322,6 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 904050373}
   - component: {fileID: 904050372}
+  - component: {fileID: 904050374}
   m_Layer: 0
   m_Name: Debugger
   m_TagString: Untagged
@@ -359,6 +360,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &904050374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904050371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9e20b8b1f777924e928eda449da295d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnableDebugVisualization: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,6 +578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ece903c8c32f647bf142e2aaebbe2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riverModelConfig: {fileID: 11400000, guid: 7c4ad38b3a9a4254087195515ba7d3e8, type: 2}
 --- !u!114 &1923748403
 MonoBehaviour:
   m_ObjectHideFlags: 0

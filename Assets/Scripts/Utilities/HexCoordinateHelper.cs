@@ -52,12 +52,12 @@ public static class HexCoordinateHelper
     {
         return new Vector3[]
         {
-            new Vector3(1, -1, 0),  // +X
-            new Vector3(1, 0, -1),  // +X+Z
-            new Vector3(0, 1, -1),  // +Z
-            new Vector3(-1, 1, 0),  // -X+Z
-            new Vector3(-1, 0, 1),  // -X
-            new Vector3(0, -1, 1)   // -Z
+            new Vector3(0, -1, 1),  // Top Right (+Z)
+            new Vector3(1, -1, 0),  // Right (+X)
+            new Vector3(1, 0, -1),  // Bottom Right (+X+Z)
+            new Vector3(0, 1, -1),  // Bottom Left (-Z)
+            new Vector3(-1, 1, 0),  // Left (-X)
+            new Vector3(-1, 0, 1)   // Top Left (-X+Z)
         };
     }
 }

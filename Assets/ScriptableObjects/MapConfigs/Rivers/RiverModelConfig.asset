@@ -16,11 +16,10 @@ MonoBehaviour:
     Name: 
     Model: {fileID: 3497093088325243830, guid: c8c532dd65ced8f4487647f4cb652afd, type: 3}
     Connections: 000000000100
-  RiverStraight:
-    Name: 
+  River2Way:
+  - Name: 
     Model: {fileID: 3497093088325243830, guid: f57e7180b9252b14e9920a5837a00136, type: 3}
     Connections: 000100000100
-  CurvedRivers:
   - Name: 
     Model: {fileID: 3497093088325243830, guid: e266b8cf9d1aa7848b396e0cfbceced2, type: 3}
     Connections: 000000000101
