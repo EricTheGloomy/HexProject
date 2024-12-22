@@ -28,6 +28,15 @@ public class MapGenerationConfig : ScriptableObject
     public float SubtractAffectedTilePercentage = 0.5f; // Percentage of affected tiles for subtract
     [Header("Smoothing Settings")]
     public bool ApplySmoothing = false; // Toggle smoothing after elevation generation
+    public int SmoothingIterations = 5;
+    public float SmoothingFactor = 0.2f;
+    public bool SmoothDuringLandBudgetSteps = false;
+    public int SmoothDuringStepsIterations = 2;
+    public float SmoothDuringStepsFactor = 0.1f;
+
+    [Header("River Settings")]
+    public int MinRiverLength = 5;
+    public int NumberOfRivers = 5;
 
     [Header("Water Propagation Settings")]
     public MoistureGenerationMode SelectedMoistureMode = MoistureGenerationMode.PerlinNoise; // Add this field

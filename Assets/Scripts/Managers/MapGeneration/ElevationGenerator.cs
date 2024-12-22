@@ -65,10 +65,18 @@ public class ElevationGenerator : IMapGenerationStep
         {
             case ElevationGenerationMode.PerlinNoise:
                 GenerateElevationWithPerlinNoise(tiles);
+                if (config.ApplySmoothing)
+                {
+                    SmoothElevation(tiles, config.SmoothingIterations, config.SmoothingFactor);
+                }
                 break;
 
             case ElevationGenerationMode.LandBudget:
                 GenerateElevationWithLandBudget(tiles);
+                if (config.ApplySmoothing)
+                {
+                    SmoothElevation(tiles, config.SmoothingIterations, config.SmoothingFactor);
+                }
                 break;
 
             default:
@@ -127,7 +135,7 @@ public class ElevationGenerator : IMapGenerationStep
 
         if (config.ApplySmoothing)
         {
-            SmoothElevation(tiles);
+            SmoothElevation(tiles, config.SmoothingIterations, config.SmoothingFactor);
         }
     }
 
@@ -161,6 +169,12 @@ public class ElevationGenerator : IMapGenerationStep
 
             landBudget -= elevationChange;
         }
+
+        // Apply smoothing after this step if enabled
+        if (config.SmoothDuringLandBudgetSteps)
+        {
+            SmoothElevation(tiles, config.SmoothDuringStepsIterations, config.SmoothDuringStepsFactor);
+        }
     }
 
     private void SubtractElevation(Dictionary<Vector2, Tile> tiles, ref float landBudget)
@@ -193,23 +207,36 @@ public class ElevationGenerator : IMapGenerationStep
 
             landBudget += elevationChange;
         }
+
+        // Apply smoothing after this step if enabled
+        if (config.SmoothDuringLandBudgetSteps)
+        {
+            SmoothElevation(tiles, config.SmoothDuringStepsIterations, config.SmoothDuringStepsFactor);
+        }
     }
 
-    private void SmoothElevation(Dictionary<Vector2, Tile> tiles)
+    private void SmoothElevation(Dictionary<Vector2, Tile> tiles, int iterations, float smoothingFactor)
     {
         if (tiles == null || tiles.Count == 0) return;
 
-        foreach (var tile in tiles.Values)
+        for (int i = 0; i < iterations; i++)
         {
-            var neighbors = HexUtility.GetNeighbors(tile, tiles);
-            if (neighbors.Count > 0)
+            foreach (var tile in tiles.Values)
             {
-                float averageElevation = neighbors.Average(neighbor => neighbor.Attributes.Procedural.Elevation);
-                tile.Attributes.Procedural.Elevation = Mathf.Lerp(tile.Attributes.Procedural.Elevation, averageElevation, 0.5f);
+                var neighbors = HexUtility.GetNeighbors(tile, tiles);
+                if (neighbors.Count > 0)
+                {
+                    float averageElevation = neighbors.Average(neighbor => neighbor.Attributes.Procedural.Elevation);
+                    tile.Attributes.Procedural.Elevation = Mathf.Lerp(
+                        tile.Attributes.Procedural.Elevation,
+                        averageElevation,
+                        smoothingFactor
+                    );
+                }
             }
         }
 
-        Debug.Log("Smoothing complete.");
+//        Debug.Log($"Smoothing complete after {iterations} iterations.");
     }
 
     private Tile GetRandomTile(Dictionary<Vector2, Tile> tiles)
