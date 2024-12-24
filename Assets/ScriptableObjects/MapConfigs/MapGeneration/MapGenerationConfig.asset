@@ -31,7 +31,7 @@ MonoBehaviour:
   SmoothDuringStepsIterations: 2
   SmoothDuringStepsFactor: 0.1
   MinRiverLength: 5
-  NumberOfRivers: 1
+  NumberOfRivers: 5
   SelectedMoistureMode: 1
   MoistureDecayRate: 0.6
   MoistureJitter: 0.05

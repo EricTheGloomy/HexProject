@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HexMapRenderer : MonoBehaviour, IRenderer
 {
+    [Header("Dependencies")]
+    [SerializeField] private RiverModelConfig riverModelConfig;
+
     public static event Action OnRenderingComplete;
 
     public void RenderMap(Dictionary<Vector2, Tile> allTiles)
@@ -21,8 +24,14 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
                 continue;
             }
 
+            // Render rivers on tiles with river connections
+            if (tile.Attributes.Gameplay.HasRiver)
+            {
+                RenderRiver(tile);
+            }
+
             // Instantiate model from TileTypeData
-            if (tileTypeData.TileModel != null)
+            if (tileTypeData.TileModel != null && !tile.Attributes.Gameplay.HasRiver)
             {
                 GameObject modelInstance = Instantiate(tileTypeData.TileModel, tile.TileModel.transform);
                 modelInstance.transform.localPosition = Vector3.zero;
@@ -96,6 +105,77 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
             SettlementType.Hamlet => tileTypeData.HamletHousingDecoration,
             _ => null,
         };
+    }
+
+    private void RenderRiver(Tile tile)
+    {
+        // Get river connections for this tile
+        bool[] riverConnections = tile.Attributes.Gameplay.RiverConnections;
+
+        // Fetch the correct river prefab and rotation steps
+        int rotationSteps;
+        GameObject riverPrefab = riverModelConfig.GetRiverModel(riverConnections, out rotationSteps);
+
+        if (riverPrefab != null)
+        {
+            // Instantiate the river prefab
+            GameObject riverInstance = Instantiate(riverPrefab, tile.TileModel.transform);
+            riverInstance.transform.localPosition = Vector3.zero;
+
+            // Apply rotation (each step is 60 degrees clockwise)
+            float rotationAngle = rotationSteps * 60f;
+            riverInstance.transform.localRotation = Quaternion.Euler(0, rotationAngle, 0);
+
+            // Fetch the tile's terrain materials from TileTypeData
+            TileTypeData tileTypeData = tile.Attributes.TileTypeData;
+            if (tileTypeData != null)
+            {
+                Debug.Log($"RenderRiver: Applying base material from TileTypeData for tile at {tile.Attributes.GridPosition}");
+                ApplyRiverMaterials(riverInstance, tileTypeData.BaseMaterial);
+            }
+            else
+            {
+                Debug.LogWarning($"RenderRiver: TileTypeData is null for tile at {tile.Attributes.GridPosition}");
+            }
+
+            Debug.Log($"Rendered river at {tile.Attributes.GridPosition} with {rotationSteps} rotation steps.");
+        }
+        else
+        {
+            Debug.LogWarning($"No river model found for tile at {tile.Attributes.GridPosition} with connections: {string.Join(",", riverConnections)}.");
+        }
+    }
+
+    private void ApplyRiverMaterials(GameObject riverInstance, Material baseMaterial)
+    {
+        if (riverInstance == null || baseMaterial == null)
+        {
+            Debug.LogWarning("ApplyRiverMaterials: River instance or base material is null!");
+            return;
+        }
+
+        Renderer renderer = riverInstance.GetComponentInChildren<Renderer>();
+        if (renderer != null)
+        {
+            Material[] materials = renderer.materials;
+
+            if (materials.Length > 0)
+            {
+                // Replace the base material while keeping the river overlay material intact
+                materials[0] = baseMaterial;
+                renderer.materials = materials;
+
+                Debug.Log("ApplyRiverMaterials: Successfully applied base material to river model.");
+            }
+            else
+            {
+                Debug.LogWarning("ApplyRiverMaterials: River model has no materials.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("ApplyRiverMaterials: No Renderer found on the river instance.");
+        }
     }
 
     private void ApplyTileMaterials(GameObject tileModel, Material baseMaterial, Material overlayMaterial)

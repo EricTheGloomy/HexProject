@@ -613,6 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3ece903c8c32f647bf142e2aaebbe2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  riverModelConfig: {fileID: 11400000, guid: 7c4ad38b3a9a4254087195515ba7d3e8, type: 2}
 --- !u!114 &1923748403
 MonoBehaviour:
   m_ObjectHideFlags: 0

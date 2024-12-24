@@ -15,7 +15,7 @@ public class RiverModelConfig : ScriptableObject
     }
 
     public RiverModelPattern RiverStart;    // River start (1 connection)
-    public RiverModelPattern[] River2Way;    // Curved rivers (gap=0, gap=1)
+    public RiverModelPattern[] River2Way;    // Straight and curved rivers (gap=0, gap=1)
     public RiverModelPattern[] TJunctions;      // T-junctions
     public RiverModelPattern[] FourWayJunctions;// 4-way junctions
     public RiverModelPattern River5Way;         // 5-way junction
