@@ -43,23 +43,33 @@ public class RiverGenerator : IMapGenerationStep
             List<Tile> riverPath = FindRiverPath(randomLandTile, closestLandNeighborOfWaterTile, tiles, restrictedTiles);
             if (riverPath != null)
             {
-                foreach (var tile in riverPath)
+                // Mark the entire river path as having a river
+                foreach (Tile tile in riverPath)
                 {
                     tile.Attributes.Gameplay.HasRiver = true;
-                    restrictedTiles.Add(tile);
+                }
 
-                    // Also restrict neighbors of the river tiles
-                    foreach (var neighbor in HexUtility.GetNeighbors(tile, tiles))
+                // Set river connections sequentially
+                SetRiverConnectionsSequentially(riverPath);
+
+                // Add all tiles in the path to restricted tiles
+                restrictedTiles.UnionWith(riverPath);
+
+                // Restrict neighbors of the river tiles
+                foreach (Tile tile in riverPath)
+                {
+                    foreach (Tile neighbor in HexUtility.GetNeighbors(tile, tiles))
                     {
                         restrictedTiles.Add(neighbor);
                     }
                 }
+
                 riversGenerated++;
                 Debug.Log($"River {riversGenerated} generated with {riverPath.Count} tiles.");
             }
             else
             {
-                // Rollback: Mark the start and end tiles as not having a river
+                // Rollback: Clear HasRiver if path generation failed
                 randomLandTile.Attributes.Gameplay.HasRiver = false;
                 closestLandNeighborOfWaterTile.Attributes.Gameplay.HasRiver = false;
                 Debug.LogWarning("Failed to generate a river path. Rolling back.");
@@ -68,6 +78,24 @@ public class RiverGenerator : IMapGenerationStep
         }
 
         Debug.Log($"River generation completed. {riversGenerated} rivers successfully created.");
+    }
+
+    private void SetRiverConnection(Tile currentTile, Tile nextTile, Dictionary<Vector2, Tile> tiles)
+    {
+        // Find the edge from the current tile to the next tile
+        int currentToNextEdge = HexUtility.GetEdgeBetweenTiles(currentTile, nextTile);
+        if (currentToNextEdge == -1)
+        {
+            Debug.LogWarning("Unable to determine edge between tiles.");
+            return;
+        }
+
+        // Find the reverse edge from the next tile to the current tile
+        int nextToCurrentEdge = (currentToNextEdge + 3) % 6; // Opposite edge on hex grid
+
+        // Set the river connections
+        currentTile.Attributes.Gameplay.RiverConnections[currentToNextEdge] = true;
+        nextTile.Attributes.Gameplay.RiverConnections[nextToCurrentEdge] = true;
     }
 
     private Tile FindRandomEligibleLandTile(Dictionary<Vector2, Tile> tiles, HashSet<Tile> restrictedTiles)
@@ -203,6 +231,33 @@ public class RiverGenerator : IMapGenerationStep
         path.Reverse();
         return path;
     }
+
+    private void SetRiverConnectionsSequentially(List<Tile> riverPath)
+    {
+        for (int i = 0; i < riverPath.Count - 1; i++)
+        {
+            Tile currentTile = riverPath[i];
+            Tile nextTile = riverPath[i + 1];
+
+            // Calculate the edge between the current and next tiles
+            int currentToNextEdge = HexUtility.GetEdgeBetweenTiles(currentTile, nextTile);
+            if (currentToNextEdge == -1)
+            {
+                Debug.LogWarning($"Invalid edge between tiles: {currentTile.Attributes.GridPosition} and {nextTile.Attributes.GridPosition}");
+                continue;
+            }
+
+            // Calculate the opposite edge for the next tile
+            int nextToCurrentEdge = (currentToNextEdge + 3) % 6;
+
+            // Set the river connections for both tiles
+            currentTile.Attributes.Gameplay.RiverConnections[currentToNextEdge] = true;
+            nextTile.Attributes.Gameplay.RiverConnections[nextToCurrentEdge] = true;
+
+            Debug.Log($"River connection set: {currentTile.Attributes.GridPosition} edge {currentToNextEdge} <-> {nextTile.Attributes.GridPosition} edge {nextToCurrentEdge}");
+        }
+    }
+
 }
 
 

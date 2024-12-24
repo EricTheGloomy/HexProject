@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Tile : MonoBehaviour, IInteractable
 {
@@ -40,7 +41,7 @@ public class Tile : MonoBehaviour, IInteractable
         if (!neighbors.Contains(neighbor))
         {
             neighbors.Add(neighbor);
-            neighbor.neighbors.Add(this);
+            Debug.Log($"Added neighbor {neighbor.Attributes.GridPosition} to {Attributes.GridPosition}");
         }
     }
 

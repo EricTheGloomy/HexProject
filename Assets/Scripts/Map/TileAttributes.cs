@@ -4,7 +4,7 @@ using UnityEngine;
 public class TileAttributes
 {
     [Header("Grid Data")]
-    public Vector2Int GridPosition;
+    public Vector2 GridPosition;
     public Vector2 OffsetCoordinates;
     public Vector3 CubeCoordinates;
 

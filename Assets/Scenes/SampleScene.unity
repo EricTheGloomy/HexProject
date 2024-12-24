@@ -322,6 +322,8 @@ GameObject:
   m_Component:
   - component: {fileID: 904050373}
   - component: {fileID: 904050372}
+  - component: {fileID: 904050374}
+  - component: {fileID: 904050375}
   m_Layer: 0
   m_Name: Debugger
   m_TagString: Untagged
@@ -359,6 +361,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &904050374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904050371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73171508b0a35db448d9bae68c789162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugCubePrefab: {fileID: 5004647059652795407, guid: a0df1acb94a35ad468ef899b4469af32, type: 3}
+--- !u!114 &904050375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904050371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70ab6ec43806f343bb009757b0b784f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AddRiverKey: 116
+  ConnectRiverKey: 121
+  GridManager: {fileID: 1923748401}
+  riverTilePositions:
+  - {x: 1, y: 0}
+  - {x: 1, y: 1}
+  - {x: 1, y: 2}
+  - {x: 1, y: 3}
+  - {x: 2, y: 3}
+  - {x: 3, y: 3}
+  - {x: 4, y: 4}
+  - {x: 3, y: 5}
+  - {x: 4, y: 6}
+  - {x: 5, y: 6}
+  - {x: 6, y: 6}
+  - {x: 7, y: 6}
+  - {x: 7, y: 5}
+  - {x: 7, y: 4}
+  - {x: 7, y: 3}
+  - {x: 7, y: 2}
+  - {x: 6, y: 2}
+  - {x: 5, y: 2}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
