@@ -31,8 +31,11 @@ public class RiverGenerator : IMapGenerationStep
             }
 
             // Step 2: Find the closest water neighbor's land neighbor within MinRiverLength
-            Tile closestLandNeighborOfWaterTile = FindClosestLandNeighborOfWater(randomLandTile, tiles, config.MinRiverLength, restrictedTiles);
-            if (closestLandNeighborOfWaterTile == null)
+            var closestTiles = FindClosestLandNeighborOfWater(randomLandTile, tiles, config.MinRiverLength, restrictedTiles);
+            Tile closestLandNeighborOfWaterTile = closestTiles.LandTile;
+            Tile correspondingWaterTile = closestTiles.WaterTile;
+
+            if (closestLandNeighborOfWaterTile == null || correspondingWaterTile == null)
             {
                 Debug.LogWarning($"No valid land neighbors of water tiles found at or beyond the minimum range of {config.MinRiverLength} from the selected river start.");
                 attempts++;
@@ -49,8 +52,8 @@ public class RiverGenerator : IMapGenerationStep
                     tile.Attributes.Gameplay.HasRiver = true;
                 }
 
-                // Set river connections sequentially
-                SetRiverConnectionsSequentially(riverPath);
+                // Pass the pre-identified water tile to the connection method
+                SetRiverConnectionsSequentially(riverPath, correspondingWaterTile);
 
                 // Add all tiles in the path to restricted tiles
                 restrictedTiles.UnionWith(riverPath);
@@ -75,6 +78,7 @@ public class RiverGenerator : IMapGenerationStep
                 Debug.LogWarning("Failed to generate a river path. Rolling back.");
                 attempts++;
             }
+
         }
 
         Debug.Log($"River generation completed. {riversGenerated} rivers successfully created.");
@@ -122,9 +126,10 @@ public class RiverGenerator : IMapGenerationStep
         return null;
     }
 
-    private Tile FindClosestLandNeighborOfWater(Tile startTile, Dictionary<Vector2, Tile> tiles, int minRiverLength, HashSet<Tile> restrictedTiles)
+    private (Tile LandTile, Tile WaterTile) FindClosestLandNeighborOfWater(Tile startTile, Dictionary<Vector2, Tile> tiles, int minRiverLength, HashSet<Tile> restrictedTiles)
     {
-        Tile closestTile = null;
+        Tile closestLandTile = null;
+        Tile correspondingWaterTile = null;
         float closestDistance = float.MaxValue;
 
         foreach (var tile in tiles.Values)
@@ -141,7 +146,8 @@ public class RiverGenerator : IMapGenerationStep
                         if (!restrictedTiles.Contains(neighbor) &&
                             neighbor.Attributes.Procedural.FixedElevationCategory == TileTypeDataMappingConfig.ElevationCategory.Land)
                         {
-                            closestTile = neighbor;
+                            closestLandTile = neighbor;
+                            correspondingWaterTile = tile;
                             closestDistance = distance;
                         }
                     }
@@ -149,7 +155,7 @@ public class RiverGenerator : IMapGenerationStep
             }
         }
 
-        if (closestTile != null)
+        if (closestLandTile != null)
         {
             Debug.Log($"Closest valid land neighbor of water tile found at distance {closestDistance}.");
         }
@@ -158,7 +164,7 @@ public class RiverGenerator : IMapGenerationStep
             Debug.LogWarning("No valid land neighbors of water tiles satisfy the minimum river length requirement.");
         }
 
-        return closestTile;
+        return (closestLandTile, correspondingWaterTile);
     }
 
     private List<Tile> FindRiverPath(Tile startTile, Tile endTile, Dictionary<Vector2, Tile> tiles, HashSet<Tile> restrictedTiles)
@@ -232,7 +238,7 @@ public class RiverGenerator : IMapGenerationStep
         return path;
     }
 
-    private void SetRiverConnectionsSequentially(List<Tile> riverPath)
+    private void SetRiverConnectionsSequentially(List<Tile> riverPath, Tile waterTile)
     {
         for (int i = 0; i < riverPath.Count - 1; i++)
         {
@@ -255,6 +261,20 @@ public class RiverGenerator : IMapGenerationStep
             nextTile.Attributes.Gameplay.RiverConnections[nextToCurrentEdge] = true;
 
             Debug.Log($"River connection set: {currentTile.Attributes.GridPosition} edge {currentToNextEdge} <-> {nextTile.Attributes.GridPosition} edge {nextToCurrentEdge}");
+        }
+
+        // Connect the final river tile to the water tile
+        Tile lastTile = riverPath[riverPath.Count - 1];
+        int lastToWaterEdge = HexUtility.GetEdgeBetweenTiles(lastTile, waterTile);
+
+        if (lastToWaterEdge != -1)
+        {
+            lastTile.Attributes.Gameplay.RiverConnections[lastToWaterEdge] = true;
+            Debug.Log($"Final river tile connected to water neighbor: {lastTile.Attributes.GridPosition} edge {lastToWaterEdge}");
+        }
+        else
+        {
+            Debug.LogWarning($"Failed to connect last river tile to water neighbor: {lastTile.Attributes.GridPosition}");
         }
     }
 
