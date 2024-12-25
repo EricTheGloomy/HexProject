@@ -55,6 +55,12 @@ public class VegetationGenerator : IMapGenerationStep
         {
             return false;
         }
+        
+        // Prevent vegetation on tiles with rivers
+        if (tile.Attributes.Gameplay.HasRiver)
+        {
+            return false;
+        }
 
         float elevation = tile.Attributes.Procedural.Elevation;
         float moisture = tile.Attributes.Procedural.Moisture;

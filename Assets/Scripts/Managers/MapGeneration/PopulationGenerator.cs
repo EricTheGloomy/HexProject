@@ -92,6 +92,12 @@ public class PopulationGenerator : IMapGenerationStep
             tile.Attributes.Procedural.FixedElevationCategory == TileTypeDataMappingConfig.ElevationCategory.Mountain)
         {
             return false;
+            
+        }
+        // Prevent housing on tiles with rivers
+        if (tile.Attributes.Gameplay.HasRiver)
+        {
+            return false;
         }
 
         // Check suitability thresholds

@@ -20,9 +20,8 @@ public class RiverGenerator : IMapGenerationStep
         // Keep track of tiles already used by rivers and their neighbors
         HashSet<Tile> restrictedTiles = new HashSet<Tile>();
 
-        while (riversGenerated < config.NumberOfRivers && attempts < config.NumberOfRivers * 2)
+        while (riversGenerated < config.NumberOfRivers && attempts < config.MaxRiverGenerationRetries)
         {
-            // Step 1: Find a random eligible land tile
             Tile randomLandTile = FindRandomEligibleLandTile(tiles, restrictedTiles);
             if (randomLandTile == null)
             {
@@ -30,7 +29,6 @@ public class RiverGenerator : IMapGenerationStep
                 break;
             }
 
-            // Step 2: Find the closest water neighbor's land neighbor within MinRiverLength
             var closestTiles = FindClosestLandNeighborOfWater(randomLandTile, tiles, config.MinRiverLength, restrictedTiles);
             Tile closestLandNeighborOfWaterTile = closestTiles.LandTile;
             Tile correspondingWaterTile = closestTiles.WaterTile;
@@ -42,28 +40,25 @@ public class RiverGenerator : IMapGenerationStep
                 continue;
             }
 
-            // Step 3: Attempt to generate river path
             List<Tile> riverPath = FindRiverPath(randomLandTile, closestLandNeighborOfWaterTile, tiles, restrictedTiles);
             if (riverPath != null)
             {
-                // Mark the entire river path as having a river
                 foreach (Tile tile in riverPath)
                 {
                     tile.Attributes.Gameplay.HasRiver = true;
                 }
 
-                // Pass the pre-identified water tile to the connection method
                 SetRiverConnectionsSequentially(riverPath, correspondingWaterTile);
 
-                // Add all tiles in the path to restricted tiles
-                restrictedTiles.UnionWith(riverPath);
-
-                // Restrict neighbors of the river tiles
-                foreach (Tile tile in riverPath)
+                if (config.RestrictNeighbors)
                 {
-                    foreach (Tile neighbor in HexUtility.GetNeighbors(tile, tiles))
+                    restrictedTiles.UnionWith(riverPath);
+                    foreach (Tile tile in riverPath)
                     {
-                        restrictedTiles.Add(neighbor);
+                        foreach (Tile neighbor in HexUtility.GetNeighbors(tile, tiles))
+                        {
+                            restrictedTiles.Add(neighbor);
+                        }
                     }
                 }
 
@@ -72,13 +67,12 @@ public class RiverGenerator : IMapGenerationStep
             }
             else
             {
-                // Rollback: Clear HasRiver if path generation failed
                 randomLandTile.Attributes.Gameplay.HasRiver = false;
                 closestLandNeighborOfWaterTile.Attributes.Gameplay.HasRiver = false;
                 Debug.LogWarning("Failed to generate a river path. Rolling back.");
+
                 attempts++;
             }
-
         }
 
         Debug.Log($"River generation completed. {riversGenerated} rivers successfully created.");
@@ -110,7 +104,7 @@ public class RiverGenerator : IMapGenerationStep
         {
             if (!restrictedTiles.Contains(tile) &&
                 tile.Attributes.Procedural.FixedElevationCategory == TileTypeDataMappingConfig.ElevationCategory.Land &&
-                tile.Attributes.Procedural.Elevation > 0.5f)
+                tile.Attributes.Procedural.Elevation > config.MinElevationForRiverStart)
             {
                 landTiles.Add(tile);
             }
@@ -220,7 +214,7 @@ public class RiverGenerator : IMapGenerationStep
     private float CalculateCost(Tile from, Tile to)
     {
         float elevationChange = to.Attributes.Procedural.Elevation - from.Attributes.Procedural.Elevation;
-        return elevationChange > 0 ? 1 + elevationChange * 5 : 1 + Mathf.Abs(elevationChange);
+        return config.BaseRiverPathCost + (elevationChange > 0 ? elevationChange * config.ElevationCostMultiplier : Mathf.Abs(elevationChange));
     }
 
     private List<Tile> ReconstructPath(RiverNode endNode)

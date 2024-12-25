@@ -34,17 +34,25 @@ public class MapGenerationConfig : ScriptableObject
     public int SmoothDuringStepsIterations = 2;
     public float SmoothDuringStepsFactor = 0.1f;
 
-    [Header("River Settings")]
-    public int MinRiverLength = 5;
+    [Header("River Generation Settings")]
     public int NumberOfRivers = 5;
+    public int MinRiverLength = 5;
+    public bool RestrictNeighbors = true; // Restrict tiles neighboring the river
+    public float MinElevationForRiverStart = 0.5f; // Minimum elevation for starting river tiles
+    public float ElevationCostMultiplier = 5f; // Multiplier for elevation change cost in river pathfinding
+    public float BaseRiverPathCost = 1f; // Base cost for moving to a tile in pathfinding
+    public int MaxRiverGenerationRetries = 10; // Maximum retries for river generation
 
     [Header("Water Propagation Settings")]
-    public MoistureGenerationMode SelectedMoistureMode = MoistureGenerationMode.PerlinNoise; // Add this field
+    public MoistureGenerationMode SelectedMoistureMode = MoistureGenerationMode.PerlinNoise;
     public float MoistureDecayRate = 0.2f;    // % moisture lost per tile distance
     public float MoistureJitter = 0.05f;      // Random moisture variation per tile
-
-    [Header("Moisture Jitter")]
     public int MoistureMaxRange = 5;          // Range for water-based moisture spreading
+
+    [Header("River Propagation Settings")]
+    public float RiverMoistureDecayRate = 0.1f;    // % moisture lost per tile distance for rivers
+    public float RiverMoistureJitter = 0.02f;       // Random moisture variation per tile for rivers
+    public int RiverMoistureMaxRange = 2;           // Range for river-based moisture spreading
 
     [Header("Temperature Settings")]
     public TemperatureGenerationMode SelectedTemperatureMode = TemperatureGenerationMode.PerlinNoise;

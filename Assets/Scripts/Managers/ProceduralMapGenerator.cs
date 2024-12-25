@@ -50,14 +50,14 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
         mapGenerators = new List<IMapGenerationStep>
         {
             new ElevationGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
+            new RiverGenerator(MapGenerationConfig),
             new MoistureGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
             new TemperatureGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
             new BiomeGenerator(BiomeBandConfig, TileTypeDataMappingConfig),
-            //new PopulationGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
-            //new VegetationGenerator(MapGenerationConfig),
-            //new DecorationsGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
+            new PopulationGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
+            new VegetationGenerator(MapGenerationConfig),
+            new DecorationsGenerator(MapGenerationConfig, TileTypeDataMappingConfig),
             // Add more generators here as needed
-            new RiverGenerator(MapGenerationConfig)
         };
     }
 

@@ -50,36 +50,59 @@ public class MoistureGenerator : IMapGenerationStep
 
     private void SpreadMoistureFromWater(Dictionary<Vector2, Tile> tiles)
     {
-        Queue<(Tile tile, int distance)> frontier = new Queue<(Tile, int)>();
-        HashSet<Tile> visited = new HashSet<Tile>();
+        Queue<(Tile tile, int distance)> waterFrontier = new Queue<(Tile, int)>();
+        Queue<(Tile tile, int distance)> riverFrontier = new Queue<(Tile, int)>();
+        HashSet<Tile> waterVisited = new HashSet<Tile>();
+        HashSet<Tile> riverVisited = new HashSet<Tile>();
 
+        // Initialize moisture values for water and river tiles
         foreach (var tile in tiles.Values)
         {
             if (tile.Attributes.Procedural.FixedElevationCategory == TileTypeDataMappingConfig.ElevationCategory.Water)
             {
                 tile.Attributes.Procedural.Moisture = 1.0f;
-                frontier.Enqueue((tile, 0));
-                visited.Add(tile);
+                waterFrontier.Enqueue((tile, 0));
+                waterVisited.Add(tile);
             }
-            else
+            else if (tile.Attributes.Gameplay.HasRiver)
             {
-                tile.Attributes.Procedural.Moisture = 0.0f;
+                tile.Attributes.Procedural.Moisture = Mathf.Max(tile.Attributes.Procedural.Moisture, 0.5f); // Combine moisture if already set
+                riverFrontier.Enqueue((tile, 0));
+                riverVisited.Add(tile);
             }
         }
 
-        int safetyCounter = 10000; // Prevent infinite BFS
+        // Propagate moisture from water tiles
+        PropagateMoisture(waterFrontier, tiles, waterVisited, config.MoistureDecayRate, config.MoistureJitter, config.MoistureMaxRange);
+
+        // Propagate moisture from river tiles
+        PropagateMoisture(riverFrontier, tiles, riverVisited, config.RiverMoistureDecayRate, config.RiverMoistureJitter, config.RiverMoistureMaxRange);
+
+        Debug.Log("MoistureGenerator: Moisture propagation complete.");
+    }
+
+    private void PropagateMoisture(
+        Queue<(Tile tile, int distance)> frontier,
+        Dictionary<Vector2, Tile> tiles,
+        HashSet<Tile> visited,
+        float decayRate,
+        float jitter,
+        int maxRange
+    )
+    {
+        int safetyCounter = 100000; // Prevent infinite BFS
         while (frontier.Count > 0 && safetyCounter > 0)
         {
             var (currentTile, distance) = frontier.Dequeue();
-            if (distance >= config.MoistureMaxRange) continue;
+            if (distance >= maxRange) continue;
 
             foreach (Tile neighbor in HexUtility.GetNeighbors(currentTile, tiles))
             {
                 if (!visited.Contains(neighbor))
                 {
-                    float decayMoisture = currentTile.Attributes.Procedural.Moisture * config.MoistureDecayRate;
-                    float jitter = UnityEngine.Random.Range(-config.MoistureJitter, config.MoistureJitter);
-                    float moistureContribution = Mathf.Clamp01(decayMoisture + jitter);
+                    float decayMoisture = currentTile.Attributes.Procedural.Moisture * decayRate;
+                    float randomJitter = UnityEngine.Random.Range(-jitter, jitter);
+                    float moistureContribution = Mathf.Clamp01(decayMoisture + randomJitter);
 
                     neighbor.Attributes.Procedural.Moisture = Mathf.Clamp01(neighbor.Attributes.Procedural.Moisture + moistureContribution);
                     frontier.Enqueue((neighbor, distance + 1));
@@ -92,9 +115,8 @@ public class MoistureGenerator : IMapGenerationStep
 
         if (safetyCounter <= 0)
         {
-            Debug.LogError("SpreadMoistureFromWater: Terminating due to potential infinite loop.");
+            Debug.LogError("PropagateMoisture: Terminating due to potential infinite loop.");
         }
-
-        Debug.Log("MoistureGenerator: Moisture propagation complete.");
     }
+
 }

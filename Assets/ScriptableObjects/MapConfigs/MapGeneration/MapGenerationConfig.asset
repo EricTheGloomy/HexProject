@@ -24,18 +24,26 @@ MonoBehaviour:
   SubtractMaxElevationChange: 0.1
   SubtractElevationRadius: 5
   SubtractAffectedTilePercentage: 0.75
-  ApplySmoothing: 0
+  ApplySmoothing: 1
   SmoothingIterations: 5
   SmoothingFactor: 0.2
   SmoothDuringLandBudgetSteps: 0
-  SmoothDuringStepsIterations: 2
+  SmoothDuringStepsIterations: 1
   SmoothDuringStepsFactor: 0.1
-  MinRiverLength: 5
   NumberOfRivers: 5
+  MinRiverLength: 5
+  RestrictNeighbors: 1
+  MinElevationForRiverStart: 0.6
+  ElevationCostMultiplier: 5
+  BaseRiverPathCost: 1
+  MaxRiverGenerationRetries: 10
   SelectedMoistureMode: 1
-  MoistureDecayRate: 0.6
-  MoistureJitter: 0.05
+  MoistureDecayRate: 0.5
+  MoistureJitter: 0.02
   MoistureMaxRange: 5
+  RiverMoistureDecayRate: 0.1
+  RiverMoistureJitter: 0.01
+  RiverMoistureMaxRange: 2
   SelectedTemperatureMode: 1
   PolarTemperatureMin: 0
   PolarTemperatureMax: 1
