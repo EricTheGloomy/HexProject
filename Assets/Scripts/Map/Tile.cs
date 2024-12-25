@@ -41,7 +41,7 @@ public class Tile : MonoBehaviour, IInteractable
         if (!neighbors.Contains(neighbor))
         {
             neighbors.Add(neighbor);
-            Debug.Log($"Added neighbor {neighbor.Attributes.GridPosition} to {Attributes.GridPosition}");
+//            Debug.Log($"Added neighbor {neighbor.Attributes.GridPosition} to {Attributes.GridPosition}");
         }
     }
 

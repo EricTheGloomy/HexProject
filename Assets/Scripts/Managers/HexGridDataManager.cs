@@ -95,7 +95,7 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
         {
             Tile tile = entry.Value;
 
-            Debug.Log($"Assigning neighbors for tile at {tile.Attributes.GridPosition}");
+//            Debug.Log($"Assigning neighbors for tile at {tile.Attributes.GridPosition}");
             List<Tile> neighbors = HexUtility.GetNeighbors(tile, hexCells);
 
             // Clear and reassign neighbors in the correct order
@@ -107,7 +107,7 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
             }
 
             // Log final neighbor order for debugging
-            Debug.Log($"Tile {tile.Attributes.GridPosition} neighbors: {string.Join(", ", tile.Neighbors.Select(n => n.Attributes.GridPosition))}");
+//            Debug.Log($"Tile {tile.Attributes.GridPosition} neighbors: {string.Join(", ", tile.Neighbors.Select(n => n.Attributes.GridPosition))}");
         }
 
         Debug.Log("HexGridDataManager: Neighbors assigned.");

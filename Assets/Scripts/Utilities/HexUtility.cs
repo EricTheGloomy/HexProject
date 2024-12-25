@@ -75,7 +75,7 @@ public static class HexUtility
             Mathf.Round(neighborPos.y - currentPos.y)
         );
 
-        Debug.Log($"Calculating edge from {currentTile.Attributes.GridPosition} to {neighborTile.Attributes.GridPosition}, Direction: {direction}");
+//        Debug.Log($"Calculating edge from {currentTile.Attributes.GridPosition} to {neighborTile.Attributes.GridPosition}, Direction: {direction}");
 
         // Determine if the current row is even or odd
         bool isEvenRow = ((int)currentPos.y % 2) == 0;

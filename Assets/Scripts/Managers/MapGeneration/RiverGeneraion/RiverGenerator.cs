@@ -254,7 +254,7 @@ public class RiverGenerator : IMapGenerationStep
             currentTile.Attributes.Gameplay.RiverConnections[currentToNextEdge] = true;
             nextTile.Attributes.Gameplay.RiverConnections[nextToCurrentEdge] = true;
 
-            Debug.Log($"River connection set: {currentTile.Attributes.GridPosition} edge {currentToNextEdge} <-> {nextTile.Attributes.GridPosition} edge {nextToCurrentEdge}");
+//            Debug.Log($"River connection set: {currentTile.Attributes.GridPosition} edge {currentToNextEdge} <-> {nextTile.Attributes.GridPosition} edge {nextToCurrentEdge}");
         }
 
         // Connect the final river tile to the water tile
@@ -272,55 +272,4 @@ public class RiverGenerator : IMapGenerationStep
         }
     }
 
-}
-
-
-
-
-// Supporting Classes
-public class RiverNode
-{
-    public Tile Tile;
-    public RiverNode Parent;
-    public float GCost; // Cost to reach this node
-    public float HCost; // Estimated cost to goal
-    public float FCost => GCost + HCost; // Total cost
-}
-
-// A simple priority queue implementation can be added separately or replaced with any available library.
-public class PriorityQueue<T>
-{
-    private readonly SortedList<float, Queue<T>> _elements = new SortedList<float, Queue<T>>();
-
-    public int Count { get; private set; }
-
-    public void Enqueue(T item, float priority)
-    {
-        if (!_elements.ContainsKey(priority))
-        {
-            _elements[priority] = new Queue<T>();
-        }
-
-        _elements[priority].Enqueue(item);
-        Count++;
-    }
-
-    public T Dequeue()
-    {
-        if (Count == 0)
-        {
-            throw new System.InvalidOperationException("The queue is empty.");
-        }
-
-        var firstKey = _elements.Keys[0];
-        var firstQueue = _elements[firstKey];
-        var item = firstQueue.Dequeue();
-        if (firstQueue.Count == 0)
-        {
-            _elements.Remove(firstKey);
-        }
-
-        Count--;
-        return item;
-    }
 }

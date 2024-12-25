@@ -42,7 +42,7 @@ public class RiverModelConfig : ScriptableObject
         }
         else
         {
-            Debug.Log($"Matched river model for connections: {string.Join(",", riverConnections)} with rotation steps: {rotationSteps}");
+//            Debug.Log($"Matched river model for connections: {string.Join(",", riverConnections)} with rotation steps: {rotationSteps}");
         }
 
         return model;
@@ -73,11 +73,11 @@ public class RiverModelConfig : ScriptableObject
         {
             for (int i = 0; i < 6; i++)
             {
-                Debug.Log($"Trying pattern: {pattern.Name}, Rotation Steps: {i}, Connections: {string.Join(",", connections)}");
+//                Debug.Log($"Trying pattern: {pattern.Name}, Rotation Steps: {i}, Connections: {string.Join(",", connections)}");
 
                 if (connections.SequenceEqual(RotateConnections(pattern.Connections, i)))
                 {
-                    Debug.Log($"Matched pattern {pattern.Name} with rotation {i * 60} degrees for connections: {string.Join(",", connections)}");
+//                    Debug.Log($"Matched pattern {pattern.Name} with rotation {i * 60} degrees for connections: {string.Join(",", connections)}");
                     rotationSteps = i;
                     return pattern.Model;
                 }

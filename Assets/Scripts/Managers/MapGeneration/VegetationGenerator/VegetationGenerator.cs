@@ -39,7 +39,7 @@ public class VegetationGenerator : IMapGenerationStep
                 tile.Attributes.Gameplay.HasVegetation = true;
                 tile.Attributes.Gameplay.IsOccupied = true; // Prevent other uses
                 vegetationCount++;
-                Debug.Log($"Vegetation added at {tile.Attributes.GridPosition}");
+//                Debug.Log($"Vegetation added at {tile.Attributes.GridPosition}");
             }
         }
 

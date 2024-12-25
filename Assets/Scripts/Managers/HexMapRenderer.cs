@@ -130,7 +130,7 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
             TileTypeData tileTypeData = tile.Attributes.TileTypeData;
             if (tileTypeData != null)
             {
-                Debug.Log($"RenderRiver: Applying base material from TileTypeData for tile at {tile.Attributes.GridPosition}");
+//                Debug.Log($"RenderRiver: Applying base material from TileTypeData for tile at {tile.Attributes.GridPosition}");
                 ApplyRiverMaterials(riverInstance, tileTypeData.BaseMaterial);
             }
             else
@@ -138,7 +138,7 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
                 Debug.LogWarning($"RenderRiver: TileTypeData is null for tile at {tile.Attributes.GridPosition}");
             }
 
-            Debug.Log($"Rendered river at {tile.Attributes.GridPosition} with {rotationSteps} rotation steps.");
+//            Debug.Log($"Rendered river at {tile.Attributes.GridPosition} with {rotationSteps} rotation steps.");
         }
         else
         {
@@ -165,7 +165,7 @@ public class HexMapRenderer : MonoBehaviour, IRenderer
                 materials[0] = baseMaterial;
                 renderer.materials = materials;
 
-                Debug.Log("ApplyRiverMaterials: Successfully applied base material to river model.");
+//                Debug.Log("ApplyRiverMaterials: Successfully applied base material to river model.");
             }
             else
             {

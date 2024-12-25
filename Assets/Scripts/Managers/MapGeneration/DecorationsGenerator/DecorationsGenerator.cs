@@ -47,7 +47,7 @@ public class DecorationsGenerator : IMapGenerationStep
                     tile.Attributes.Gameplay.MountainType = MountainType.HighMountain;
                 }
 
-                Debug.Log($"Mountain decoration assigned at {tile.Attributes.GridPosition} as {tile.Attributes.Gameplay.MountainType}");
+//                Debug.Log($"Mountain decoration assigned at {tile.Attributes.GridPosition} as {tile.Attributes.Gameplay.MountainType}");
             }
         }
 
@@ -67,9 +67,3 @@ public class DecorationsGenerator : IMapGenerationStep
     }
 }
 
-public enum MountainType
-{
-    None,
-    LowMountain,
-    HighMountain
-}
