@@ -628,7 +628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapGenerationConfig: {fileID: 11400000, guid: 4cabaf96612277c47be04a221f3ea9b3, type: 2}
   TileTypeDataMappingConfig: {fileID: 11400000, guid: 83bb729403a9edd44b795d38cfa7a48c, type: 2}
-  BiomeBandConfig: {fileID: 11400000, guid: 954380d94cb875c4ea6f8a504711bf90, type: 2}
+  BiomeBandConfig: {fileID: 11400000, guid: da61696930ab54447abe54fee23c2c4d, type: 2}
 --- !u!114 &1923748404
 MonoBehaviour:
   m_ObjectHideFlags: 0

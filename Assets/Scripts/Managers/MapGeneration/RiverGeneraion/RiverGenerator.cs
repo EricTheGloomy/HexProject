@@ -55,7 +55,7 @@ public class RiverGenerator : IMapGenerationStep
                     restrictedTiles.UnionWith(riverPath);
                     foreach (Tile tile in riverPath)
                     {
-                        foreach (Tile neighbor in HexUtility.GetNeighbors(tile, tiles))
+                        foreach (Tile neighbor in tile.Neighbors)
                         {
                             restrictedTiles.Add(neighbor);
                         }
@@ -134,8 +134,7 @@ public class RiverGenerator : IMapGenerationStep
 
                 if (distance >= minRiverLength && distance < closestDistance)
                 {
-                    List<Tile> neighbors = HexUtility.GetNeighbors(tile, tiles);
-                    foreach (var neighbor in neighbors)
+                    foreach (var neighbor in tile.Neighbors)
                     {
                         if (!restrictedTiles.Contains(neighbor) &&
                             neighbor.Attributes.Procedural.FixedElevationCategory == TileTypeDataMappingConfig.ElevationCategory.Land)
@@ -186,7 +185,7 @@ public class RiverGenerator : IMapGenerationStep
 
             closedList.Add(currentNode.Tile);
 
-            foreach (var neighbor in HexUtility.GetNeighbors(currentNode.Tile, tiles))
+            foreach (var neighbor in currentNode.Tile.Neighbors)
             {
                 if (closedList.Contains(neighbor) || restrictedTiles.Contains(neighbor) ||
                     neighbor.Attributes.Procedural.FixedElevationCategory != TileTypeDataMappingConfig.ElevationCategory.Land)

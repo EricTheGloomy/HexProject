@@ -16,6 +16,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
         foreach (var tile in tiles.Values)
         {
             tile.SetVisibility(VisibilityState.Hidden);
+            tile.TileDecorations.SetActive(false);
         }
 
         Tile startingTile = FindStartingTile();
@@ -66,6 +67,8 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
             if (!revealedTiles.Contains(tile))
             {
                 tile.SetVisibility(VisibilityState.Visible);
+                tile.TileDecorations.SetActive(true);
+
                 revealedTiles.Add(tile);
             }
         }

@@ -223,7 +223,7 @@ public class ElevationGenerator : IMapGenerationStep
         {
             foreach (var tile in tiles.Values)
             {
-                var neighbors = HexUtility.GetNeighbors(tile, tiles);
+                var neighbors = tile.Neighbors; // Use the Tile's neighbors directly
                 if (neighbors.Count > 0)
                 {
                     float averageElevation = neighbors.Average(neighbor => neighbor.Attributes.Procedural.Elevation);

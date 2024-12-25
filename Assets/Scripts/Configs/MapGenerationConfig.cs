@@ -45,11 +45,13 @@ public class MapGenerationConfig : ScriptableObject
 
     [Header("Water Propagation Settings")]
     public MoistureGenerationMode SelectedMoistureMode = MoistureGenerationMode.PerlinNoise;
+    public float WaterTileBaseMoisture = 1.0f;
     public float MoistureDecayRate = 0.2f;    // % moisture lost per tile distance
     public float MoistureJitter = 0.05f;      // Random moisture variation per tile
     public int MoistureMaxRange = 5;          // Range for water-based moisture spreading
 
     [Header("River Propagation Settings")]
+    public float RiverTileBaseMoisture = 0.5f;
     public float RiverMoistureDecayRate = 0.1f;    // % moisture lost per tile distance for rivers
     public float RiverMoistureJitter = 0.02f;       // Random moisture variation per tile for rivers
     public int RiverMoistureMaxRange = 2;           // Range for river-based moisture spreading

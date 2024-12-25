@@ -16,20 +16,20 @@ MonoBehaviour:
   LandBudget: 250
   AddElevationCycles: 4
   SubtractElevationCycles: 2
-  AddMinElevationChange: 0.01
+  AddMinElevationChange: 0.05
   AddMaxElevationChange: 0.1
   AddElevationRadius: 5
   AddAffectedTilePercentage: 0.75
-  SubtractMinElevationChange: 0.01
+  SubtractMinElevationChange: 0.05
   SubtractMaxElevationChange: 0.1
   SubtractElevationRadius: 5
   SubtractAffectedTilePercentage: 0.75
   ApplySmoothing: 1
   SmoothingIterations: 5
-  SmoothingFactor: 0.2
+  SmoothingFactor: 0.1
   SmoothDuringLandBudgetSteps: 0
-  SmoothDuringStepsIterations: 1
-  SmoothDuringStepsFactor: 0.1
+  SmoothDuringStepsIterations: 2
+  SmoothDuringStepsFactor: 0.05
   NumberOfRivers: 5
   MinRiverLength: 5
   RestrictNeighbors: 1
@@ -38,9 +38,11 @@ MonoBehaviour:
   BaseRiverPathCost: 1
   MaxRiverGenerationRetries: 10
   SelectedMoistureMode: 1
+  WaterTileBaseMoisture: 1
   MoistureDecayRate: 0.5
   MoistureJitter: 0.02
   MoistureMaxRange: 5
+  RiverTileBaseMoisture: 0.4
   RiverMoistureDecayRate: 0.1
   RiverMoistureJitter: 0.01
   RiverMoistureMaxRange: 2

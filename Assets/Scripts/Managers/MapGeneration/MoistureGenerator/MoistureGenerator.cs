@@ -60,13 +60,13 @@ public class MoistureGenerator : IMapGenerationStep
         {
             if (tile.Attributes.Procedural.FixedElevationCategory == TileTypeDataMappingConfig.ElevationCategory.Water)
             {
-                tile.Attributes.Procedural.Moisture = 1.0f;
+                tile.Attributes.Procedural.Moisture = config.WaterTileBaseMoisture;
                 waterFrontier.Enqueue((tile, 0));
                 waterVisited.Add(tile);
             }
             else if (tile.Attributes.Gameplay.HasRiver)
             {
-                tile.Attributes.Procedural.Moisture = Mathf.Max(tile.Attributes.Procedural.Moisture, 0.5f); // Combine moisture if already set
+                tile.Attributes.Procedural.Moisture = Mathf.Max(tile.Attributes.Procedural.Moisture, config.RiverTileBaseMoisture); // Combine moisture if already set
                 riverFrontier.Enqueue((tile, 0));
                 riverVisited.Add(tile);
             }
@@ -81,14 +81,7 @@ public class MoistureGenerator : IMapGenerationStep
         Debug.Log("MoistureGenerator: Moisture propagation complete.");
     }
 
-    private void PropagateMoisture(
-        Queue<(Tile tile, int distance)> frontier,
-        Dictionary<Vector2, Tile> tiles,
-        HashSet<Tile> visited,
-        float decayRate,
-        float jitter,
-        int maxRange
-    )
+    private void PropagateMoisture(Queue<(Tile tile, int distance)> frontier, Dictionary<Vector2, Tile> tiles, HashSet<Tile> visited, float decayRate, float jitter, int maxRange)
     {
         int safetyCounter = 100000; // Prevent infinite BFS
         while (frontier.Count > 0 && safetyCounter > 0)
@@ -96,7 +89,7 @@ public class MoistureGenerator : IMapGenerationStep
             var (currentTile, distance) = frontier.Dequeue();
             if (distance >= maxRange) continue;
 
-            foreach (Tile neighbor in HexUtility.GetNeighbors(currentTile, tiles))
+            foreach (Tile neighbor in currentTile.Neighbors) // Use the Neighbors property directly
             {
                 if (!visited.Contains(neighbor))
                 {
