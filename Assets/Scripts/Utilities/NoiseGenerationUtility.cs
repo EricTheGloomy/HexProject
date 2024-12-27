@@ -48,15 +48,16 @@ public static class NoiseGenerationUtility
         return Mathf.InverseLerp(minClamp, maxClamp, noiseHeight);
     }
 
-    public static Vector2[] GetPerlinOffsets(int octaves, int offsetRangeMin, int offsetRangeMax, System.Random random)
+    public static Vector2[] GetPerlinOffsets(int octaves, int offsetRangeMin, int offsetRangeMax)
     {
         Vector2[] offsets = new Vector2[octaves];
         for (int i = 0; i < octaves; i++)
         {
-            float offsetX = random.Next(offsetRangeMin, offsetRangeMax);
-            float offsetY = random.Next(offsetRangeMin, offsetRangeMax);
+            float offsetX = UnityEngine.Random.Range(offsetRangeMin, offsetRangeMax);
+            float offsetY = UnityEngine.Random.Range(offsetRangeMin, offsetRangeMax);
             offsets[i] = new Vector2(offsetX, offsetY);
         }
         return offsets;
     }
+
 }

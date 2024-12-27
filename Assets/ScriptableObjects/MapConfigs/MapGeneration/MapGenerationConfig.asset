@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: MapGenerationConfig
   m_EditorClassIdentifier: 
   SelectedElevationMode: 0
-  LandBudget: 250
-  AddElevationCycles: 4
+  LandBudget: 200
+  AddElevationCycles: 5
   SubtractElevationCycles: 2
   AddMinElevationChange: 0.05
   AddMaxElevationChange: 0.1
-  AddElevationRadius: 5
+  AddElevationRadius: 3
   AddAffectedTilePercentage: 0.75
   SubtractMinElevationChange: 0.05
   SubtractMaxElevationChange: 0.1
-  SubtractElevationRadius: 5
+  SubtractElevationRadius: 3
   SubtractAffectedTilePercentage: 0.75
   ApplySmoothing: 1
   SmoothingIterations: 5
@@ -87,7 +87,7 @@ MonoBehaviour:
   HighMountainPercentage: 50
   ExtremeSettlementChance: 0.2
   seed: 42
-  isSeedRandomized: 0
+  isSeedRandomized: 1
   ElevationScale: 4
   ElevationOctaves: 8
   ElevationPersistence: 0.5

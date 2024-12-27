@@ -71,12 +71,11 @@ public class VegetationGenerator : IMapGenerationStep
 
     private void ShuffleList<T>(List<T> list)
     {
-        System.Random rng = new System.Random(config.Seed); // Use a consistent seed for reproducibility
         int n = list.Count;
         while (n > 1)
         {
             n--;
-            int k = rng.Next(n + 1);
+            int k = UnityEngine.Random.Range(0, n + 1); // Use UnityEngine.Random for random index
             (list[k], list[n]) = (list[n], list[k]);
         }
     }

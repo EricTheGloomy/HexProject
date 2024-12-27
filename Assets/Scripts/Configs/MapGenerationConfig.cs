@@ -69,6 +69,8 @@ public class MapGenerationConfig : ScriptableObject
     public float ElevationTemperatureThreshold = 0.5f; // Elevation at which temperature starts dropping
 
     [Header("Settlement Settings")]
+    
+    [Range(0f, 1f)] public float ExtremeSettlementChance = 0.1f; // 10% chance
     public int NumberOfCities = 3;
     public int NumberOfTowns = 5;
     public int NumberOfVillages = 10;
@@ -91,6 +93,7 @@ public class MapGenerationConfig : ScriptableObject
     public int HamletRadius = 1;
 
     public int PlacementRetries = 10; // Limit retries to avoid infinite loops
+
     [Header("Population for Tiles Without Housing")]
     public int MinPopulationForUninhabited = 1;
     public int MaxPopulationForUninhabited = 10;
@@ -116,10 +119,6 @@ public class MapGenerationConfig : ScriptableObject
     [Header("Mountain Decorations")]
     [Range(0f, 100f)] public float LowMountainPercentage = 50f; // Percent of mountain range for low mountains
     [Range(0f, 100f)] public float HighMountainPercentage = 50f; // Percent of mountain range for high mountains
-
-
-    [Range(0f, 1f)]
-    public float ExtremeSettlementChance = 0.1f; // 10% chance
 
     [Header("Seed Settings")]
     [SerializeField] private int seed = 42;

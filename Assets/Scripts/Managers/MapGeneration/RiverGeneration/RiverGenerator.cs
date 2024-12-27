@@ -113,8 +113,8 @@ public class RiverGenerator : IMapGenerationStep
         Debug.Log($"Found {landTiles.Count} eligible land tiles.");
         if (landTiles.Count > 0)
         {
-            System.Random random = new System.Random();
-            return landTiles[random.Next(landTiles.Count)];
+        int randomIndex = UnityEngine.Random.Range(0, landTiles.Count);
+        return landTiles[randomIndex];
         }
 
         return null;

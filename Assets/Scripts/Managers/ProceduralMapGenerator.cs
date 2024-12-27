@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
 {
@@ -20,6 +21,10 @@ public class ProceduralMapGenerator : MonoBehaviour, IMapGenerator
     private void GenerateMap(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("ProceduralMapGenerator: Starting map generation...");
+        // Initialize the global random state with the seed
+        Random.InitState(MapGenerationConfig.Seed);
+        Debug.Log($"Random.InitState initialized with seed: {MapGenerationConfig.Seed}");
+
         InitializeGenerators();
 
         foreach (var generator in mapGenerators)
