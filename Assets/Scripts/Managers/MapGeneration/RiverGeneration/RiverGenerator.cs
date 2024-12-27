@@ -13,6 +13,7 @@ public class RiverGenerator : IMapGenerationStep
     public void Generate(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log($"RiverGenerator: Attempting to generate {config.NumberOfRivers} rivers...");
+        Random.InitState(config.Seed);
 
         int riversGenerated = 0;
         int attempts = 0;

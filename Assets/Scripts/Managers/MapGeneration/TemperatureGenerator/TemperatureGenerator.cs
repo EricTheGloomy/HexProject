@@ -16,6 +16,8 @@ public class TemperatureGenerator : IMapGenerationStep
     public void Generate(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("TemperatureGenerator: Generating temperature...");
+        Random.InitState(config.Seed);
+
         PrecomputeTemperature(tiles);
         Debug.Log("TemperatureGenerator: Temperature generation complete.");
     }
@@ -46,6 +48,12 @@ public class TemperatureGenerator : IMapGenerationStep
 
     private void GenerateTemperatureWithPerlinNoise(Dictionary<Vector2, Tile> tiles)
     {
+        var offsets = NoiseGenerationUtility.GetPerlinOffsets(
+            config.TemperatureOctaves,
+            config.OffsetRangeMin,
+            config.OffsetRangeMax
+        );
+
         foreach (var tile in tiles.Values)
         {
             Vector2Int gridPosition = new Vector2Int((int)tile.Attributes.GridPosition.x, (int)tile.Attributes.GridPosition.y);
@@ -54,7 +62,8 @@ public class TemperatureGenerator : IMapGenerationStep
                 config.TemperatureScale,
                 config.TemperatureOctaves,
                 config.TemperaturePersistence,
-                config.TemperatureLacunarity
+                config.TemperatureLacunarity,
+                offsets
             );
         }
         Debug.Log("TemperatureGenerator: Temperature generated using Perlin Noise.");
@@ -112,7 +121,7 @@ public class TemperatureGenerator : IMapGenerationStep
             }
 
             // Apply jitter for slight variation
-            float jitter = UnityEngine.Random.Range(-config.TemperatureJitter, config.TemperatureJitter);
+            float jitter = Random.Range(-config.TemperatureJitter, config.TemperatureJitter);
             tile.Attributes.Procedural.Temperature = Mathf.Clamp01(baseTemperature + jitter);
         }
         Debug.Log("TemperatureGenerator: Applied elevation-based temperature adjustment and jitter.");

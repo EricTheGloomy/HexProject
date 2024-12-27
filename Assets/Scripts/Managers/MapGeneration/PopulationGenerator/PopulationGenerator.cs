@@ -15,6 +15,7 @@ public class PopulationGenerator : IMapGenerationStep
     public void Generate(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("PopulationGenerator: Generating population...");
+        Random.InitState(config.Seed);
 
         // Step 1: Place settlements
         PlaceSettlement(tiles, SettlementType.City, config.NumberOfCities, config.CityRadius, config.CityMinPopulation, config.CityMaxPopulation);

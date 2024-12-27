@@ -15,6 +15,7 @@ public class DecorationsGenerator : IMapGenerationStep
     public void Generate(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("DecorationsGenerator: Generating decorations...");
+        Random.InitState(config.Seed);
 
         // Get mountain elevation range from the mappings
         var mountainMapping = GetMountainMapping();

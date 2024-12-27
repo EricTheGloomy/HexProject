@@ -15,6 +15,8 @@ public class MoistureGenerator : IMapGenerationStep
     public void Generate(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("MoistureGenerator: Generating moisture...");
+        Random.InitState(config.Seed);
+
         PrecomputeMoisture(tiles);
         Debug.Log("MoistureGenerator: Moisture generation complete.");
     }
@@ -26,18 +28,7 @@ public class MoistureGenerator : IMapGenerationStep
         switch (config.SelectedMoistureMode)
         {
             case MoistureGenerationMode.PerlinNoise:
-                foreach (var tile in tiles.Values)
-                {
-                    Vector2Int gridPosition = new Vector2Int((int)tile.Attributes.GridPosition.x, (int)tile.Attributes.GridPosition.y);
-
-                    tile.Attributes.Procedural.Moisture = NoiseGenerationUtility.GeneratePerlinValue(
-                        gridPosition.x, gridPosition.y,
-                        config.MoistureScale,
-                        config.MoistureOctaves,
-                        config.MoisturePersistence,
-                        config.MoistureLacunarity
-                    );
-                }
+                GenerateMoistureWithPerlinNoise(tiles);
                 Debug.Log("MoistureGenerator: Moisture generated using Perlin Noise.");
                 break;
 
@@ -45,6 +36,29 @@ public class MoistureGenerator : IMapGenerationStep
                 SpreadMoistureFromWater(tiles);
                 Debug.Log("MoistureGenerator: Moisture generated using Water Propagation.");
                 break;
+        }
+    }
+
+    private void GenerateMoistureWithPerlinNoise(Dictionary<Vector2, Tile> tiles)
+    {
+        var offsets = NoiseGenerationUtility.GetPerlinOffsets(
+            config.MoistureOctaves,
+            config.OffsetRangeMin,
+            config.OffsetRangeMax
+        );
+
+        foreach (var tile in tiles.Values)
+        {
+            Vector2Int gridPosition = new Vector2Int((int)tile.Attributes.GridPosition.x, (int)tile.Attributes.GridPosition.y);
+
+            tile.Attributes.Procedural.Moisture = NoiseGenerationUtility.GeneratePerlinValue(
+                gridPosition.x, gridPosition.y,
+                config.MoistureScale,
+                config.MoistureOctaves,
+                config.MoisturePersistence,
+                config.MoistureLacunarity,
+                offsets
+            );
         }
     }
 
@@ -94,7 +108,7 @@ public class MoistureGenerator : IMapGenerationStep
                 if (!visited.Contains(neighbor))
                 {
                     float decayMoisture = currentTile.Attributes.Procedural.Moisture * decayRate;
-                    float randomJitter = UnityEngine.Random.Range(-jitter, jitter);
+                    float randomJitter = Random.Range(-jitter, jitter);
                     float moistureContribution = Mathf.Clamp01(decayMoisture + randomJitter);
 
                     neighbor.Attributes.Procedural.Moisture = Mathf.Clamp01(neighbor.Attributes.Procedural.Moisture + moistureContribution);

@@ -16,6 +16,7 @@ public class ElevationGenerator : IMapGenerationStep
     public void Generate(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("ElevationGenerator: Generating elevation...");
+        Random.InitState(config.Seed);
 
         PrecomputeElevationNoise(tiles);
 
@@ -85,9 +86,15 @@ public class ElevationGenerator : IMapGenerationStep
         }
     }
 
-    private void GenerateElevationWithPerlinNoise(Dictionary<Vector2, Tile> tiles)
+    public void GenerateElevationWithPerlinNoise(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("ElevationGenerator: Generating elevation using Perlin Noise...");
+
+        var offsets = NoiseGenerationUtility.GetPerlinOffsets(
+            config.ElevationOctaves,
+            config.OffsetRangeMin,
+            config.OffsetRangeMax
+        );
 
         foreach (var tileEntry in tiles)
         {
@@ -99,7 +106,8 @@ public class ElevationGenerator : IMapGenerationStep
                 config.ElevationScale,
                 config.ElevationOctaves,
                 config.ElevationPersistence,
-                config.ElevationLacunarity
+                config.ElevationLacunarity,
+                offsets // Pass the offsets
             );
         }
 
@@ -154,7 +162,7 @@ public class ElevationGenerator : IMapGenerationStep
 
             if (landBudget <= 0f) break;
 
-            float elevationChange = UnityEngine.Random.Range(
+            float elevationChange = Random.Range(
                 config.AddMinElevationChange,
                 config.AddMaxElevationChange
             );
@@ -192,7 +200,7 @@ public class ElevationGenerator : IMapGenerationStep
 
             if (landBudget <= 0f) break;
 
-            float elevationChange = UnityEngine.Random.Range(
+            float elevationChange = Random.Range(
                 config.SubtractMinElevationChange,
                 config.SubtractMaxElevationChange
             );
@@ -242,7 +250,7 @@ public class ElevationGenerator : IMapGenerationStep
     private Tile GetRandomTile(Dictionary<Vector2, Tile> tiles)
     {
         List<Tile> tileList = new List<Tile>(tiles.Values);
-        int randomIndex = UnityEngine.Random.Range(0, tileList.Count);
+        int randomIndex = Random.Range(0, tileList.Count);
         return tileList[randomIndex];
     }
 }

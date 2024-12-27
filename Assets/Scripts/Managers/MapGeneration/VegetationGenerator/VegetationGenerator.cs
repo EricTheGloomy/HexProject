@@ -13,6 +13,7 @@ public class VegetationGenerator : IMapGenerationStep
     public void Generate(Dictionary<Vector2, Tile> tiles)
     {
         Debug.Log("VegetationGenerator: Generating vegetation...");
+        Random.InitState(config.Seed);
 
         // Collect eligible tiles
         List<Tile> eligibleTiles = new List<Tile>();
@@ -75,7 +76,7 @@ public class VegetationGenerator : IMapGenerationStep
         while (n > 1)
         {
             n--;
-            int k = UnityEngine.Random.Range(0, n + 1); // Use UnityEngine.Random for random index
+            int k = Random.Range(0, n + 1); // Use UnityEngine.Random for random index
             (list[k], list[n]) = (list[n], list[k]);
         }
     }
