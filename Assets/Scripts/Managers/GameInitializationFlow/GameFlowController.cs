@@ -14,6 +14,8 @@ public class GameInitializationFlowController : MonoBehaviour
     [SerializeField] private FogOfWarManager fogOfWarManager;
     [SerializeField] private CameraManager cameraManager;
 
+    public static event Action<Dictionary<Vector2, Tile>> OnGameplayStart;
+
     private Dictionary<Vector2, Tile> cachedHexCells;
     private readonly Dictionary<GameState, IGameStateHandler> stateHandlers = new();
 
@@ -62,18 +64,18 @@ public class GameInitializationFlowController : MonoBehaviour
             return;
         }
 
-        if (CurrentState == newState)
-        {
-            Debug.LogWarning($"Already in state {newState}, skipping transition.");
-            return;
-        }
-
         Debug.Log($"Transitioning from {CurrentState} to {newState}");
         CurrentState = newState;
 
+        if (newState == GameState.Gameplay)
+        {
+            OnGameplayStart?.Invoke(cachedHexCells); // Notify subscribers
+            enabled = false; // Disable the GameFlowController
+            return;
+        }
+
         if (stateHandlers.TryGetValue(newState, out var handler))
         {
-            Debug.Log($"Executing {handler.GetType().Name} for state {newState}.");
             handler.EnterState(cachedHexCells);
         }
         else
