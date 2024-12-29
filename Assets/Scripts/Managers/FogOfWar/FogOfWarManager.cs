@@ -23,6 +23,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
         Tile startingTile = FindStartingTile();
         if (startingTile != null)
         {
+            Debug.Log($"FogOfWarManager: Revealing area around starting tile at {startingTile.Attributes.GridPosition}.");
             RevealAreaAroundTile(startingTile);
         }
         else
