@@ -13,37 +13,37 @@ MonoBehaviour:
   m_Name: MapGenerationConfig
   m_EditorClassIdentifier: 
   SelectedElevationMode: 0
-  LandBudget: 200
+  LandBudget: 250
   AddElevationCycles: 5
   SubtractElevationCycles: 2
   AddMinElevationChange: 0.05
-  AddMaxElevationChange: 0.1
-  AddElevationRadius: 3
+  AddMaxElevationChange: 0.11
+  AddElevationRadius: 4
   AddAffectedTilePercentage: 0.75
-  SubtractMinElevationChange: 0.05
-  SubtractMaxElevationChange: 0.1
-  SubtractElevationRadius: 3
+  SubtractMinElevationChange: 0.01
+  SubtractMaxElevationChange: 0.08
+  SubtractElevationRadius: 4
   SubtractAffectedTilePercentage: 0.75
   ApplySmoothing: 1
   SmoothingIterations: 5
   SmoothingFactor: 0.1
-  SmoothDuringLandBudgetSteps: 0
+  SmoothDuringLandBudgetSteps: 1
   SmoothDuringStepsIterations: 2
   SmoothDuringStepsFactor: 0.05
-  NumberOfRivers: 5
-  MinRiverLength: 5
-  RestrictNeighbors: 1
-  MinElevationForRiverStart: 0.6
-  ElevationCostMultiplier: 5
+  NumberOfRivers: 10
+  MinRiverLength: 3
+  RestrictNeighbors: 0
+  MinElevationForRiverStart: 0.45
+  ElevationCostMultiplier: 3
   BaseRiverPathCost: 1
   MaxRiverGenerationRetries: 10
-  SelectedMoistureMode: 1
+  SelectedMoistureMode: 0
   WaterTileBaseMoisture: 1
-  MoistureDecayRate: 0.5
-  MoistureJitter: 0.02
-  MoistureMaxRange: 5
+  MoistureDecayRate: 0.6
+  MoistureJitter: 0.01
+  MoistureMaxRange: 6
   RiverTileBaseMoisture: 0.4
-  RiverMoistureDecayRate: 0.1
+  RiverMoistureDecayRate: 0.15
   RiverMoistureJitter: 0.01
   RiverMoistureMaxRange: 2
   SelectedTemperatureMode: 1
@@ -52,6 +52,7 @@ MonoBehaviour:
   TemperatureJitter: 0.05
   ElevationTemperatureDropRate: 0.2
   ElevationTemperatureThreshold: 0.5
+  ExtremeSettlementChance: 0.2
   NumberOfCities: 3
   NumberOfTowns: 5
   NumberOfVillages: 10
@@ -85,23 +86,22 @@ MonoBehaviour:
   VegetationChance: 0.75
   LowMountainPercentage: 50
   HighMountainPercentage: 50
-  ExtremeSettlementChance: 0.2
   seed: 42
-  isSeedRandomized: 1
-  ElevationScale: 4
-  ElevationOctaves: 8
-  ElevationPersistence: 0.5
-  ElevationLacunarity: 2
-  MoistureScale: 3
-  MoistureOctaves: 6
-  MoisturePersistence: 0.6
-  MoistureLacunarity: 1.8
-  TemperatureScale: 3
-  TemperatureOctaves: 6
-  TemperaturePersistence: 0.4
-  TemperatureLacunarity: 2.2
+  isSeedRandomized: 0
   RandomSeedMin: 0
   RandomSeedMax: 10000
+  ElevationScale: 8
+  ElevationOctaves: 4
+  ElevationPersistence: 0.5
+  ElevationLacunarity: 2
+  MoistureScale: 10
+  MoistureOctaves: 4
+  MoisturePersistence: 0.5
+  MoistureLacunarity: 2
+  TemperatureScale: 10
+  TemperatureOctaves: 4
+  TemperaturePersistence: 0.5
+  TemperatureLacunarity: 2
   NoiseScale: 4
   Octaves: 4
   Persistence: 0.5

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158d34acff4e54a489fc67c16a24b559, type: 3}
   m_Name: FogConfig
   m_EditorClassIdentifier: 
-  RevealRadius: 99
+  RevealRadius: 999

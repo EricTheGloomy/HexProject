@@ -139,6 +139,9 @@ public class MapGenerationConfig : ScriptableObject
             return seed;
         }
     }
+    private int? cachedSeed = null;
+    public int RandomSeedMin = 0;
+    public int RandomSeedMax = 10000;
 
     [Header("Elevation Noise Settings")]
     public float ElevationScale = 1f;
@@ -157,10 +160,6 @@ public class MapGenerationConfig : ScriptableObject
     public int TemperatureOctaves = 2;
     public float TemperaturePersistence = 0.4f;
     public float TemperatureLacunarity = 2.2f;
-
-    private int? cachedSeed = null;
-    public int RandomSeedMin = 0;
-    public int RandomSeedMax = 10000;
 
     [Header("General Perlin Noise Settings")]
     [Range(0.1f, 10f)] public float NoiseScale = 1f;
