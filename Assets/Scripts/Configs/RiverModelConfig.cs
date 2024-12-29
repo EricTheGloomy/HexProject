@@ -15,8 +15,7 @@ public class RiverModelConfig : ScriptableObject
     }
 
     public RiverModelPattern RiverStart;    // River start (1 connection)
-    public RiverModelPattern RiverStraight; // Straight river (0,3 or equivalent)
-    public RiverModelPattern[] CurvedRivers;    // Curved rivers (gap=0, gap=1)
+    public RiverModelPattern[] River2Way;    // Straight and curved rivers (gap=0, gap=1)
     public RiverModelPattern[] TJunctions;      // T-junctions
     public RiverModelPattern[] FourWayJunctions;// 4-way junctions
     public RiverModelPattern River5Way;         // 5-way junction
@@ -31,8 +30,7 @@ public class RiverModelConfig : ScriptableObject
         int activeEdges = riverConnections.Count(c => c);
 
         if (activeEdges == 1) model = MatchPattern(RiverStart, riverConnections, out rotationSteps);
-        if (activeEdges == 2){model = MatchPatterns(CurvedRivers, riverConnections, out rotationSteps)
-         ?? MatchPattern(RiverStraight, riverConnections, out rotationSteps);}
+        if (activeEdges == 2){model = MatchPatterns(River2Way, riverConnections, out rotationSteps);}
         if (activeEdges == 3) model = MatchPatterns(TJunctions, riverConnections, out rotationSteps);
         if (activeEdges == 4) model = MatchPatterns(FourWayJunctions, riverConnections, out rotationSteps);
         if (activeEdges == 5) model = MatchPattern(River5Way, riverConnections, out rotationSteps);
@@ -40,7 +38,11 @@ public class RiverModelConfig : ScriptableObject
 
         if (model == null)
         {
-            Debug.LogWarning($"No river model found for connections: {string.Join(",", riverConnections)}");
+            Debug.LogWarning($"No river model found for connections: {string.Join(",", riverConnections)} with {activeEdges} active edges.");
+        }
+        else
+        {
+//            Debug.Log($"Matched river model for connections: {string.Join(",", riverConnections)} with rotation steps: {rotationSteps}");
         }
 
         return model;
@@ -71,11 +73,11 @@ public class RiverModelConfig : ScriptableObject
         {
             for (int i = 0; i < 6; i++)
             {
-                Debug.Log($"Trying pattern: {pattern.Name}, Rotation Steps: {i}, Connections: {string.Join(",", connections)}");
+//                Debug.Log($"Trying pattern: {pattern.Name}, Rotation Steps: {i}, Connections: {string.Join(",", connections)}");
 
                 if (connections.SequenceEqual(RotateConnections(pattern.Connections, i)))
                 {
-                    Debug.Log($"Matched pattern {pattern.Name} with rotation {i * 60} degrees for connections: {string.Join(",", connections)}");
+//                    Debug.Log($"Matched pattern {pattern.Name} with rotation {i * 60} degrees for connections: {string.Join(",", connections)}");
                     rotationSteps = i;
                     return pattern.Model;
                 }

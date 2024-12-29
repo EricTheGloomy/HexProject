@@ -28,14 +28,33 @@ public class MapGenerationConfig : ScriptableObject
     public float SubtractAffectedTilePercentage = 0.5f; // Percentage of affected tiles for subtract
     [Header("Smoothing Settings")]
     public bool ApplySmoothing = false; // Toggle smoothing after elevation generation
+    public int SmoothingIterations = 5;
+    public float SmoothingFactor = 0.2f;
+    public bool SmoothDuringLandBudgetSteps = false;
+    public int SmoothDuringStepsIterations = 2;
+    public float SmoothDuringStepsFactor = 0.1f;
+
+    [Header("River Generation Settings")]
+    public int NumberOfRivers = 5;
+    public int MinRiverLength = 5;
+    public bool RestrictNeighbors = true; // Restrict tiles neighboring the river
+    public float MinElevationForRiverStart = 0.5f; // Minimum elevation for starting river tiles
+    public float ElevationCostMultiplier = 5f; // Multiplier for elevation change cost in river pathfinding
+    public float BaseRiverPathCost = 1f; // Base cost for moving to a tile in pathfinding
+    public int MaxRiverGenerationRetries = 10; // Maximum retries for river generation
 
     [Header("Water Propagation Settings")]
-    public MoistureGenerationMode SelectedMoistureMode = MoistureGenerationMode.PerlinNoise; // Add this field
+    public MoistureGenerationMode SelectedMoistureMode = MoistureGenerationMode.PerlinNoise;
+    public float WaterTileBaseMoisture = 1.0f;
     public float MoistureDecayRate = 0.2f;    // % moisture lost per tile distance
     public float MoistureJitter = 0.05f;      // Random moisture variation per tile
-
-    [Header("Moisture Jitter")]
     public int MoistureMaxRange = 5;          // Range for water-based moisture spreading
+
+    [Header("River Propagation Settings")]
+    public float RiverTileBaseMoisture = 0.5f;
+    public float RiverMoistureDecayRate = 0.1f;    // % moisture lost per tile distance for rivers
+    public float RiverMoistureJitter = 0.02f;       // Random moisture variation per tile for rivers
+    public int RiverMoistureMaxRange = 2;           // Range for river-based moisture spreading
 
     [Header("Temperature Settings")]
     public TemperatureGenerationMode SelectedTemperatureMode = TemperatureGenerationMode.PerlinNoise;
@@ -48,6 +67,58 @@ public class MapGenerationConfig : ScriptableObject
     [Header("Temperature Elevation Adjustment")]
     public float ElevationTemperatureDropRate = 0.1f; // Temperature decrease per unit elevation
     public float ElevationTemperatureThreshold = 0.5f; // Elevation at which temperature starts dropping
+
+    [Header("Settlement Settings")]
+    
+    [Range(0f, 1f)] public float ExtremeSettlementChance = 0.1f; // 10% chance
+    public int NumberOfCities = 3;
+    public int NumberOfTowns = 5;
+    public int NumberOfVillages = 10;
+    public int NumberOfHamlets = 20;
+
+    public int CityMinPopulation = 500;
+    public int CityMaxPopulation = 1000;
+    public int CityRadius = 4;
+
+    public int TownMinPopulation = 200;
+    public int TownMaxPopulation = 499;
+    public int TownRadius = 3;
+
+    public int VillageMinPopulation = 50;
+    public int VillageMaxPopulation = 199;
+    public int VillageRadius = 2;
+
+    public int HamletMinPopulation = 10;
+    public int HamletMaxPopulation = 49;
+    public int HamletRadius = 1;
+
+    public int PlacementRetries = 10; // Limit retries to avoid infinite loops
+
+    [Header("Population for Tiles Without Housing")]
+    public int MinPopulationForUninhabited = 1;
+    public int MaxPopulationForUninhabited = 10;
+
+    [Header("Terrain Suitability Settings")]
+    public float MinElevationForHousing = 0.35f;
+    public float MaxElevationForHousing = 0.55f;
+
+    public float MinMoistureForHousing = 0.3f;
+    public float MaxMoistureForHousing = 0.6f;
+
+    public float MinTemperatureForHousing = 0.3f;
+    public float MaxTemperatureForHousing = 0.6f;
+
+    [Header("Vegetation Settings")]
+    public int MaxVegetationTiles = 100; // Maximum tiles to populate with vegetation
+    public float MinVegetationElevation = 0.31f; // Minimum elevation for vegetation
+    public float MaxVegetationElevation = 0.6f; // Maximum elevation for vegetation
+    public float MinVegetationMoisture = 0.4f; // Minimum moisture for vegetation
+    public float MaxVegetationMoisture = 1.0f; // Maximum moisture for vegetation
+    public float VegetationChance = 0.75f; // Probability a suitable tile gets vegetation
+
+    [Header("Mountain Decorations")]
+    [Range(0f, 100f)] public float LowMountainPercentage = 50f; // Percent of mountain range for low mountains
+    [Range(0f, 100f)] public float HighMountainPercentage = 50f; // Percent of mountain range for high mountains
 
     [Header("Seed Settings")]
     [SerializeField] private int seed = 42;
@@ -68,6 +139,9 @@ public class MapGenerationConfig : ScriptableObject
             return seed;
         }
     }
+    private int? cachedSeed = null;
+    public int RandomSeedMin = 0;
+    public int RandomSeedMax = 10000;
 
     [Header("Elevation Noise Settings")]
     public float ElevationScale = 1f;
@@ -86,10 +160,6 @@ public class MapGenerationConfig : ScriptableObject
     public int TemperatureOctaves = 2;
     public float TemperaturePersistence = 0.4f;
     public float TemperatureLacunarity = 2.2f;
-
-    private int? cachedSeed = null;
-    public int RandomSeedMin = 0;
-    public int RandomSeedMax = 10000;
 
     [Header("General Perlin Noise Settings")]
     [Range(0.1f, 10f)] public float NoiseScale = 1f;

@@ -16,6 +16,8 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
         foreach (var tile in tiles.Values)
         {
             tile.SetVisibility(VisibilityState.Hidden);
+            tile.TileDecorations.SetActive(false);
+            tile.TileModel.SetActive(false);
         }
 
         Tile startingTile = FindStartingTile();
@@ -39,7 +41,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
 
         foreach (var tile in allTiles.Values)
         {
-            if (tile.Attributes.IsStartingLocation)
+            if (tile.Attributes.Gameplay.IsStartingLocation)
             {
                 Debug.Log($"FogOfWarManager: Found starting tile at {tile.Attributes.GridPosition}.");
                 return tile;
@@ -66,6 +68,9 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
             if (!revealedTiles.Contains(tile))
             {
                 tile.SetVisibility(VisibilityState.Visible);
+                tile.TileDecorations.SetActive(true);
+                tile.TileModel.SetActive(true);
+
                 revealedTiles.Add(tile);
             }
         }

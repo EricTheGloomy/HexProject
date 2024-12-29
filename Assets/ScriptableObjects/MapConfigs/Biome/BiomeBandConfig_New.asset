@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6cbbba2ce69e7944857388f8d916c4b, type: 3}
+  m_Name: BiomeBandConfig_New
+  m_EditorClassIdentifier: 
+  BiomeBands:
+  - Name: 
+    MinTemperature: 0
+    MaxTemperature: 0.1
+    MinMoisture: 0
+    MaxMoisture: 0.1
+    TileTypeData: {fileID: 11400000, guid: 9fa2fa1c677f31b40882394ff1176710, type: 2}
+  - Name: 
+    MinTemperature: 0
+    MaxTemperature: 0.1
+    MinMoisture: 0.1
+    MaxMoisture: 0.35
+    TileTypeData: {fileID: 11400000, guid: 9fa2fa1c677f31b40882394ff1176710, type: 2}
+  - Name: 
+    MinTemperature: 0
+    MaxTemperature: 0.1
+    MinMoisture: 0.35
+    MaxMoisture: 0.65
+    TileTypeData: {fileID: 11400000, guid: ccf9a62b0b529ca4cb0317f7486f02cb, type: 2}
+  - Name: 
+    MinTemperature: 0
+    MaxTemperature: 0.1
+    MinMoisture: 0.65
+    MaxMoisture: 0.9
+    TileTypeData: {fileID: 11400000, guid: ccf9a62b0b529ca4cb0317f7486f02cb, type: 2}
+  - Name: 
+    MinTemperature: 0
+    MaxTemperature: 0.1
+    MinMoisture: 0.9
+    MaxMoisture: 1
+    TileTypeData: {fileID: 11400000, guid: ccf9a62b0b529ca4cb0317f7486f02cb, type: 2}
+  - Name: 
+    MinTemperature: 0.1
+    MaxTemperature: 0.3
+    MinMoisture: 0
+    MaxMoisture: 0.1
+    TileTypeData: {fileID: 11400000, guid: 9fa2fa1c677f31b40882394ff1176710, type: 2}
+  - Name: 
+    MinTemperature: 0.1
+    MaxTemperature: 0.3
+    MinMoisture: 0.1
+    MaxMoisture: 0.35
+    TileTypeData: {fileID: 11400000, guid: 1e37cf06fec7c674295b9de45030d62a, type: 2}
+  - Name: 
+    MinTemperature: 0.1
+    MaxTemperature: 0.3
+    MinMoisture: 0.35
+    MaxMoisture: 0.65
+    TileTypeData: {fileID: 11400000, guid: 1e37cf06fec7c674295b9de45030d62a, type: 2}
+  - Name: 
+    MinTemperature: 0.1
+    MaxTemperature: 0.3
+    MinMoisture: 0.65
+    MaxMoisture: 0.9
+    TileTypeData: {fileID: 11400000, guid: 1e37cf06fec7c674295b9de45030d62a, type: 2}
+  - Name: 
+    MinTemperature: 0.1
+    MaxTemperature: 0.3
+    MinMoisture: 0.9
+    MaxMoisture: 1
+    TileTypeData: {fileID: 11400000, guid: e073d33a781d5d1478a7cc6ee3f4dde9, type: 2}
+  - Name: 
+    MinTemperature: 0.3
+    MaxTemperature: 0.55
+    MinMoisture: 0
+    MaxMoisture: 0.1
+    TileTypeData: {fileID: 11400000, guid: 9f1e70686b01ed344bf0205a7eecb1e8, type: 2}
+  - Name: 
+    MinTemperature: 0.3
+    MaxTemperature: 0.55
+    MinMoisture: 0.1
+    MaxMoisture: 0.35
+    TileTypeData: {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}
+  - Name: 
+    MinTemperature: 0.3
+    MaxTemperature: 0.55
+    MinMoisture: 0.35
+    MaxMoisture: 0.65
+    TileTypeData: {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}
+  - Name: 
+    MinTemperature: 0.3
+    MaxTemperature: 0.55
+    MinMoisture: 0.65
+    MaxMoisture: 0.9
+    TileTypeData: {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}
+  - Name: 
+    MinTemperature: 0.3
+    MaxTemperature: 0.55
+    MinMoisture: 0.9
+    MaxMoisture: 1
+    TileTypeData: {fileID: 11400000, guid: e073d33a781d5d1478a7cc6ee3f4dde9, type: 2}
+  - Name: 
+    MinTemperature: 0.55
+    MaxTemperature: 0.85
+    MinMoisture: 0
+    MaxMoisture: 0.1
+    TileTypeData: {fileID: 11400000, guid: 9f1e70686b01ed344bf0205a7eecb1e8, type: 2}
+  - Name: 
+    MinTemperature: 0.55
+    MaxTemperature: 0.85
+    MinMoisture: 0.1
+    MaxMoisture: 0.35
+    TileTypeData: {fileID: 11400000, guid: c2a607e613193574d9e0cec63a141ee7, type: 2}
+  - Name: 
+    MinTemperature: 0.55
+    MaxTemperature: 0.85
+    MinMoisture: 0.35
+    MaxMoisture: 0.65
+    TileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
+  - Name: 
+    MinTemperature: 0.55
+    MaxTemperature: 0.85
+    MinMoisture: 0.65
+    MaxMoisture: 0.9
+    TileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
+  - Name: 
+    MinTemperature: 0.55
+    MaxTemperature: 0.85
+    MinMoisture: 0.9
+    MaxMoisture: 1
+    TileTypeData: {fileID: 11400000, guid: e073d33a781d5d1478a7cc6ee3f4dde9, type: 2}
+  - Name: 
+    MinTemperature: 0.85
+    MaxTemperature: 1
+    MinMoisture: 0
+    MaxMoisture: 0.1
+    TileTypeData: {fileID: 11400000, guid: 9f1e70686b01ed344bf0205a7eecb1e8, type: 2}
+  - Name: 
+    MinTemperature: 0.85
+    MaxTemperature: 1
+    MinMoisture: 0.1
+    MaxMoisture: 0.35
+    TileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
+  - Name: 
+    MinTemperature: 0.85
+    MaxTemperature: 1
+    MinMoisture: 0.35
+    MaxMoisture: 0.65
+    TileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
+  - Name: 
+    MinTemperature: 0.85
+    MaxTemperature: 1
+    MinMoisture: 0.65
+    MaxMoisture: 0.9
+    TileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
+  - Name: 
+    MinTemperature: 0.85
+    MaxTemperature: 1
+    MinMoisture: 0.9
+    MaxMoisture: 1
+    TileTypeData: {fileID: 11400000, guid: e073d33a781d5d1478a7cc6ee3f4dde9, type: 2}

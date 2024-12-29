@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HexGridDataManager : MonoBehaviour, IGridManager
@@ -94,12 +95,19 @@ public class HexGridDataManager : MonoBehaviour, IGridManager
         {
             Tile tile = entry.Value;
 
+//            Debug.Log($"Assigning neighbors for tile at {tile.Attributes.GridPosition}");
             List<Tile> neighbors = HexUtility.GetNeighbors(tile, hexCells);
+
+            // Clear and reassign neighbors in the correct order
+            tile.Neighbors.Clear();
 
             foreach (Tile neighbor in neighbors)
             {
-                tile.AddNeighbor(neighbor); // Ensure bi-directional relationship
+                tile.AddNeighbor(neighbor);
             }
+
+            // Log final neighbor order for debugging
+//            Debug.Log($"Tile {tile.Attributes.GridPosition} neighbors: {string.Join(", ", tile.Neighbors.Select(n => n.Attributes.GridPosition))}");
         }
 
         Debug.Log("HexGridDataManager: Neighbors assigned.");

@@ -8,7 +8,8 @@ public class MapDebugVisualizer : MonoBehaviour
         Default,
         Elevation,
         Moisture,
-        Temperature
+        Temperature,
+        River // Added River mode
     }
 
     [Header("Debug Settings")]
@@ -59,6 +60,11 @@ public class MapDebugVisualizer : MonoBehaviour
             debugMode = DebugMode.Temperature;
             UpdateVisualization();
         }
+        else if (Input.GetKeyDown(KeyCode.P)) // Add the River debug mode
+        {
+            debugMode = DebugMode.River;
+            UpdateVisualization();
+        }
     }
 
     private void UpdateVisualization()
@@ -93,6 +99,10 @@ public class MapDebugVisualizer : MonoBehaviour
             case DebugMode.Temperature:
                 ApplyVisualization(tiles, tile => tile.Attributes.Procedural.Temperature);
                 break;
+
+            case DebugMode.River:
+                ApplyRiverVisualization(tiles); // Add river visualization
+                break;
         }
     }
 
@@ -107,6 +117,23 @@ public class MapDebugVisualizer : MonoBehaviour
 
             // Apply color based on the value
             ApplyDebugColor(tile, value);
+        }
+    }
+
+    private void ApplyRiverVisualization(Dictionary<Vector2, Tile> tiles)
+    {
+        foreach (var tileEntry in tiles)
+        {
+            Tile tile = tileEntry.Value;
+
+            if (tile.Attributes.Gameplay.HasRiver) // Check if tile has a river
+            {
+                ApplyDebugColor(tile, 1f); // Set black for river tiles
+            }
+            else
+            {
+                ApplyDebugColor(tile, 0f); // Set white for non-river tiles
+            }
         }
     }
 

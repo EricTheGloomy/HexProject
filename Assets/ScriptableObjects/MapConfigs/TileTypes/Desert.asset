@@ -17,5 +17,13 @@ MonoBehaviour:
   TileModel: {fileID: 3497093088325243830, guid: 66505fb4a38386043b3a7fe7b060d398, type: 3}
   FogOverlay: {fileID: 3497093088325243830, guid: 505a05d7b49819b4b8221354f800139e, type: 3}
   BaseMaterial: {fileID: 2100000, guid: 25088ace4b26e8147b03e89b7aa70dca, type: 2}
-  RiverMaterial: {fileID: 2100000, guid: e4f84aba56023894f96b3099d3a3e586, type: 2}
+  OverlayMaterial: {fileID: 0}
   isEligibleForStart: 0
+  CityHousingDecoration: {fileID: 8823183034249352666, guid: e47442839bb91a84fb5fbd413846f366, type: 3}
+  TownHousingDecoration: {fileID: 8823183034249352666, guid: 457146e527c13154a9223a9d71bbe05c, type: 3}
+  VillageHousingDecoration: {fileID: 8823183034249352666, guid: beb2be4e69bed404dbf45c2cf832afe9, type: 3}
+  HamletHousingDecoration: {fileID: 8823183034249352666, guid: 6316f568d90de3849ad62a03ba9dbea2, type: 3}
+  StartingLocationDecoration: {fileID: 8823183034249352666, guid: 5ee8a84ab0b5528438f604bed59f8b62, type: 3}
+  VegetationDecoration: {fileID: 8484662910265437372, guid: ac15780ed86c6cb4886efb635fca5b32, type: 3}
+  LowMountainDecoration: {fileID: 8484662910265437372, guid: 98c9de1bf5f2c6b4ea38a2e8552fb094, type: 3}
+  HighMountainDecoration: {fileID: 8484662910265437372, guid: a3cd2d2eb20bcce4992e3c0116619e70, type: 3}
