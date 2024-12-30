@@ -24,7 +24,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
         if (startingTile != null)
         {
             Debug.Log($"FogOfWarManager: Revealing area around starting tile at {startingTile.Attributes.GridPosition}.");
-            RevealAreaAroundTile(startingTile);
+            RevealAreaAroundTile(startingTile, fogConfig.RevealRadius);
         }
         else
         {
@@ -53,7 +53,7 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
         return null;
     }
 
-    public void RevealAreaAroundTile(Tile centerTile)
+    public void RevealAreaAroundTile(Tile centerTile, int radius)
     {
         if (centerTile == null)
         {
@@ -61,7 +61,6 @@ public class FogOfWarManager : MonoBehaviour, IFogOfWarManager
             return;
         }
 
-        int radius = fogConfig != null ? fogConfig.RevealRadius : 4; // Fallback to 4 if config is missing
         var tilesToReveal = HexUtility.GetHexesInRange(centerTile, radius, allTiles);
 
         foreach (var tile in tilesToReveal)
