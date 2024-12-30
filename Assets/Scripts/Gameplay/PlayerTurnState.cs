@@ -14,11 +14,13 @@ public class PlayerTurnState : IGameplayStateHandler
     public void EnterState()
     {
         Debug.Log("Player turn started. Waiting for player actions...");
+        manager.skillsManager.enabled = true;
     }
 
     public void ExitState()
     {
         Debug.Log("Player turn ended.");
+        manager.skillsManager.enabled = false;
     }
 
     public void EndTurn()

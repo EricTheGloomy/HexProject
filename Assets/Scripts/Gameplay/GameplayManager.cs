@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
+    public SkillsManager skillsManager;
     private Dictionary<Vector2, Tile> mapTiles;
     [SerializeField]
     private GameplayState currentState;

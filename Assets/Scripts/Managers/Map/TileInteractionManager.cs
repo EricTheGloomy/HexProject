@@ -49,14 +49,14 @@ public class TileInteractionManager : MonoBehaviour
             if (tile == null || interactable == null)
             {
                 Debug.LogWarning("TileInteractionManager: No valid tile selected.");
-                ClearSelectionIndicator();
+                HandleTileDeselection();
                 return;
             }
 
             if (tile.Attributes.Visibility == VisibilityState.Hidden)
             {
                 Debug.Log("TileInteractionManager: Cannot select a tile under fog of war.");
-                ClearSelectionIndicator();
+                HandleTileDeselection();
                 return;
             }
 
