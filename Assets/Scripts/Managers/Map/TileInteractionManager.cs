@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TileInteractionManager : MonoBehaviour
@@ -7,6 +8,9 @@ public class TileInteractionManager : MonoBehaviour
 
     private GameObject activeSelectionIndicator;
     private IInteractable currentInteractable;
+
+    public static event Action<Tile> OnTileSelected;
+    public static event Action OnTileDeselected;
 
     private void Start()
     {
@@ -42,38 +46,27 @@ public class TileInteractionManager : MonoBehaviour
             Tile tile = hit.collider.GetComponent<Tile>();
             IInteractable interactable = tile as IInteractable;
 
-            // Ensure tile is valid
             if (tile == null || interactable == null)
             {
                 Debug.LogWarning("TileInteractionManager: No valid tile selected.");
-                ClearSelectionIndicator();
+                HandleTileDeselection();
                 return;
             }
 
-            // Ensure the tile is not under fog of war
             if (tile.Attributes.Visibility == VisibilityState.Hidden)
             {
                 Debug.Log("TileInteractionManager: Cannot select a tile under fog of war.");
-                ClearSelectionIndicator();
+                HandleTileDeselection();
                 return;
             }
 
-            // Handle interaction
-            if (currentInteractable != null)
-            {
-                currentInteractable.Interact(); // Deselect previous tile
-            }
-
-            interactable.Interact(); // Select new tile
+            interactable.Interact();
             currentInteractable = interactable;
 
-            // Update selection indicator
             UpdateSelectionIndicator(hit.collider.transform.position);
-        }
-        else
-        {
-            // Clear the selection indicator if no valid object is clicked
-            ClearSelectionIndicator();
+
+            // Notify listeners about the tile selection
+            OnTileSelected?.Invoke(tile);
         }
     }
 
@@ -81,13 +74,16 @@ public class TileInteractionManager : MonoBehaviour
     {
         if (currentInteractable != null)
         {
-            currentInteractable.Interact(); // Deselect the current tile
+            currentInteractable.Interact();
             currentInteractable = null;
         }
 
         ClearSelectionIndicator();
 
         Debug.Log("TileInteractionManager: Tile deselected.");
+
+        // Notify listeners about the tile deselection
+        OnTileDeselected?.Invoke();
     }
 
     private void UpdateSelectionIndicator(Vector3 position)
