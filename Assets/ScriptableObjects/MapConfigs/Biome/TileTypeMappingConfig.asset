@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593db46fa69b3ba429299869c57b4b5b, type: 3}
+  m_Name: TileTypeMappingConfig
+  m_EditorClassIdentifier: 
+  ElevationMappings:
+  - Category: 0
+    TileTypeData: {fileID: 11400000, guid: f137421e8a93b3443a4fb5c6826eed2e, type: 2}
+    MinElevation: 0
+    MaxElevation: 0.1
+  - Category: 0
+    TileTypeData: {fileID: 11400000, guid: e7c422348adba67499332bbc6e4c2b7b, type: 2}
+    MinElevation: 0.1
+    MaxElevation: 0.2
+  - Category: 0
+    TileTypeData: {fileID: 11400000, guid: 7996e6623cfad5c4e83dbe4e3fea08d7, type: 2}
+    MinElevation: 0.2
+    MaxElevation: 0.3
+  - Category: 1
+    TileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
+    MinElevation: 0.3
+    MaxElevation: 0.7
+  - Category: 2
+    TileTypeData: {fileID: 11400000, guid: 54a6858f68528b74cb178a99911a0344, type: 2}
+    MinElevation: 0.7
+    MaxElevation: 1
+  FallbackTileTypeData: {fileID: 11400000, guid: fa1ef05d1f735564e83a189f9e76a6b9, type: 2}
