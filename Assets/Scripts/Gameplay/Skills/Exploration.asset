@@ -16,4 +16,4 @@ MonoBehaviour:
   description: Reveal fog of war around a tile.
   skillCost: 0
   skillIcon: {fileID: 0}
-  radius: 2
+  radius: 3

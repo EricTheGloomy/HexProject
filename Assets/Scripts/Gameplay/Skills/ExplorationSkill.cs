@@ -16,7 +16,7 @@ public class ExplorationSkill : ITileSkill
     public bool CanUse(Tile targetTile)
     {
         if (targetTile == null) return false;
-
+/*
         var neighbors = targetTile.Neighbors;
         foreach (var neighbor in neighbors)
         {
@@ -26,7 +26,8 @@ public class ExplorationSkill : ITileSkill
             }
         }
 
-        return false;
+        return false;*/
+        return true;
     }
 
     public void Use(Tile targetTile)
